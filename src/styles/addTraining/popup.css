@@ -1,0 +1,31 @@
+/* Popup style */
+.popup-boxd {
+    position: fixed;
+    background: whitesmoke;
+    width: 500px;
+    height: fit-content;
+    top:50%;
+    left: 40%;
+    display: grid;
+  }
+
+
+.newTrain, .input-group {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+  .submit-btn {
+    position: center;
+    width: 50px;
+    height: 20px;
+    margin-top: 50px;
+    margin-left: 200px;
+    margin-bottom: 50px;
+  }
+
+  .cancel-btn {
+    position: relative;
+    width: 50px;
+    height: 20px;
+  }
