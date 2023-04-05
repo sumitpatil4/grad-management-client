@@ -1,0 +1,27 @@
+.navbar{
+    display: grid;
+    height: 100px;
+    background-color: rgb(14, 20, 30);
+    grid-template-columns: 20% 80%;
+}
+
+.nav_links
+{
+    display: flex;
+    flex-direction: row;
+    justify-content:right;
+    align-items:center;
+}
+
+.nav_links>div{
+    width:fit-content;
+    color: antiquewhite;
+    font-size: 28px;
+    padding: 29px 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav_links>div:hover{
+    border-bottom: 5px solid rgb(46, 200, 102);
+}
