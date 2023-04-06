@@ -3,29 +3,70 @@
     position: fixed;
     background: whitesmoke;
     width: 500px;
-    height: fit-content;
-    top:50%;
+    height: 350px;
+    top:40%;
     left: 40%;
     display: grid;
+    border-radius: 3px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
   }
 
-
-.newTrain, .input-group {
-    margin-top: 50px;
-    margin-left: 50px;
+.newTrain {
+  height: 68px;
+  background: black;
+  overflow: hidden;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
 }
 
-  .submit-btn {
-    position: center;
-    width: 50px;
-    height: 20px;
-    margin-top: 50px;
-    margin-left: 200px;
-    margin-bottom: 50px;
+.newTrain h2 {
+  color: white ;
+  padding-top: 15px;
+  padding-left: 32px;
+  font-weight: normal;
+}
+
+.input-group {
+    height: 45px;
+    width: 100%;
+    margin: 40px 0;
+}
+
+.input-group label {
+  /* position: absolute; */
+  font-size: 18px;
+  padding-left: 60px;
+  transform: translateY(-50%);
+  font-weight: 500;
+}
+
+.input-group input {
+  /* position: relative; */
+  height: 100%;
+  width: 40%;
+  padding-left: 40px;
+  margin-left: 40px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+#val {
+  margin-left: 155px;
+  color: red;
+}
+
+  .submit-btn, .cancel-btn {
+    width: 150px;
+    margin-left: 60px;
+    border: 1px solid #27ae60;
+    border-radius: 3px;
+    color: #27ae60;
+    padding: 8px 10px;
+    font-size: 18px;
+    cursor: pointer;
   }
 
-  .cancel-btn {
-    position: relative;
-    width: 50px;
-    height: 20px;
-  }
+.cancel-btn:hover, .submit-btn:hover {
+  background: #27ae60;
+  color: white;
+}
