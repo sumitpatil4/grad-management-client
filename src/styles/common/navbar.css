@@ -27,7 +27,7 @@
 .navlinks{
     width:fit-content;
     color: antiquewhite;
-    font-size: 1em;
+    font-size: 20px;
     padding: 0px 2vw;
     display: flex;
     align-items: center;
@@ -39,7 +39,8 @@
 
 
 .navlinks:hover{
-    border-bottom: 3px solid rgb(46, 200, 102);
+    background-color:rgb(46, 200, 102) ;
+    /* border-bottom: 3px solid rgb(46, 200, 102); */
 }
 
 
