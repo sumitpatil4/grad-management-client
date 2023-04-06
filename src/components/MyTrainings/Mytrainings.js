@@ -1,4 +1,3 @@
-import Popup from '../addTraining/addTrain';
 import React, { useState } from 'react'
 import "../../styles/mytrainings/mytrainings.css"
 import "../../styles/addTraining/popup.css"

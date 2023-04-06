@@ -1,6 +1,6 @@
 
 .mytrainingsContainer{
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .mytrainingsContainer>h1{
@@ -12,7 +12,7 @@
 }
 
 .mytrainings{
-    margin: 30px 40px;
+    /* margin: 30px 40px; */
     display: grid;
     grid-template-columns: repeat(3,1fr);
 }
@@ -23,13 +23,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 500px;
-    height: 300px;
-    margin: 20px;
+    width: 25vw;
+    height: 25vh;
+    margin: 3vw;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 20px;
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
     
@@ -42,5 +42,5 @@
 }
 
 .add_icon{
-    font-size: 50px;
+    font-size: 30px;
 }
