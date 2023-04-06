@@ -1,6 +1,6 @@
 import React from 'react'
 import "../../styles/aboutUs/aboutUs.css"
-import avator from "../img/avator.png"
+import avator from "../../images/avator.png"
 
 const About = () => {
   return (

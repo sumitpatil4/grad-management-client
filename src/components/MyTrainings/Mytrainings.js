@@ -1,4 +1,4 @@
-import React, { useState, } from 'react'
+import React, { useState } from 'react'
 import "../../styles/mytrainings/mytrainings.css"
 import "../../styles/addTraining/popup.css"
 import { GrAdd } from 'react-icons/gr';
