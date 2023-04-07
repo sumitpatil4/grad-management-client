@@ -36,6 +36,10 @@
     height: inherit;
 }
 
+.active
+{
+    background-color: rgb(46, 200, 102);
+}
 
 
 .navlinks:hover{

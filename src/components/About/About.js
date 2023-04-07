@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../styles/aboutUs/aboutUs.css"
+import "./aboutUs.css"
 import avator from "../../images/avator.png"
 
 const About = () => {
