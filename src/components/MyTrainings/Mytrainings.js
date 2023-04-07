@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import "../../styles/mytrainings/mytrainings.css"
-import "../../styles/addTraining/popup.css"
+import "./mytrainings.css"
 import { GrAdd } from 'react-icons/gr';
 
 const Mytrainings = () => {
@@ -39,24 +38,25 @@ const Mytrainings = () => {
             </div>            
          </div>
 
-        {isOpen && <div className="popup-boxd">
-            <div className='newTrain'>
-            <h2>Add New Training</h2>
+        {isOpen && <div className='popupContainer'>
+            <div className="popup-boxd">
+              <div className='newTrain'>
+              <h2>Add New Training</h2>
+              </div>
+                
+              <div className="input-group">
+                <label htmlFor="name">Name </label>
+                <input type="text" id="name" onChange={handleChange} value={temp} />
+                <p id="val">{validMsg}</p>                                                              
+              </div>
+              <div><button type="submit" className="submit-btn" onClick={handleClick}>
+                Submit
+              </button>
+              <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
+                Cancel
+              </button>
+              </div>
             </div>
-              
-            <div className="input-group">
-              <label htmlFor="name">Name </label>
-              <input type="text" id="name" onChange={handleChange} value={temp} />
-              <p id="val">{validMsg}</p>                                                              
-            </div>
-            <div><button type="submit" className="submit-btn" onClick={handleClick}>
-              Submit
-            </button>
-            <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
-              Cancel
-            </button>
-            </div>
-              
         </div>}
     </div>
   )

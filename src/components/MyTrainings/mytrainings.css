@@ -1,11 +1,68 @@
+
+.mytrainingsContainer{
+    /* padding: 20px; */
+}
+
+.mytrainingsContainer>h1{
+    text-align: center;
+    font-size: 36px;
+    padding: 10px 20px;
+    margin: 0px 40px;
+    border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
+.mytrainings{
+    /* margin: 30px 40px; */
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+
+.mytrainings>div{
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25vw;
+    height: 25vh;
+    margin: 3vw;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    
+}
+
+
+.mytrainings>div:hover{
+    transform: scale(1.02);
+}
+
+.add_icon{
+    font-size: 30px;
+}
+
 /* Popup style */
+
+.popupContainer
+{
+  top:10%;
+  position: absolute;
+  width: 100vw;
+  height: 90vh;
+  background-color: #ffffff88;
+}
+
 .popup-boxd {
-    position: fixed;
+    position: absolute;
     background: whitesmoke;
     width: 500px;
     height: 350px;
-    top:40%;
-    left: 40%;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     display: grid;
     border-radius: 3px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
@@ -20,7 +77,8 @@
 }
 
 .newTrain h2 {
-  color: white ;
+  text-align: center;
+  color: white;
   padding-top: 15px;
   padding-left: 32px;
   font-weight: normal;
@@ -35,7 +93,7 @@
 .input-group label {
   /* position: absolute; */
   font-size: 18px;
-  padding-left: 60px;
+  padding-left: 80px;
   transform: translateY(-50%);
   font-weight: 500;
 }
@@ -44,7 +102,7 @@
   /* position: relative; */
   height: 100%;
   width: 40%;
-  padding-left: 40px;
+  padding-left: 20px;
   margin-left: 40px;
   font-size: 17px;
   border: 1px solid lightgrey;

@@ -1,4 +1,4 @@
-import "../../styles/trainers/trainers.css"
+import "./trainers.css"
 import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
 
