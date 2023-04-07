@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
+import { IoClose } from 'react-icons/io5';
+import { MdEdit } from 'react-icons/md';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
@@ -70,45 +72,26 @@ const handleEditClick = (index) => {
         
         {arr.map((e, i)=> <div id={i}> 
           
-          <div >
-            <div id={i} onClick={() => handleEdit(i)}>
-            <GrEdit className='edit_icon' color='blue'/>                           
+          <div className='iconContainer'>
+            <div id={i} className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
+              <MdEdit className='edit_icon'/>
             </div>
             <div id={i} onClick={()=>handleRem(i)}>
-            <GrClose className="close-icon" color='blue'/> </div>
-              {e} 
+              <IoClose className="close-icon"/>
+            </div>
           </div> 
+          <div className='trainingText'>{e}</div>
 
         </div> )}
                         
 
-        <div onClick={() => setIsOpen(true)}>
+        <div className='trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd className='add_icon'/>                           
         </div>            
       </div>
         
-
-      {/* {isOpen && <div className="popup-boxd">
-          <div className='newTrain'>
-          <h2>Add New Training</h2>
-          </div>
-            
-          <div className="input-group">
-            <label htmlFor="name">Name </label>
-            <input type="text" id="name" onChange={handleChange} value={temp} />
-            <p id="val">{validMsg}</p>                                                              
-          </div>
-          <div><button type="submit" className="submit-btn" onClick={handleClick}>
-            Submit
-          </button>
-          <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
-            Cancel
-          </button>
-          </div>
-            
-      </div>} */}
-    {/* </div> */}
-      {isOpenCon && <div className='con-popup'>
+      {isOpenCon && <div className='popupContainer'>
+       <div className='con-popup'>
         <div className='delTrain'>
         <h2>Are you sure to delete this training?</h2>
         </div>
@@ -120,7 +103,7 @@ const handleEditClick = (index) => {
           </button>
           </div>
         </div>
-        // </div>
+        </div>
         }
         {isOpen && <div className='popupContainer'>
             <div className="popup-boxd">
@@ -143,8 +126,9 @@ const handleEditClick = (index) => {
             </div>
         </div>}
 
-      {isOpenEdit && <div className='popup-edit'>
-        <div className='editTrain'>
+      {isOpenEdit && <div className='popupContainer'>
+        <div className="popup-boxd">
+        <div className='newTrain'>
         <h2>Enter New Training Name</h2>
         </div>
             
@@ -160,6 +144,7 @@ const handleEditClick = (index) => {
           Cancel
         </button>
         </div>
+      </div>
       </div>}
     </div>
   )
