@@ -1,0 +1,224 @@
+
+.mytrainingsContainer{
+    /* padding: 20px; */
+}
+
+.mytrainingsContainer>h1{
+    text-align: center;
+    font-size: 36px;
+    padding: 10px 20px;
+    margin: 0px 40px;
+    border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
+.mytrainings{
+    /* margin: 30px 40px; */
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+
+.mytrainings>div{
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25vw;
+    height: 25vh;
+    margin: 3vw;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    
+}
+
+
+.mytrainings>div:hover{
+    transform: scale(1.02);
+}
+
+.add_icon{
+    font-size: 30px;
+}
+
+/* Popup style */
+
+.popupContainer
+{
+  top:10%;
+  position: absolute;
+  width: 100vw;
+  height: 90vh;
+  background-color: #ffffff88;
+}
+
+.popup-boxd {
+    position: absolute;
+    background: whitesmoke;
+    width: 500px;
+    height: 350px;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: grid;
+    border-radius: 3px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+  }
+
+.newTrain {
+  height: 68px;
+  background: black;
+  overflow: hidden;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+}
+
+.newTrain h2 {
+  text-align: center;
+  color: white;
+  padding-top: 15px;
+  padding-left: 32px;
+  font-weight: normal;
+}
+
+.input-group {
+    height: 45px;
+    width: 100%;
+    margin: 40px 0;
+}
+
+.input-group label {
+  /* position: absolute; */
+  font-size: 18px;
+  padding-left: 80px;
+  transform: translateY(-50%);
+  font-weight: 500;
+}
+
+.input-group input {
+  /* position: relative; */
+  height: 100%;
+  width: 40%;
+  padding-left: 20px;
+  margin-left: 40px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+#val {
+  margin-left: 155px;
+  color: red;
+}
+
+  .submit-btn, .cancel-btn {
+    width: 150px;
+    margin-left: 60px;
+    border: 1px solid #27ae60;
+    border-radius: 3px;
+    color: #27ae60;
+    padding: 8px 10px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+.cancel-btn:hover, .submit-btn:hover {
+  background: #27ae60;
+  color: white;
+}
+
+
+.close-icon {
+  color: red;
+  stroke: rgb(243, 11, 11) !important;
+  cursor: pointer;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  background: #ededed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 20px;
+  text-align: center;
+  border: 1px solid #999;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 100;
+}
+
+.edit_icon {
+  color: green;
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: 1px;
+  background: #ededed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  /* line-height: 20px; */
+  text-align: center;
+  border: 1px solid #999;
+  /* font-size: 10px; */
+  /* font-weight: bold; */
+}
+
+/*Delete Training popup*/
+
+.con-popup {
+  position: absolute;
+  background: whitesmoke;
+  width: 500px;
+  height: 250px;
+  top:40%;
+  left: 40%;
+  display: grid;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+}
+
+.delTrain {
+  height: 68px;
+  background: black;
+  overflow: hidden;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+}
+
+.delTrain h2 {
+  color: white ;
+  padding-top: 15px;
+  padding-left: 32px;
+  font-weight: normal;
+}
+
+/* Edit Popup style */
+.popup-edit {
+  position: fixed;
+  background: whitesmoke;
+  width: 500px;
+  height: 350px;
+  top:40%;
+  left: 40%;
+  display: grid;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+}
+
+.editTrain {
+height: 68px;
+background: black;
+overflow: hidden;
+border-radius: 3px 3px 0 0;
+box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+}
+
+.editTrain h2 {
+color: white ;
+padding-top: 15px;
+padding-left: 32px;
+font-weight: normal;
+}

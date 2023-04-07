@@ -1,21 +1,20 @@
 import React from 'react'
-import "../../styles/aboutUs/aboutUs.css"
-import avator from "../img/avator.png"
+import "./aboutUs.css"
+import avator from "../../images/avator.png"
 
 const About = () => {
   return (
     <div >
       <div className='aboutUs'>
-          <h1>Welcome to GradManagement</h1>
+          <h4>Welcome to GradManagement</h4>
           <div className='aboutUsContent'>
           {/* <img src={gradmanagement}></img> */}
-            <p>The GradManagement Helps the Manager in managing and kepping a record of Interns  respective Trainings along with their Trainers.</p><p>   The Manager can schedule a meeting for a particular Topic for a group of Interns.</p>
+            <p>The GradManagement Helps the Manager in managing and kepping a record of Interns their Trainer along with their Trainings.</p>
+            <p> The Manager can schedule a meeting for a particular Topic for a group of Interns.</p>
 
-            <br></br>
             <div className='about'>
             <div>
-            <h4>This Application was &nbsp;&nbsp;Designed by</h4>
-            <br></br>
+            <h6>This Application was &nbsp;&nbsp;Designed by</h6>
             <ul>
                <li>
                    {/* <div class="circleContainer"> 
@@ -43,10 +42,8 @@ const About = () => {
                 </li>
             </ul>
             </div>
-            
             <div>
-            <h4>Our Manager</h4>
-            <br></br>
+            <h6>Our Manager</h6>
             <ul>
               <li> 
                  {/* <div class="circleContainer"> 
@@ -57,8 +54,7 @@ const About = () => {
             </ul>
             </div>
             <div>
-            <h4>Our Mentors</h4>
-            <br></br>
+            <h6>Our Mentors</h6>
             <ul>
               <li> 
                  {/* <div class="circleContainer"> 
@@ -75,8 +71,6 @@ const About = () => {
             </ul>
             </div>           
           </div>
-
-
          </div>
       </div>
       </div>    

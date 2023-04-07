@@ -1,8 +1,6 @@
-import React, { useState, } from 'react'
-import "../../styles/mytrainings/mytrainings.css"
-import "../../styles/addTraining/popup.css"
+import React, { useState } from 'react'
+import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
-import { useEffect } from 'react';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
@@ -15,9 +13,8 @@ const Mytrainings = () => {
 
 
   const handleChange = event => {
-    setTemp(event.target.value);
-    
-};
+    setTemp(event.target.value);  
+  };
 
   const handleClick = () => {
     if(temp==""){
@@ -91,7 +88,7 @@ const handleEditClick = (index) => {
       </div>
         
 
-      {isOpen && <div className="popup-boxd">
+      {/* {isOpen && <div className="popup-boxd">
           <div className='newTrain'>
           <h2>Add New Training</h2>
           </div>
@@ -109,8 +106,8 @@ const handleEditClick = (index) => {
           </button>
           </div>
             
-      </div>}
-
+      </div>} */}
+    {/* </div> */}
       {isOpenCon && <div className='con-popup'>
         <div className='delTrain'>
         <h2>Are you sure to delete this training?</h2>
@@ -122,6 +119,28 @@ const handleEditClick = (index) => {
             No
           </button>
           </div>
+        </div>
+        // </div>
+        }
+        {isOpen && <div className='popupContainer'>
+            <div className="popup-boxd">
+              <div className='newTrain'>
+              <h2>Add New Training</h2>
+              </div>
+                
+              <div className="input-group">
+                <label htmlFor="name">Name </label>
+                <input type="text" id="name" onChange={handleChange} value={temp} />
+                <p id="val">{validMsg}</p>                                                              
+              </div>
+              <div><button type="submit" className="submit-btn" onClick={handleClick}>
+                Submit
+              </button>
+              <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
+                Cancel
+              </button>
+              </div>
+            </div>
         </div>}
 
       {isOpenEdit && <div className='popup-edit'>

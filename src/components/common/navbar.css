@@ -1,0 +1,83 @@
+.navbar{
+    display: grid;
+    width: 100vw;
+    height: 10vh;
+    background-color: rgb(14, 20, 30);
+    grid-template-columns: 20vw 80vw;
+}
+
+.website_logo_wrapper
+{
+    height: 10vh;
+}
+
+.website_logo{
+    height: inherit;
+}
+
+.navlinksContainer
+{
+    display: flex;
+    flex-direction: row;
+    justify-content:right;
+    align-items:center;
+    height: 10vh;
+}
+
+.navlinks{
+    width:fit-content;
+    color: antiquewhite;
+    font-size: 20px;
+    padding: 0px 2vw;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    height: inherit;
+}
+
+.active
+{
+    background-color: rgb(46, 200, 102);
+}
+
+
+.navlinks:hover{
+    background-color:rgb(46, 200, 102) ;
+    /* border-bottom: 3px solid rgb(46, 200, 102); */
+}
+
+
+.profile_logo
+{
+    margin-top: 0px;
+    padding: 0px 2vw;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+.profile_logo:hover
+{
+    transform: scale(1.1);
+}
+
+
+/* css for profile component */
+
+.profile_layout{
+    position: absolute;
+    /* margin-top: 2px; */
+    right: 0px;
+    background-color: rgb(14, 20, 30);
+}
+
+.profile_layout>div{
+    font-weight: bold;
+    color: white;
+    padding: 5px 10px;
+}
+
+.profile_layout>div:hover{
+    background-color: rgb(46, 200, 102);
+    cursor: pointer;
+}
