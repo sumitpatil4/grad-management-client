@@ -26,7 +26,7 @@
 
 .navlinks{
     width:fit-content;
-    color: antiquewhite;
+    color: white;
     font-size: 20px;
     padding: 0px 2vw;
     display: flex;
@@ -51,7 +51,7 @@
 .profile_logo
 {
     margin-top: 0px;
-    padding: 0px 2vw;
+    padding: 0px 3vw;
     width: 35px;
     height: 35px;
     cursor: pointer;
