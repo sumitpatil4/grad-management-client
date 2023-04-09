@@ -21,6 +21,11 @@
     cursor: pointer;
 }
 
+.google_btn:hover
+{
+    transform: scale(1.05);
+}
+
 .google-icon-wrapper
 {
     padding: 5px 10px;
@@ -28,7 +33,7 @@
 }
 
 .btn-text{
-    padding: 3px 5px;
+    padding: 3px 10px;
     color: white;
     background-color: #4285f4;
 }

@@ -18,7 +18,7 @@ const Login = (props) => {
             </div>
         </nav>
         <Routes>
-          <Route path="/" element={<Loginwrapper setLogin={props.setLogin}/>}/>
+          <Route path="/" element={<Loginwrapper/>}/>
           <Route path="/aboutus" element={<About />}/>
         </Routes>
         
