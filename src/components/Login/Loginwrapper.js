@@ -1,24 +1,35 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import AuthContext from '../Contextapi/Authcontext';
 
 const Loginwrapper = (props) => {
 
-    const handleLogin=()=>{
-        props.setLogin(false);
+    const usecontext=useContext(AuthContext);
+    const {handleLogin,
+        updateempid,
+        updateempname,
+        updateempmail,
+        updateemppicture,
+        updateemprole}=usecontext;
+
+    const handleLoginApi=()=>{
+            //call google api here and store in db get response
+            //using response update emp_details to auth contextapi
+            updateemprole("superadmin")
+            handleLogin();
     }
 
-  return (
-    <div className='loginWrapper'>
-            <h2>Welcome</h2>
-            <div className="google_btn" onClick={handleLogin}>
-                <div className="google-icon-wrapper">
-                    <FcGoogle/>
+    return (
+        <div className='loginWrapper'>
+                <h2>Welcome</h2>
+                <div className="google_btn" onClick={handleLoginApi}>
+                    <div className="google-icon-wrapper">
+                        <FcGoogle/>
+                    </div>
+                    <p className="btn-text"><b>Sign in with google</b></p>
                 </div>
-                <p className="btn-text"><b>Sign in with google</b></p>
             </div>
-        </div>
-  )
+    )
 }
 
 export default Loginwrapper
