@@ -1,6 +1,6 @@
 import "./trainers.css"
 import React, { useState } from 'react'
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch ,FaUserAlt} from 'react-icons/fa';
 import profileIcon from "../../images/profileIcon.png";
 import deleteIcon from "../../images/deleteIcon.png";
 import editIcon from "../../images/editIcon.png";
@@ -26,7 +26,8 @@ function TrainerRow({ trainer, onDelete ,onProfile}) {
       <div className="trainer-col skill">{trainer.skill}</div>
       <div className="trainer-col">
       <button className="profileIconButton" onClick={()=> onProfile(trainer)}>
-        <img src={profileIcon}></img>
+        {/* <img src={profileIcon}></img> */}
+        <FaUserAlt/>
       </button>
       </div>
     </div>
@@ -104,7 +105,7 @@ const Trainers = () => {
     setEditingTrainer(trainerId);
     const popup = document.getElementById("popup");
     if (popup) {
-  popup.style.display = 'block';
+   popup.style.display = 'block';
    }
   };
 
@@ -118,7 +119,7 @@ const Trainers = () => {
     dispprofile(trainer);
     const popup = document.getElementById("popup");
     if (popup) {
-  popup.style.display = 'block';
+   popup.style.display = 'block';
    }
   };
   
@@ -129,21 +130,27 @@ const Trainers = () => {
 
 
 
-  const handleSearch = () => {
-    console.log(searchQuery);
-  }
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredTrainers = trainers.filter(
+    (trainer) =>
+      trainer.trainersname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      trainer.skill.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="trainers">
       <div className="button-container">
         <button className="add-button" onClick={handleAdd}>Add&nbsp;Trainer</button>
         <div className="search-bar">
-          <input type="text" placeholder="byName....bySkill...." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          <input type="text" placeholder="byName....bySkill...." value={searchQuery} onChange={handleSearchInputChange} />
           <button type="submit"><FaSearch /></button>
         </div>
       </div>
-      <TableHeader />
-      {trainers.map((trainer) => (
+      <TableHeader /> 
+      {(searchQuery !== "" ? filteredTrainers : trainers).map((trainer) => (
             <TrainerRow  trainer={trainer}  onProfile={handleProfile}/>
       ))}
         {profile && (
@@ -154,38 +161,41 @@ const Trainers = () => {
         </div>
        <div className="popup-data">
          <div>
-          <span><strong>Id:</strong></span>
-          <span>{profile.trainersid}</span>
+          <div><strong>Id:</strong></div>
+          <div>{profile.trainersid}</div>
          </div>
          <div>
-          <span><strong>Name:</strong></span>
-          <span>{profile.trainersname}</span>
+          <div><strong>Name:</strong></div>
+          <div>{profile.trainersname}</div>
          </div>
          <div>
-          <span><strong>Skill:</strong></span>
-          <span>{profile.skill}</span>
+          <div><strong>Skill:</strong></div>
+          <div>{profile.skill}</div>
          </div>
          <div>
-          <span><strong>Phone:</strong></span>
-          <span>{profile.phone}</span>
+          <div><strong>Phone:</strong></div>
+          <div>{profile.phone}</div>
          </div>
          <div>
-          <span><strong>Email:</strong></span>
-          <span>{profile.email}</span>
+          <div><strong>Email:</strong></div>
+          <div>{profile.email}</div>
          </div>
          <div>
-          <span><strong>Availability:</strong></span>
-          <span>{profile.availability}</span>
+          <div><strong>Availability:</strong></div>
+          <div>{profile.availability}</div>
          </div>
        </div>
-       <button className="popup-close" onClick={() => (document.getElementById("popup").style.display = "none")}>
-            close
-       </button>
+       <div className="button-container">
+        <button className="editIconButton" onClick={() => handleEdit(profile.trainersid)}>
+         {/* <img src={editIcon}></img> */}
+         Edit
+        </button>
+        <button className="popup-close" onClick={() => (document.getElementById("popup").style.display = "none")}>
+          close
+        </button>
+       </div>
        <button className="deleteIconButton" onClick={() => handleDelete(profile.trainersid)}>
         <img src={deleteIcon}></img>
-       </button>
-       <button className="editIconButton" onClick={() => handleEdit(profile.trainersid)}>
-        <img src={editIcon}></img>
        </button>
       </div>
     </div>
