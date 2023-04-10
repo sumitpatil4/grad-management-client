@@ -19,10 +19,6 @@
 
 
 .mytrainings>div{
-    /* text-align: center; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 25vw;
     height: 25vh;
     margin: 3vw;
@@ -40,6 +36,41 @@
     transform: scale(1.02);
 }
 
+.trainingText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+}
+
+.iconContainer{
+  display: flex;
+  justify-content: right;
+}
+
+.close-icon {
+  font-size: 35px;
+  padding: 5px;
+  color: rgb(255, 54, 54);
+}
+
+.close-icon:hover{
+  background-color: rgba(0, 0, 0, 0.295);
+  border-radius: 50%;
+}
+
+.edit_icon {
+  font-size: 28px;
+  padding:7px;
+  color: rgb(94, 132, 255);
+}
+
+.edit_icon:hover{
+  background-color: rgba(0, 0, 0,  0.295);
+  border-radius: 50%;
+
+}
+
 .add_icon{
     font-size: 30px;
 }
@@ -48,11 +79,11 @@
 
 .popupContainer
 {
-  top:10%;
+  top:0%;
   position: absolute;
   width: 100vw;
-  height: 90vh;
-  background-color: #ffffff88;
+  height: 100vh;
+  background-color: #00000046;
 }
 
 .popup-boxd {
@@ -60,9 +91,9 @@
     background: whitesmoke;
     width: 500px;
     height: 350px;
-    top:50%;
+    top:40%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-40%);
     display: grid;
     border-radius: 3px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
@@ -85,9 +116,9 @@
 }
 
 .input-group {
-    height: 45px;
+    height: 40px;
     width: 100%;
-    margin: 40px 0;
+    margin: 10px 0;
 }
 
 .input-group label {
@@ -104,6 +135,16 @@
   width: 40%;
   padding-left: 20px;
   margin-left: 40px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+.input-group select {
+  /* position: relative; */
+  height: 100%;
+  width: 40%;
+  padding-left: 20px;
+  margin-left: 50px;
   font-size: 17px;
   border: 1px solid lightgrey;
 }
@@ -127,4 +168,64 @@
 .cancel-btn:hover, .submit-btn:hover {
   background: #27ae60;
   color: white;
+}
+
+
+
+/*Delete Training popup*/
+
+.con-popup {
+  position: absolute;
+  background: whitesmoke;
+  width: 500px;
+  height: 250px;
+  top:40%;
+  left: 50%;
+  transform: translate(-50%,-40%);
+  display: grid;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+}
+
+.delTrain {
+  height: 68px;
+  background: black;
+  overflow: hidden;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+}
+
+.delTrain h2 {
+  color: white ;
+  padding-top: 15px;
+  padding-left: 32px;
+  font-weight: normal;
+}
+
+/* Edit Popup style */
+.popup-edit {
+  position: fixed;
+  background: whitesmoke;
+  width: 500px;
+  height: 350px;
+  top:40%;
+  left: 40%;
+  display: grid;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+}
+
+.editTrain {
+height: 68px;
+background: black;
+overflow: hidden;
+border-radius: 3px 3px 0 0;
+box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+}
+
+.editTrain h2 {
+color: white ;
+padding-top: 15px;
+padding-left: 32px;
+font-weight: normal;
 }
