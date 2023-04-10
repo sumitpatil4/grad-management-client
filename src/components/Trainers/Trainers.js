@@ -1,51 +1,133 @@
 import "./trainers.css"
 import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
+import profileIcon from "../../images/profileIcon.png";
+import deleteIcon from "../../images/deleteIcon.png";
+import editIcon from "../../images/editIcon.png";
+
+
+
 
 function TableHeader() {
   return (
     <div className="table-header">
-      <div className="header-col">Trainer ID</div>
       <div className="header-col">Trainer Name</div>
-      <div className="header-col">Email</div>
       <div className="header-col">Skill</div>
       <div className="header-col"></div>
     </div>
   );
 }
 
-function TrainerRow({ trainer, onDelete }) {
+function TrainerRow({ trainer, onDelete ,onProfile}) {
+
   return (
     <div className="trainer-row">
-      <div className="trainer-col trainer-id">{trainer.trainersid}</div>
       <div className="trainer-col trainer-name">{trainer.trainersname}</div>
-      <div className="trainer-col email">{trainer.email}</div>
       <div className="trainer-col skill">{trainer.skill}</div>
       <div className="trainer-col">
-        <button className="delete-button" onClick={() => onDelete(trainer)}>Delete</button>
+      <button className="profileIconButton" onClick={()=> onProfile(trainer)}>
+        <img src={profileIcon}></img>
+      </button>
       </div>
     </div>
   );
 }
 
+
+
+// function AvailabilityForm() {
+//   const [startDate, setStartDate] = useState("");
+//   const [endDate, setEndDate] = useState("");
+//   const [startTime, setStartTime] = useState("");
+//   const [endTime, setEndTime] = useState("");
+
+//   const handleStartDateChange = (event) => {
+//     setStartDate(event.target.value);
+//   };
+
+//   const handleEndDateChange = (event) => {
+//     setEndDate(event.target.value);
+//   };
+
+//   const handleStartTimeChange = (event) => {
+//     setStartTime(event.target.value);
+//   };
+
+//   const handleEndTimeChange = (event) => {
+//     setEndTime(event.target.value);
+//   };
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     console.log(`You are available from ${startDate} at ${startTime} to ${endDate} at ${endTime}.`);
+//   };
+
+//   return (
+//     <div className="availability-form">
+//       <label>
+//         Start Date:
+//         <input type="date" value={startDate} onChange={handleStartDateChange} />
+//       </label>
+//       <br />
+//       <label>
+//         End Date:
+//         <input type="date" value={endDate} onChange={handleEndDateChange} />
+//       </label>
+//       <br />
+//       <label>
+//         Start Time:
+//         <input type="time" value={startTime} onChange={handleStartTimeChange} />
+//       </label>
+//       <br />
+//       <label>
+//         End Time:
+//         <input type="time" value={endTime} onChange={handleEndTimeChange} />
+//       </label>
+//       <br />
+//       <button className="submit-button" onClick={handleSubmit}>Submit</button>
+//     </div>
+//   );
+// }
+
 const Trainers = () => {
   const [trainers, setTrainers] = useState([
-    { trainersid: 1, trainersname: 'Ashish Tripathy', email: 'ashish@gmail.com', skill: 'Python' },
-    { trainersid: 2, trainersname: 'Sumit Vasant Patil', email: 'sumit@gmail.com', skill: 'Java'},
-    { trainersid: 3, trainersname: 'Sai Krupananda', email: 'sai@gmail.com', skill: 'C++'},
-    { trainersid: 4, trainersname: 'Akriti Singh', email: 'akriti@gmail.com', skill: 'JavaScript'},
+    { trainersid:1, trainersname: 'Ashish Tripathy', skill: 'Python',phone: '8630132801', email: 'ashish@gmail.com', availability: 'Monday-Friday' },
+    { trainersid:2, trainersname: 'Sumit Vasant Patil', skill: 'Java',phone: '1234543212', email: 'sumit@gmail.com', availability: 'Monday-Friday'},
+    { trainersid:3, trainersname: 'Sai Krupananda', skill: 'C++',phone: '1234567890', email: 'sai@gmail.com', availability: 'Monday-Friday'},
+    { trainersid:4, trainersname: 'Akriti Singh',skill: 'JavaScript',phone: '1234567890', email: 'akriti@gmail.com', availability: 'Monday-Friday'},
   ]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [profile, dispprofile] = useState("");
+  const [editingTrainer, setEditingTrainer] = useState(null);
 
-  const handleDelete = (trainerToDelete) => {
-    const newTrainers = trainers.filter((trainer) => trainer.trainersid !== trainerToDelete.trainersid);
-    setTrainers(newTrainers);
+  const handleEdit = (trainerId) =>{
+    setEditingTrainer(trainerId);
+    const popup = document.getElementById("popup");
+    if (popup) {
+  popup.style.display = 'block';
+   }
   };
 
+  const handleDelete = (trainerId) => {
+    const newTrainers = trainers.filter((trainer) => trainer.trainersid !== trainerId);
+    setTrainers(newTrainers);
+    dispprofile(null); 
+  };
+
+  const handleProfile = (trainer) =>{
+    dispprofile(trainer);
+    const popup = document.getElementById("popup");
+    if (popup) {
+  popup.style.display = 'block';
+   }
+  };
+  
   const handleAdd = () => {
-    const newTrainer = { trainersid: trainers.length + 1, trainersname: 'New Trainer', email: 'newtrainer@gmail.com', skill: 'New Skill' };
+    const newTrainer = {  trainerid: trainers.length+1, trainersname: 'New Trainer', skill: 'New Skill',phone: '1234567890', email: 'newtrainer@gmail.com', availability: 'Monday-Friday' };
     setTrainers([...trainers, newTrainer]);
   };
+
+
 
   const handleSearch = () => {
     console.log(searchQuery);
@@ -54,18 +136,61 @@ const Trainers = () => {
   return (
     <div className="trainers">
       <div className="button-container">
-        <button className="add-button" onClick={handleAdd}>Add Trainer</button>
+        <button className="add-button" onClick={handleAdd}>Add&nbsp;Trainer</button>
         <div className="search-bar">
-          <input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-          {/* <button className="search-button" onClick={handleSearch}>Search</button> */}
+          <input type="text" placeholder="byName....bySkill...." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           <button type="submit"><FaSearch /></button>
         </div>
       </div>
       <TableHeader />
       {trainers.map((trainer) => (
-        <TrainerRow key={trainer.trainersid} trainer={trainer} onDelete={handleDelete} />
+            <TrainerRow  trainer={trainer}  onProfile={handleProfile}/>
       ))}
+        {profile && (
+  <div id="popup" className="popup">
+    <div className="popup-content">
+        <div className="trainer-details">
+         <h2>Trainer Details</h2>
+        </div>
+       <div className="popup-data">
+         <div>
+          <span><strong>Id:</strong></span>
+          <span>{profile.trainersid}</span>
+         </div>
+         <div>
+          <span><strong>Name:</strong></span>
+          <span>{profile.trainersname}</span>
+         </div>
+         <div>
+          <span><strong>Skill:</strong></span>
+          <span>{profile.skill}</span>
+         </div>
+         <div>
+          <span><strong>Phone:</strong></span>
+          <span>{profile.phone}</span>
+         </div>
+         <div>
+          <span><strong>Email:</strong></span>
+          <span>{profile.email}</span>
+         </div>
+         <div>
+          <span><strong>Availability:</strong></span>
+          <span>{profile.availability}</span>
+         </div>
+       </div>
+       <button className="popup-close" onClick={() => (document.getElementById("popup").style.display = "none")}>
+            close
+       </button>
+       <button className="deleteIconButton" onClick={() => handleDelete(profile.trainersid)}>
+        <img src={deleteIcon}></img>
+       </button>
+       <button className="editIconButton" onClick={() => handleEdit(profile.trainersid)}>
+        <img src={editIcon}></img>
+       </button>
+      </div>
     </div>
+    )}
+ </div>
   );
 }
 
