@@ -4,17 +4,19 @@ const AuthContext=React.createContext();
 
 export const Auth=(props)=>{
     const [isAuthenticated,setIsAuthenticated]=useState(true);
-    const [empid,setEmpid]=useState("");
+    const [empid,setEmpid]=useState("1001");
     const [empname,setEmpname]=useState("");
     const [empmail,setEmpmail]=useState("");
     const [emppicture,setEmppicture]=useState("");
     const [emprole,setEmprole]=useState("");
+    const [notificationCheck,setNotificationCheck]=useState(false);
 
     const updateempid=(e)=>setEmpid(e);
     const updateempname=(e)=>setEmpname(e);
     const updateempmail=(e)=>setEmpmail(e);
     const updateemppicture=(e)=>setEmppicture(e);
     const updateemprole=(e)=>setEmprole(e);
+    const updatenotificationCheck=(e)=>setNotificationCheck(e);
 
     const handleLogin=()=>{
         // if(empname!=="" && empid!=="" && empmail!=="" && emppicture!=="")
@@ -40,13 +42,15 @@ export const Auth=(props)=>{
           empmail,
           emppicture,
           emprole,
+          notificationCheck,
           handleLogout,
           handleLogin,
           updateempid,
           updateempname,
           updateempmail,
           updateemppicture,
-          updateemprole
+          updateemprole,
+          updatenotificationCheck
         }}
       >
         {props.children}

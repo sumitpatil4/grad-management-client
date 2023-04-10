@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import website_logo from "../../images/website_logo.png";
 import "./navbar.css"
 import { NavLink } from 'react-router-dom';
 import profile from "../../images/profile.svg"
 import Profile from './Profile';
+import { IoNotifications } from 'react-icons/io5';
+// import AdminContext from '../Contextapi/Admincontext';
+import AuthContext from '../Contextapi/Authcontext';
 
 const Navbar = (props) => {
+
+  const usecontext=useContext(AuthContext);
+  const {notificationCheck,updatenotificationCheck}=usecontext;
 
   const [profileflag,setProfileflag]=useState(false);
   const [managerflag,setManagerflag]=useState(false);
@@ -56,12 +62,14 @@ const Navbar = (props) => {
           }
 
           {superadminflag && <>
-              <NavLink className="navlinks" to={"/employees"}>Employees</NavLink>
-              <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
+              <NavLink className="navlinks" to={"/admin"}>Users</NavLink>
+              {/* <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink> */}
+              <IoNotifications onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
             </>
           }
 
           {userflag && <>
+            <NavLink className="navlinks" to={"/user"}>User</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
           }

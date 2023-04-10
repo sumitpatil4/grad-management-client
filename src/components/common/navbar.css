@@ -51,7 +51,7 @@
 .profile_logo
 {
     margin-top: 0px;
-    padding: 0px 3vw;
+    padding: 0px 2vw;
     width: 35px;
     height: 35px;
     cursor: pointer;
@@ -80,4 +80,18 @@
 .profile_layout>div:hover{
     background-color: rgb(46, 200, 102);
     cursor: pointer;
+}
+
+/* notifications */
+
+.notification_icon
+{
+    padding: 0px 2vw;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.notification_icon:hover{
+    transform: scale(1.1);
 }

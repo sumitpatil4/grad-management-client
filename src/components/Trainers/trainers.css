@@ -130,8 +130,8 @@
   .button-container{
     display: flex;
     flex-direction: row;
+    margin:20px 0px;
     margin-left: 10px;
-    margin-top:20px;
   }
 
   .button-container input[type=text]{
@@ -146,9 +146,9 @@
   }
 
   .search-bar {
-    margin-left: 80px;
+    margin-left: 61vw;
     display: flex;
-    align-items: center;
+    align-items:center;
     max-width: 400px;
     background-color: #fff;
     border-radius: 5px;

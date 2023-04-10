@@ -6,7 +6,9 @@ import { Route,Routes,useNavigate } from 'react-router-dom';
 import About from './About/About';
 import Login from './Login/Login';
 import AuthContext from './Contextapi/Authcontext';
-import Employees from './Admin/Employees';
+import Users from './Admin/Users';
+import User from './User/User';
+import {Admin} from './Contextapi/Admincontext';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
@@ -55,10 +57,10 @@ const Home = () => {
             navigate("/mytrainings",true);
             break;
           case 'superadmin':
-            navigate("/employees",true);
+            navigate("/admin",true);
             break;
           case 'user':
-            navigate("/mytrainings",true);
+            navigate("/user",true);
             break;
         }
     }
@@ -81,16 +83,20 @@ const Home = () => {
         <Navbar role={emprole}/>
         <h1>Leader ship</h1>
         </div>}
-        {superadminflag && <div>
+        {superadminflag && <Admin><div>
         <Navbar role={emprole}/>
         <Routes>
-            <Route path="/employees" element={<Employees />}/>
-            <Route path="/aboutus" element={<About />}/>
+            <Route path="/admin" element={<Users />}/>
+            {/* <Route path="/aboutus" element={<About />}/> */}
         </Routes>
-        </div>}
+        </div></Admin>}
         {userflag && <div>
         <Navbar role={emprole}/>
-        <h1>Not Assigned a role yet</h1>
+        <Routes>
+          <Route path="/user" element={<User />}/>
+          <Route path="/aboutus" element={<About />}/>
+        </Routes>
+        
         </div>} 
         </>
     }

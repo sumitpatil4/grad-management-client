@@ -89,12 +89,12 @@
 .popup-boxd {
     position: absolute;
     background: whitesmoke;
-    width: 500px;
-    height: 350px;
+    width: 35vw;
+    height: fit-content;
+    padding-bottom: 20px;
     top:40%;
     left: 50%;
     transform: translate(-50%,-40%);
-    display: grid;
     border-radius: 3px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
   }
@@ -111,30 +111,41 @@
   text-align: center;
   color: white;
   padding-top: 15px;
-  padding-left: 32px;
   font-weight: normal;
 }
 
 .input-group {
-    height: 40px;
-    width: 100%;
-    margin: 10px 0;
+    margin: 30px 0;
+    margin-left: 50px;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    justify-content: center;
 }
 
 .input-group label {
   /* position: absolute; */
   font-size: 18px;
-  padding-left: 80px;
-  transform: translateY(-50%);
+  padding-top: 10px;
+  /* transform: translateY(-50%); */
   font-weight: 500;
 }
 
 .input-group input {
   /* position: relative; */
   height: 100%;
-  width: 40%;
-  padding-left: 20px;
-  margin-left: 40px;
+  width: 70%;
+  padding:5px 20px;
+  /* margin-left: 40px; */
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+.input-group textarea {
+  /* position: relative; */
+  height: 100%;
+  width: 70%;
+  padding:5px 20px;
+  /* margin-left: 40px; */
   font-size: 17px;
   border: 1px solid lightgrey;
 }
@@ -142,9 +153,9 @@
 .input-group select {
   /* position: relative; */
   height: 100%;
-  width: 40%;
-  padding-left: 20px;
-  margin-left: 50px;
+  width: 83%;
+  padding:10px 20px;
+  /* margin-left: 50px; */
   font-size: 17px;
   border: 1px solid lightgrey;
 }
@@ -156,7 +167,7 @@
 
   .submit-btn, .cancel-btn {
     width: 150px;
-    margin-left: 60px;
+    margin-left: 80px;
     border: 1px solid #27ae60;
     border-radius: 3px;
     color: #27ae60;
