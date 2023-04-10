@@ -1,23 +1,12 @@
 .trainers {
     font-family: Arial,Helvetica,sans-serif;
     margin-top: 2%;
-    margin-left: 40px;
+    margin-left: 20%;
     padding: 5px;
-    width: 90%;
-    background: whitesmoke;
-    /* border-radius: 20px; */
+    width: 60%;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }  
-  /* h1 {
-    font-size: 50px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-    font-family: sans-serif;
-    letter-spacing: 1.4px;
-    font-size: 14px;
-    font-family: Arial,Helvetica,sans-serif;
-  } */
+
   
   .table-header {
     font-family: Arial,Helvetica,sans-serif;
@@ -25,7 +14,7 @@
     letter-spacing: 1.4px;
     font-size: 14px;
     display: flex;
-    padding: 20px;
+    padding: 10px;
     margin-top :2px;
     margin-bottom: 5px;
     border-bottom: 1px solid #aba4a4;
@@ -47,7 +36,6 @@
     margin-bottom: 5px;
     border: none;
     padding: 10px;
-    /* border-radius: 26px; */
     border-bottom: 1px solid #cdc6c6;
 
   }
@@ -58,36 +46,33 @@
     text-align: center;
   }
   
-  .trainer-id {
-    /* font-weight: bold; */
+  .trainer-name {
+    text-transform: capitalize;
     font-size: 20px;
     color:#0E141E;
   }
   
-  .trainer-name {
-    text-transform: capitalize;
-    font-size: 20px;
-  }
-  
   .email {
     font-size: 20px;
+    color:#0E141E;
   }
   
   .skill {
     text-transform: uppercase;
     font-size: 20px;
+    color:#0E141E;
   }
 
   .add-button{
     margin-right: 50%;
-    font-size:20px;
-    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: bold;
     background-color: #4CAF50;
     border-radius: 8px; 
     color: white;
     cursor: pointer; 
     border-color: #4CAF50;
-    padding: 6px 30px;
+    padding: 0px 10px;
   }
   .add-button:hover{
     background-color: #3e8e41; 
@@ -107,20 +92,6 @@
     background-color: #f44336c4;
   }
 
-  /* .search-button {
-    background-color: #4CAF50; 
-    color: white; 
-    border: none; 
-    padding: 12px 24px; 
-    font-size: 16px; 
-    cursor: pointer; 
-    border-radius: 30px;
-    border-color: #4CAF50; 
-  }
-  
-  .search-button:hover {
-    background-color: #3e8e41; 
-  } */
 
   .button-container{
     display: flex;
@@ -141,7 +112,7 @@
   }
 
   .search-bar {
-    margin-left: 80px;
+    margin-left: 10px;
     display: flex;
     align-items: center;
     max-width: 400px;
@@ -154,6 +125,7 @@
   .search-bar input[type="text"] {
     flex: 1;
     height: 100%;
+    width:40%;
     padding: 10px 20px;
     border: none;
     outline: none;
@@ -180,6 +152,176 @@
   .search-bar button[type="submit"] i {
     font-size: 24px;
   }
+
+  .profileIconButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .profileIconButton>img{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profileIconButton:hover{
+    transform: scale(1.2);
+  }
+ 
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+
+  .popup-content{
+    position: absolute;
+    background: whitesmoke;
+    width: 500px;
+    height: 400px;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 3px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+  }
+
+  .trainer-details{
+    height: 68px;
+    background: black;
+  }
+
+  .trainer-details>h2{
+    text-align: center;
+    color: white;
+    padding-top: 15px;
+    padding-left: 32px;
+    font-weight: normal;
+  }
+
+  .popup-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+
+  .popup-data>div{
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    width:80%;
+    padding-top: 6px;
+  }
+  
+  .popup-data>div> span {
+    margin-right: 20px;
+  }
+  
+  .popup-close {
+    margin-top: 20px;
+    width: 150px;
+    margin-left: 174px;
+    border: 1px solid #27ae60;
+    border-radius: 3px;
+    color: #27ae60;
+    padding: 8px 10px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .popup-close:hover{
+    background: #27ae60;
+    color: white;
+  }
+
+
+  .deleteIconButton{
+    position: absolute;
+    top: 77px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .deleteIconButton>img{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .deleteIconButton:hover{
+    transform : scale(1.2);
+  }
+
+  .editIconButton{
+    position: absolute;
+    top: 122px;
+    right: 4px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .editIconButton>img{
+    width:80%;
+    height: 80%;
+    object-fit: cover;
+  }
+
+  .editIconButton:hover{
+    transform : scale(1.2);
+  }
+
+  .availability-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  .submit-button {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #006F8E;
+  }
+
+
+
+
+  
+  
+
+  
   
   
   
