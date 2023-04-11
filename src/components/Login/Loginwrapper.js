@@ -6,16 +6,18 @@ const Loginwrapper = (props) => {
 
     const usecontext=useContext(AuthContext);
     const {handleLogin,
-        updateempid,
-        updateempname,
-        updateempmail,
-        updateemppicture,
-        updateemprole}=usecontext;
+          updateuserid,
+          updateusername,
+          updateusermail,
+          updateuserpicture,
+          updateaccessToken,
+          updateidToken,
+          updateuserrole}=usecontext;
 
     const handleLoginApi=()=>{
             //call google api here and store in db get response
             //using response update emp_details to auth contextapi
-            updateemprole("user")
+            updateuserrole("ROLE_MANAGER");
             handleLogin();
     }
 

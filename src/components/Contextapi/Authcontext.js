@@ -3,53 +3,61 @@ import React, { useState } from "react"
 const AuthContext=React.createContext();
 
 export const Auth=(props)=>{
-    const [isAuthenticated,setIsAuthenticated]=useState(true);
-    const [empid,setEmpid]=useState("1001");
-    const [empname,setEmpname]=useState("");
-    const [empmail,setEmpmail]=useState("");
-    const [emppicture,setEmppicture]=useState("");
-    const [emprole,setEmprole]=useState("");
+    const [isAuthenticated,setIsAuthenticated]=useState(false);
+    const [userid,setUserid]=useState("1001");
+    const [username,setUsername]=useState("");
+    const [usermail,setUsermail]=useState("");
+    const [userpicture,setUserpicture]=useState("");
+    const [userrole,setUserrole]=useState("");
+    const [accessToken,setAccessToken]=useState("");
+    const [idToken,setIdToken]=useState("");
     const [notificationCheck,setNotificationCheck]=useState(false);
 
-    const updateempid=(e)=>setEmpid(e);
-    const updateempname=(e)=>setEmpname(e);
-    const updateempmail=(e)=>setEmpmail(e);
-    const updateemppicture=(e)=>setEmppicture(e);
-    const updateemprole=(e)=>setEmprole(e);
+    const updateuserid=(e)=>setUserid(e);
+    const updateusername=(e)=>setUsername(e);
+    const updateusermail=(e)=>setUsermail(e);
+    const updateuserpicture=(e)=>setUserpicture(e);
+    const updateuserrole=(e)=>setUserrole(e);
+    const updateaccessToken=(e)=>setAccessToken(e);
+    const updateidToken=(e)=>setIdToken(e);
     const updatenotificationCheck=(e)=>setNotificationCheck(e);
 
     const handleLogin=()=>{
-        // if(empname!=="" && empid!=="" && empmail!=="" && emppicture!=="")
-            setIsAuthenticated(false);
+        // if(username!=="" && userid!=="" && usermail!=="" && userpicture!=="")
+            setIsAuthenticated(true);
         // else return;
     }
 
     const handleLogout=()=>{
-        setIsAuthenticated(true);
-        setEmpid("");
-        setEmpname("");
-        setEmpmail("");
-        setEmppicture("");
-        setEmprole("");
+        setIsAuthenticated(false);
+        setUserid("");
+        setUsername("");
+        setUsermail("");
+        setUserpicture("");
+        setUserrole("");
     }
 
     return (
         <AuthContext.Provider
         value={{
           isAuthenticated,
-          empname,
-          empid,
-          empmail,
-          emppicture,
-          emprole,
+          username,
+          userid,
+          usermail,
+          userpicture,
+          userrole,
+          accessToken,
+          idToken,
           notificationCheck,
           handleLogout,
           handleLogin,
-          updateempid,
-          updateempname,
-          updateempmail,
-          updateemppicture,
-          updateemprole,
+          updateuserid,
+          updateusername,
+          updateusermail,
+          updateuserpicture,
+          updateuserrole,
+          updateaccessToken,
+          updateidToken,
           updatenotificationCheck
         }}
       >
