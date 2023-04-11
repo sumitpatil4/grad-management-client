@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
 import { IoClose } from 'react-icons/io5';
-import { MdEdit } from 'react-icons/md';
+import { MdEdit,MdDelete } from 'react-icons/md';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
-  const [arr, setArr] = useState(["training1","training2","training3","training4"])
+  const [arr, setArr] = useState(["Training1","Training2","Training3","Training4"])
   const [temp, setTemp] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenCon, setIsOpenCon] = useState(false)
@@ -22,7 +22,7 @@ const Mytrainings = () => {
     if(temp==""){
       setValidMsg("Invalid Name!!");
       setTimeout(()=>{
-          document.getElementById("val").style.display="none";
+          setValidMsg("");
       },5000);
     }
     else{
@@ -52,8 +52,8 @@ const handleRemoveClick = (index) => {
 // handle click event of the Edit button
 const handleEdit = (i) => {
   setArrId(i);
+  setTemp(arr[i]);
   setIsOpenEdit(true);
-  setTemp(arr[arrId]);
 }
 
 const handleEditClick = (index) => {
@@ -63,6 +63,7 @@ const handleEditClick = (index) => {
   setArr(list);
   setIsOpenEdit(false);
   console.log(list);
+  setTemp('');
 };
 
   return (
@@ -77,7 +78,7 @@ const handleEditClick = (index) => {
               <MdEdit className='edit_icon'/>
             </div>
             <div id={i} onClick={()=>handleRem(i)}>
-              <IoClose className="close-icon"/>
+              <MdDelete className="close-icon"/>
             </div>
           </div> 
           <div className='trainingText'>{e}</div>
@@ -91,11 +92,11 @@ const handleEditClick = (index) => {
       </div>
         
       {isOpenCon && <div className='popupContainer'>
-       <div className='con-popup'>
-        <div className='delTrain'>
-        <h2>Are you sure to delete this training?</h2>
+       <div className='popup-boxd'>
+        <div className='popupHeader'>
+          <h2>Are you sure to delete this training?</h2>
         </div>
-          <div><button type="submit" className="submit-btn" onClick={() => handleRemoveClick(arrId)}>
+          <div className='buttonsContainer'><button type="submit" className="submit-btn" onClick={() => handleRemoveClick(arrId)}>
             Yes
           </button>
           <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
@@ -105,47 +106,57 @@ const handleEditClick = (index) => {
         </div>
         </div>
         }
-        {isOpen && <div className='popupContainer'>
+        {isOpen && <form><div className='popupContainer'>
             <div className="popup-boxd">
-              <div className='newTrain'>
-              <h2>Add New Training</h2>
+              <div className='popupHeader'>
+                <h2>Add New Training</h2>
               </div>
-                
-              <div className="input-group">
-                <label htmlFor="name">Name </label>
-                <input type="text" id="name" onChange={handleChange} value={temp} />
-                <p id="val">{validMsg}</p>                                                              
+              <div className='inputContainer'>
+                <div className="input-group">
+                  <label htmlFor="name">Name </label>
+                  <div>
+                    <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
+                    <p id="val">{validMsg}</p>
+                  </div>                                                              
+                </div>
               </div>
-              <div><button type="submit" className="submit-btn" onClick={handleClick}>
-                Submit
-              </button>
-              <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
-                Cancel
-              </button>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={handleClick}>
+                 Submit
+                </button>
+                <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
+                  Cancel
+                </button>
               </div>
             </div>
-        </div>}
+        </div></form>}
 
-      {isOpenEdit && <div className='popupContainer'>
+      {isOpenEdit && <form><div className='popupContainer'>
         <div className="popup-boxd">
-        <div className='newTrain'>
-        <h2>Enter New Training Name</h2>
-        </div>
+          <div className='popupHeader'>
+            <h2>Enter New Training Name</h2>
+          </div>
             
-        <div className="input-group">
-          <label htmlFor="name">Name </label>
-          <input type="text" id="name" onChange={handleChange} value={temp} />
-          <p id="val">{validMsg}</p>                                                              
+        <div className='inputContainer'>
+          <div className="input-group">
+            <label htmlFor="name">Name </label>
+            <div>
+              <input type="text" id="name" onChange={handleChange} value={temp} />
+              <p id="val">{validMsg}</p>     
+            </div>                                                         
+          </div>
         </div>
-        <div><button type="submit" className="submit-btn" onClick={() => handleEditClick(arrId)}>
-          Submit
-        </button>
-        <button type="reset" className="cancel-btn" onClick={() => setIsOpenEdit(false)}>
-          Cancel
-        </button>
+
+        <div className='buttonsContainer'>
+          <button type="submit" className="submit-btn" onClick={() => handleEditClick(arrId)}>
+            Submit
+          </button>
+          <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false);setTemp('');}}>
+            Cancel
+          </button>
         </div>
       </div>
-      </div>}
+      </div></form>}
     </div>
   )
 }

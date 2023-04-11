@@ -1,0 +1,119 @@
+.employeeContainer
+{
+    display: block;
+    width: 100vw;
+    margin: 5% auto;
+}
+
+table
+{
+    margin: 0px auto;
+    border-collapse: collapse;
+    font-size: 22px;
+    border-radius: 5px;
+    box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px;
+}
+
+thead
+{
+    background-color: rgb(19, 28, 44);
+    color: white;
+    border-radius: 5px;
+}
+
+th{
+    padding: 20px 40px;
+}
+
+td{
+    padding: 20px 40px;
+}
+
+tr:nth-child(even)
+{
+    background-color: rgb(216, 216, 216);
+}
+
+.edit-icon,
+.del_icon
+{
+    padding: 0px 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.edit-icon
+{
+    color: rgb(94, 132, 255);
+}
+
+.del_icon
+{
+    color: rgb(255, 54, 54);
+}
+
+.edit-icon:hover,
+.del_icon:hover
+{
+    transform: scale(1.1);
+}
+
+/* styling for notification */
+
+.notificationContainer
+{
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(58, 58, 58, 0.795) 0px 8px 24px;
+    display: flex;
+    flex-direction: column;
+    top:10vh;
+    right: 7vw;
+    float: right;
+}
+
+.notification{
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(124, 124, 124, 0.308);
+}
+
+.notification:hover{
+    background-color: rgb(219, 219, 219);
+}
+
+.notification_data
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.notification_data > .empname{
+    font-weight: bold;
+    padding: 0px 5px;
+    font-size: 18px;
+}
+
+.notification_data > .emprole{
+    padding: 0px 5px;
+    font-weight: 400;
+    color: rgb(24, 20, 37);
+}
+
+.notification_time
+{
+    color: gray;
+    font-weight: 500;
+    padding: 5px;
+}
+
+.profile_icon
+{
+    padding: 5px 1vw;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+}
