@@ -3,10 +3,10 @@ import AuthContext from "../Contextapi/Authcontext";
 
 const Profile=(props)=>{
     const usecontext=useContext(AuthContext);
-    const {handleLogout}=usecontext;
+    const {username,handleLogout}=usecontext;
 
     return (<div className="profile_layout">
-                    <div>UserName</div>
+                    <div>{username}</div>
                     <div onClick={handleLogout}>Logout</div>
             </div>
             )
