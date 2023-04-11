@@ -10,7 +10,7 @@ import { FaSearch } from 'react-icons/fa';
 const Users = () => {
     const useAdmincontext=useContext(AdminContext);
     const useAuthcontext=useContext(AuthContext);
-    const {notificationList,updatenotificationList}=useAdmincontext;
+    const {userList,notificationList,updateuserList,updatenotificationList}=useAdmincontext;
     const {notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
@@ -22,7 +22,7 @@ const Users = () => {
 
 
 
-    const [employees, setEmployees] = useState([
+    const [users, setUsers] = useState([
         { userid: 1, username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
         { userid: 2, username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
         { userid: 3, username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
@@ -30,6 +30,9 @@ const Users = () => {
       ]);
 
       useEffect(()=>{
+
+        //get users and notification from db and store in userlists and notificationlist
+
         const x=[{ userid: 1,timestamp:"10 Apr 2023", username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
         { userid: 2,timestamp:"10 Apr 2023", username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
         { userid: 3,timestamp:"10 Apr 2023", username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
@@ -41,8 +44,8 @@ const Users = () => {
       
 
     const handleDelete = (userId) => {
-        const newEmployees = employees.filter((e) => e.userid !== userId);
-        setEmployees(newEmployees);
+        const newUsers = users.filter((e) => e.userid !== userId);
+        setUsers(newUsers);
         //if notification is there then it should be removed from db
         setIsOpenCon(false);
         setNotificationEditCheck(false);
@@ -55,15 +58,15 @@ const Users = () => {
     }
 
     const handleNotification=(emp)=>{
-      const newEmployee = employees.filter((e) => e.userid === emp.userid)[0];
-      newEmployee.desc="descrption Upon successfully clearing an assessment, you can promote yourself using the HackerRank certificate to peers and employers";
-      newEmployee.req_role=emp.role;
-      console.log(newEmployee);
-      // setEmployees(newEmployee);
+      const newUser = users.filter((e) => e.userid === emp.userid)[0];
+      newUser.desc="descrption Upon successfully clearing an assessment, you can promote yourself using the HackerRank certificate to peers and employers";
+      newUser.req_role=emp.role;
+      console.log(newUser);
+      // setUsers(newUser);
       setNotificationEditCheck(true);
       setIsOpenEdit(true);
-      setUserTemp(newEmployee);
-      setTemprole(newEmployee.role);
+      setUserTemp(newUser);
+      setTemprole(newUser.role);
       updatenotificationCheck(false);
     }
 
@@ -74,14 +77,14 @@ const Users = () => {
 
     const handleEditClick=(emp)=>{
         console.log(temprole);
-        employees.forEach((e)=>{
+        users.forEach((e)=>{
             if(e.userid===emp.userid)
             {
                 e.role=temprole;
             }
         })
         //if notification is there then it should be removed from db
-        setEmployees(employees);
+        setUsers(users);
         setIsOpenEdit(false);
         setNotificationEditCheck(false);
     }
@@ -105,7 +108,7 @@ const Users = () => {
             </thead>
             <tbody>
                 {
-                    employees.map((e)=><tr>
+                    users.map((e)=><tr>
                         <td>{e.username}</td>
                         <td>{e.useremail}</td>
                         <td>{e.role}</td>
@@ -137,69 +140,79 @@ const Users = () => {
         }
 
         {isOpenCon && <div className='popupContainer'>
-       <div className='con-popup'>
-        <div className='delTrain'>
-        <h2>Are you sure to delete this user?</h2>
-        </div>
-          <div><button type="submit" className="submit-btn" onClick={() => handleDelete(userId)}>
-            Yes
-          </button>
-          <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
-            No
-          </button>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Are you sure to delete this user?</h2>
+            </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => handleDelete(userId)}>
+                  Yes
+                </button>
+                <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
+                  No
+                </button>
+              </div>
           </div>
         </div>
-        </div>
         }
 
-        {isOpenEdit && <div className='popupContainer'>
-        <div className="popup-boxd">
-        <div className='newTrain'>
-        <h2>Edit Role For User</h2>
-        </div>
-            
-        <div className="input-group">
-          <label htmlFor="name">Name </label>
-          <input type="text" id="name" value={userTemp.username} readOnly={true}/>                                                            
-        </div>
+        {isOpenEdit && <form><div className='popupContainer' onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+          <div className="popup-boxd" onClick={(e)=>e.stopPropagation()}>
+            <div className='popupHeader'>
+              <h2>Edit Role For User</h2>
+            </div>
+            <div className='inputContainer'>
+              <div className="input-group">
+                <label>Name </label>
+                <input type="text" value={userTemp.username} readOnly={true}/>                                                            
+              </div>
 
-        <div className="input-group">
-          <label htmlFor="name">Email </label>
-          <input type="text" id="name" value={userTemp.useremail} readOnly={true}/>                                                            
-        </div>
+              <div className="input-group">
+                <label>Email </label>
+                <input type="text" value={userTemp.useremail} readOnly={true}/>                                                            
+              </div>
 
-        {
-          notificationEditCheck && <>
-            <div className="input-group">
-              <label htmlFor="name">Request&nbsp;Role </label>
-              <input type="text" id="name" value={userTemp.req_role} readOnly={true}/>                                                            
+              {
+                notificationEditCheck && <>
+                  <div className="input-group">
+                    <label>Request&nbsp;Role </label>
+                    <input type="text" value={userTemp.req_role} readOnly={true}/>                                                            
+                  </div>
+
+                  <div className="input-group">
+                    <label>Description</label>
+                    <textarea readOnly={true}>{userTemp.desc}</textarea>                                                        
+                  </div>
+                </>
+              }
+              
+              <div className="input-group">
+                <label>Role </label>
+                <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
+                  <option value={"manager"}>Manager</option>
+                  <option value={"leadership"}>Leader&nbsp;Ship</option>
+                  <option value={"user"}>User</option>
+                </select>                                                            
+              </div>
             </div>
 
-            <div className="input-group">
-              <label htmlFor="name">Description</label>
-              <textarea id="name" readOnly={true}>{userTemp.desc}</textarea>                                                        
-            </div>
-          </>
-        }
-        
-        <div className="input-group">
-          <label htmlFor="name">Role </label>
-          <select id="name" onClick={(e)=>setTemprole(e.target.value)}>
-            <option value={"manager"}>Manager</option>
-            <option value={"leadership"}>Leader&nbsp;Ship</option>
-            <option value={"user"}>User</option>
-          </select>                                                            
-        </div>
-
-        <div><button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
-          Submit
-        </button>
-        <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
-          Cancel
-        </button>
-        </div>
-      </div>
-      </div>}
+            {!notificationEditCheck ? (<div className='buttonsContainer'>
+              <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
+                Submit
+              </button>
+              <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+                Cancel
+              </button>
+            </div>):(<div className='buttonsContainer'>
+              <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
+                Approve
+              </button>
+              <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+                Reject
+              </button>
+            </div>)}
+          </div>
+        </div></form>}
     </div>
     )
 }

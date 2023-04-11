@@ -28,16 +28,16 @@ const Navbar = (props) => {
         setUserflag(false);
         switch(props.role)
         {
-          case 'manager':
+          case 'ROLE_MANAGER':
             setManagerflag(true);
             break;
-          case 'leadership':
+          case 'ROLE_LEADER':
             setLeadershipflag(true);
             break;
-          case 'superadmin':
+          case 'ROLE_ADMIN':
             setSuperadminflag(true);
             break;
-          case 'user':
+          case 'ROLE_USER':
             setUserflag(true);
             break;
         }

@@ -7,14 +7,14 @@ const User = () => {
     const [temprole,setTemprole]=useState("");
     const [tempdesc,setTempdesc]=useState("manager");
     const usecontext=useContext(AuthContext);
-    const {empid}=usecontext;
+    const {userid,username}=usecontext;
 
     const handleClick=()=>{
         const req={
             role:temprole,
             desc:tempdesc,
             date:Date(),
-            userid:empid
+            userid:userid
         }
         console.log(req);
         setIsOpen(false);
@@ -25,31 +25,35 @@ const User = () => {
         <>
         <div className='newuserContainer'>
             <div className='newuser'>
-                <h1>You Are New User</h1>
+                <h1>Hi {username} ! , You Are New User</h1>
                 <p onClick={()=>setIsOpen(true)}>Request&nbsp;Access</p>
             </div>
         </div>
-        {isOpen && <div className='popupContainer'>
+        {isOpen && <form><div className='popupContainer'>
             <div className="popup-boxd">
-            <div className='newTrain'>
+            <div className='popupHeader'>
             <h2>Request Dialog</h2>
             </div>
-                
-            <div className="input-group">
-            <label htmlFor="name">Role </label>
-            <select id="name" onClick={(e)=>setTemprole(e.target.value)}>
-                <option value={"manager"}>Manager</option>
-                <option value={"leadership"}>Leader&nbsp;Ship</option>
-                <option value={"user"}>User</option>
-            </select>                                                            
-            </div>
-            <div className="input-group">
-                <label htmlFor="name">Description</label>
-                <textarea id="name" onChange={(e)=>setTempdesc(e.target.value)} 
-                placeholder='Write a request description'></textarea>                                                        
+
+
+            <div className='inputContainer'>
+                <div className="input-group">
+                    <label htmlFor="name">Role </label>
+                    <select id="name" onClick={(e)=>setTemprole(e.target.value)} required={true}>
+                        <option value={"manager"}>Manager</option>
+                        <option value={"leadership"}>Leader&nbsp;Ship</option>
+                        <option value={"user"}>User</option>
+                    </select>                                                            
+                </div>
+
+                <div className="input-group">
+                    <label htmlFor="name">Description</label>
+                    <textarea id="name" onChange={(e)=>setTempdesc(e.target.value)} 
+                    placeholder='Write a request description' required={true}></textarea>                                                        
+                </div>
             </div>
 
-            <div><button type="submit" className="submit-btn" onClick={handleClick}>
+            <div className='buttonsContainer'><button type="submit" className="submit-btn" onClick={handleClick}>
                 Submit
             </button>
             <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
@@ -57,7 +61,7 @@ const User = () => {
             </button>
             </div>
             </div>
-        </div>}
+        </div></form>}
         </>
     )
 }
