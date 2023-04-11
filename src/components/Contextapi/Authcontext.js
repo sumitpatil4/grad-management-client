@@ -35,6 +35,8 @@ export const Auth=(props)=>{
         setUsermail("");
         setUserpicture("");
         setUserrole("");
+        setIdToken("");
+        setAccessToken("");
     }
 
     return (

@@ -5,6 +5,9 @@
     justify-content: center;
     align-items: center;
 }
+.newuser{
+    text-align: center;
+}
 
 .newuser>p{
     background-color: rgb(46, 200, 102);
