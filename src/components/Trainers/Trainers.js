@@ -11,7 +11,9 @@ const Trainers = () => {
       skill: "Python",
       phone: "8630132801",
       email: "ashish@gmail.com",
-      availability: "Monday-Friday",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
     },
     {
       trainersid: 2,
@@ -19,7 +21,9 @@ const Trainers = () => {
       skill: "Java",
       phone: "1234543212",
       email: "sumit@gmail.com",
-      availability: "Monday-Friday",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
     },
     {
       trainersid: 3,
@@ -27,7 +31,9 @@ const Trainers = () => {
       skill: "C++",
       phone: "1234567890",
       email: "sai@gmail.com",
-      availability: "Monday-Friday",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
     },
     {
       trainersid: 4,
@@ -35,7 +41,9 @@ const Trainers = () => {
       skill: "JavaScript",
       phone: "1234567890",
       email: "akriti@gmail.com",
-      availability: "Monday-Friday",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
     },
   ]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,6 +52,7 @@ const Trainers = () => {
   const [isOpenCon, setIsOpenCon] = useState(false);
   const [trainerId,settrainerId]=useState("");
   const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [date, setDate] = useState('');
   const [fromTime, setFromTime] = useState('');
   const [toTime, setToTime] = useState('');
@@ -78,15 +87,17 @@ const Trainers = () => {
     settrainerTemp(trainer);
   };
 
-  const handleEditClick=()=>{
-    console.log("HI");
-    }
 
 
   const handleAddPopup = () => {
     setIsAdd(true);
-    // setTrainers([...trainers, newTrainer]);
   };
+
+  const handleEdit = (trainer) => {
+    setIsEdit(true);
+    settrainerTemp(trainer);
+  }
+   
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -134,12 +145,11 @@ const Trainers = () => {
                   <td>
                     <div className="actionButton">
                       <FaUserAlt
-                        trainer={trainer}
                         onClick={() => handleProfile(trainer)}
                         className="profileIconButton"
                       />
                       <MdEdit
-                        onClick={() => handleEditClick()}
+                        onClick={() => handleEdit(trainer)}
                         className="edit-icon"
                       />
                       <MdDelete
@@ -189,32 +199,32 @@ const Trainers = () => {
               setIsAdd(false);
             }}
           >
-            <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
-              <div className="popupHeader1">
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
                 <h2>Add New Trainer</h2>
               </div>
-              <div className="inputContainer1">
-                <div className="input-group1">
+              <div className="inputContainer">
+                <div className="input-group">
                   <label>Name </label>
                   <input type="text" />
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Skill </label>
                   <input type="text" />
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Email </label>
                   <input type="text" />
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Phone </label>
                   <input type="text" />
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>
                     Date:
                     </label>
@@ -225,7 +235,7 @@ const Trainers = () => {
                     />
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>
                     From Time:
                     </label>
@@ -237,7 +247,7 @@ const Trainers = () => {
                  
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>
                     To Time:
                     </label>
@@ -258,6 +268,95 @@ const Trainers = () => {
                     className="cancel-btn"
                     onClick={() => {
                       setIsAdd(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
+
+{isEdit && (
+        <form>
+          <div
+            className="popupContainer"
+            onClick={() => {
+              setIsEdit(false);
+            }}
+          >
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
+                <h2>Edit Trainer</h2>
+              </div>
+              <div className="inputContainer">
+                <div className="input-group">
+                  <label>Name </label>
+                  <input type="text" value={trainerTemp.trainersname}/>
+                </div>
+
+                <div className="input-group">
+                  <label>Skill </label>
+                  <input type="text" value={trainerTemp.skill}/>
+                </div>
+
+                <div className="input-group">
+                  <label>Email </label>
+                  <input type="text" value={trainerTemp.email}/>
+                </div>
+
+                <div className="input-group">
+                  <label>Phone </label>
+                  <input type="text" value={trainerTemp.phone}/>
+                </div>
+
+                <div className="input-group">
+                  <label>
+                    Date
+                    </label>
+                    <input
+                      type="date"
+                      value={trainerTemp.Date}
+                      onChange={handleDateChange}
+                    />
+                </div>
+
+                <div className="input-group">
+                  <label>
+                    From Time
+                    </label>
+                    <input
+                      type="time"
+                      value={trainerTemp.from_time}
+                      onChange={handleFromTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="input-group">
+                  <label>
+                    To Time
+                    </label>
+                    <input
+                      type="time"
+                      value={trainerTemp.to_time}
+                      onChange={handleToTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="buttonsContainer">
+                  <button type="submit" className="submit-btn">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => {
+                      setIsEdit(false);
                     }}
                   >
                     Cancel
@@ -308,8 +407,18 @@ const Trainers = () => {
                 </div>
 
                 <div className="input-group">
-                  <label>Availabilty </label>
-                  <p>{trainerTemp.availability}</p>
+                  <label>Date </label>
+                  <p>{trainerTemp.Date}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>From Time </label>
+                  <p>{trainerTemp.from_time}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>To Time </label>
+                  <p>{trainerTemp.to_time}</p>
                 </div>
               </div>
             </div>

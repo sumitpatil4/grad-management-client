@@ -69,6 +69,12 @@ cursor:pointer;
   border: 1px solid lightgrey;
 }
 
+.input-group p {
+  padding:0px 30px;
+  padding-top: 10px;
+  font-size: 17px;
+}
+
 #val {
   color: red;
   font-weight: 500;
