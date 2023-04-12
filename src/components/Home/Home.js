@@ -11,6 +11,9 @@ import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
 import {Manager} from "../Contextapi/Managercontext"
 import Training from '../Training/Training';
+import Interns from '../Interns/Intern';
+import Topic from '../Topics/Topic';
+import Schedules from '../Schedules/Schedules';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
@@ -78,6 +81,9 @@ const Home = () => {
             <Routes>
               <Route path="/mytrainings" element={<Mytrainings />}/>
               <Route path="/mytrainings/training" element={<Training />}/>
+              <Route path="/mytrainings/training/interns" element={<Interns />}/>
+              <Route path="/mytrainings/training/topics" element={<Topic />}/>
+              <Route path="/mytrainings/training/schedules" element={<Schedules />}/>
               <Route path="/trainers" element={<Trainers />}/>
               <Route path="/aboutus" element={<About />}/>
             </Routes>

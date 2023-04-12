@@ -21,7 +21,7 @@
   }
   
   
-  .trainings>div{
+  .trainText{
       width: 22vw;
       height: 47vh;
       margin: 3vw;
@@ -36,13 +36,13 @@
   }
   
   
-  .trainings>div:hover{
+  .trainText:hover{
       transform: scale(1.02);
   }
   
-  .trainingText{
+  .trainText>h3{
+      height: 47vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 37%;
   }
