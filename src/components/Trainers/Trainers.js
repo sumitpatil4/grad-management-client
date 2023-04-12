@@ -115,14 +115,14 @@ const Trainers = () => {
         <button className="add-button" onClick={handleAddPopup}>
           Add&nbsp;Trainer
         </button>
-        <div className="search-bar1">
+        <div className="search-bar">
           <input
             type="text"
-            placeholder="byName....bySkill...."
+            placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchInputChange}
           />
-          <button type="submit">
+          <button type="submit" onClick={handleSearchInputChange}>
             <FaSearch />
           </button>
         </div>
