@@ -21,7 +21,14 @@ const Users = () => {
     const [isOpenCon, setIsOpenCon] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const handleSearchInputChange = (event) => {
+      setSearchQuery(event.target.value);
+    };
 
+    const filteredUsers = userList.filter(
+      (user) =>
+        user.uname.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const [users, setUsers] = useState([
         { userid: 1, username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
@@ -96,12 +103,19 @@ const Users = () => {
 
     return (
         <div className='employeeContainer'>
-        <div className="button-container">
-          <div className="search-bar">
-            <input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-            <button type="submit"><FaSearch /></button>
-          </div>
+        <div className="buttonContainer">
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+          <button type="submit" onClick={handleSearchInputChange}>
+            <FaSearch />
+          </button>
         </div>
+      </div>
         <table>
             <thead>
                 <tr>
@@ -113,7 +127,7 @@ const Users = () => {
             </thead>
             <tbody>
                 {
-                    userList.map((e)=><tr>
+                    (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
                         <td>{e.role}</td>
