@@ -26,7 +26,7 @@ const Home = () => {
         setLeadershipflag(false);
         setSuperadminflag(false);
         setUserflag(false);
-        console.log(userrole);
+        // console.log(userrole);
         switch(userrole)
         {
           case 'ROLE_MANAGER':
@@ -43,6 +43,7 @@ const Home = () => {
             break;
         }
     }
+    // console.log(usecontext)
     if(!isAuthenticated)
     {
       navigate("/",true)

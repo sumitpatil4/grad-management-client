@@ -5,6 +5,7 @@ import AuthContext from '../Contextapi/Authcontext';
 import { MdEdit,MdDelete } from 'react-icons/md';
 import profile from "../../images/profile.svg";
 import { FaSearch } from 'react-icons/fa';
+import axios from 'axios';
 
 
 const Users = () => {
@@ -31,14 +32,28 @@ const Users = () => {
 
       useEffect(()=>{
 
+        axios.get("http://localhost:8090/notification/getNotifications")
+        .then((res)=>{
+          console.log(res.data.notificationList);
+          updatenotificationList(res.data.notificationList)
+          // console.log(notificationList)
+        });
+
+        axios.get("http://localhost:8090/user/getUsers")
+        .then((res)=>{
+          // console.log(res.data.userList);
+          updateuserList(res.data.userList)
+          // console.log(userList)
+        });
         //get users and notification from db and store in userlists and notificationlist
 
-        const x=[{ userid: 1,timestamp:"10 Apr 2023", username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
-        { userid: 2,timestamp:"10 Apr 2023", username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
-        { userid: 3,timestamp:"10 Apr 2023", username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
-        { userid: 4,timestamp:"10 Apr 2023", username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},
-      ]
-        updatenotificationList(x);
+        // const x=[{ userid: 1,timestamp:"10 Apr 2023", username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
+        // { userid: 2,timestamp:"10 Apr 2023", username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
+        // { userid: 3,timestamp:"10 Apr 2023", username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
+        // { userid: 4,timestamp:"10 Apr 2023", username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},]
+
+
+        // updatenotificationList();
       },[notificationCheck])
 
       
@@ -58,15 +73,10 @@ const Users = () => {
     }
 
     const handleNotification=(emp)=>{
-      const newUser = users.filter((e) => e.userid === emp.userid)[0];
-      newUser.desc="descrption Upon successfully clearing an assessment, you can promote yourself using the HackerRank certificate to peers and employers";
-      newUser.req_role=emp.role;
-      console.log(newUser);
-      // setUsers(newUser);
       setNotificationEditCheck(true);
       setIsOpenEdit(true);
-      setUserTemp(newUser);
-      setTemprole(newUser.role);
+      setUserTemp(emp);
+      setTemprole(emp.user.role);
       updatenotificationCheck(false);
     }
 
@@ -76,13 +86,8 @@ const Users = () => {
     }
 
     const handleEditClick=(emp)=>{
-        console.log(temprole);
-        users.forEach((e)=>{
-            if(e.userid===emp.userid)
-            {
-                e.role=temprole;
-            }
-        })
+        // console.log(temprole);
+        console.log(emp.json(),temprole);
         //if notification is there then it should be removed from db
         setUsers(users);
         setIsOpenEdit(false);
@@ -108,9 +113,9 @@ const Users = () => {
             </thead>
             <tbody>
                 {
-                    users.map((e)=><tr>
-                        <td>{e.username}</td>
-                        <td>{e.useremail}</td>
+                    userList.map((e)=><tr>
+                        <td>{e.uname}</td>
+                        <td>{e.email}</td>
                         <td>{e.role}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
@@ -125,14 +130,14 @@ const Users = () => {
           notificationCheck && <div className='notificationContainer'>
             {notificationList.map((e)=><div onClick={()=>handleNotification(e)} className='notification'>
                 <div className='empprofile'>
-                  <img className="profile_icon" src={profile} alt="profile_logo"/>
+                  <img className="profile_icon" src={e.user.picture} alt="profile_logo"/>
                 </div>
                 <div>
                   <div className='notification_data'>
-                    <div className='empname'>{e.username}</div>
-                    <div className='emprole'>Request For {e.role}</div>
+                    <div className='empname'>{e.user.uname}</div>
+                    <div className='emprole'>Request For {e.requestedRole}</div>
                   </div>
-                  <div className='notification_time'>{e.timestamp}</div>
+                  <div className='notification_time'>{e.timestamp.substring(0,10)}&nbsp;&nbsp;{e.timestamp.substring(11,19)}</div>
                 </div> 
               </div>)}
               {/* <h1>notification</h1> */}
@@ -162,39 +167,56 @@ const Users = () => {
               <h2>Edit Role For User</h2>
             </div>
             <div className='inputContainer'>
-              <div className="input-group">
-                <label>Name </label>
-                <input type="text" value={userTemp.username} readOnly={true}/>                                                            
-              </div>
-
-              <div className="input-group">
-                <label>Email </label>
-                <input type="text" value={userTemp.useremail} readOnly={true}/>                                                            
-              </div>
-
               {
-                notificationEditCheck && <>
+                notificationEditCheck ? <>
+                  <div className="input-group">
+                    <label>Name </label>
+                    <input type="text" value={userTemp.user.uname} readOnly={true}/>                                                            
+                  </div>
+
+                  <div className="input-group">
+                    <label>Email </label>
+                    <input type="text" value={userTemp.user.email} readOnly={true}/>                                                            
+                  </div>
+
                   <div className="input-group">
                     <label>Request&nbsp;Role </label>
-                    <input type="text" value={userTemp.req_role} readOnly={true}/>                                                            
+                    <input type="text" value={userTemp.requestedRole} readOnly={true}/>                                                            
                   </div>
 
                   <div className="input-group">
                     <label>Description</label>
-                    <textarea readOnly={true}>{userTemp.desc}</textarea>                                                        
+                    <textarea readOnly={true}>{userTemp.notificationDesc}</textarea>                                                        
                   </div>
+
+                  <div className="input-group">
+                  <label>Role </label>
+                  <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
+                    <option value={"ROLE_MANAGER"}>Manager</option>
+                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                  </select>                                                            
+                </div> 
+                </>:<>
+                <div className="input-group">
+                    <label>Name </label>
+                    <input type="text" value={userTemp.uname} readOnly={true}/>                                                            
+                  </div>
+
+                  <div className="input-group">
+                    <label>Email </label>
+                    <input type="text" value={userTemp.email} readOnly={true}/>                                                            
+                  </div>
+
+                  <div className="input-group">
+                  <label>Role </label>
+                  <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
+                    <option value={"ROLE_MANAGER"}>Manager</option>
+                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                  </select>                                                            
+                  </div> 
                 </>
               }
-              
-              <div className="input-group">
-                <label>Role </label>
-                <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
-                  <option value={"manager"}>Manager</option>
-                  <option value={"leadership"}>Leader&nbsp;Ship</option>
-                  <option value={"user"}>User</option>
-                </select>                                                            
               </div>
-            </div>
 
             {!notificationEditCheck ? (<div className='buttonsContainer'>
               <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
@@ -207,7 +229,7 @@ const Users = () => {
               <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
                 Approve
               </button>
-              <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+              <button type="reset" id="reject-btn" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
                 Reject
               </button>
             </div>)}
