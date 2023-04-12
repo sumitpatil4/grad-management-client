@@ -1,134 +1,92 @@
-import "./trainers.css"
-import React, { useState } from 'react'
-import { FaSearch ,FaUserAlt} from 'react-icons/fa';
-import profileIcon from "../../images/profileIcon.png";
-import deleteIcon from "../../images/deleteIcon.png";
-import editIcon from "../../images/editIcon.png";
-
-
-
-
-function TableHeader() {
-  return (
-    <div className="table-header">
-      <div className="header-col">Trainer Name</div>
-      <div className="header-col">Skill</div>
-      <div className="header-col"></div>
-    </div>
-  );
-}
-
-function TrainerRow({ trainer, onDelete ,onProfile}) {
-
-  return (
-    <div className="trainer-row">
-      <div className="trainer-col trainer-name">{trainer.trainersname}</div>
-      <div className="trainer-col skill">{trainer.skill}</div>
-      <div className="trainer-col">
-      <button className="profileIconButton" onClick={()=> onProfile(trainer)}>
-        {/* <img src={profileIcon}></img> */}
-        <FaUserAlt/>
-      </button>
-      </div>
-    </div>
-  );
-}
-
-
-
-// function AvailabilityForm() {
-//   const [startDate, setStartDate] = useState("");
-//   const [endDate, setEndDate] = useState("");
-//   const [startTime, setStartTime] = useState("");
-//   const [endTime, setEndTime] = useState("");
-
-//   const handleStartDateChange = (event) => {
-//     setStartDate(event.target.value);
-//   };
-
-//   const handleEndDateChange = (event) => {
-//     setEndDate(event.target.value);
-//   };
-
-//   const handleStartTimeChange = (event) => {
-//     setStartTime(event.target.value);
-//   };
-
-//   const handleEndTimeChange = (event) => {
-//     setEndTime(event.target.value);
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     console.log(`You are available from ${startDate} at ${startTime} to ${endDate} at ${endTime}.`);
-//   };
-
-//   return (
-//     <div className="availability-form">
-//       <label>
-//         Start Date:
-//         <input type="date" value={startDate} onChange={handleStartDateChange} />
-//       </label>
-//       <br />
-//       <label>
-//         End Date:
-//         <input type="date" value={endDate} onChange={handleEndDateChange} />
-//       </label>
-//       <br />
-//       <label>
-//         Start Time:
-//         <input type="time" value={startTime} onChange={handleStartTimeChange} />
-//       </label>
-//       <br />
-//       <label>
-//         End Time:
-//         <input type="time" value={endTime} onChange={handleEndTimeChange} />
-//       </label>
-//       <br />
-//       <button className="submit-button" onClick={handleSubmit}>Submit</button>
-//     </div>
-//   );
-// }
+import "./trainers.css";
+import React, { useState } from "react";
+import { FaSearch, FaUserAlt } from "react-icons/fa";
+import { MdEdit, MdDelete } from "react-icons/md";
 
 const Trainers = () => {
   const [trainers, setTrainers] = useState([
-    { trainersid:1, trainersname: 'Ashish Tripathy', skill: 'Python',phone: '8630132801', email: 'ashish@gmail.com', availability: 'Monday-Friday' },
-    { trainersid:2, trainersname: 'Sumit Vasant Patil', skill: 'Java',phone: '1234543212', email: 'sumit@gmail.com', availability: 'Monday-Friday'},
-    { trainersid:3, trainersname: 'Sai Krupananda', skill: 'C++',phone: '1234567890', email: 'sai@gmail.com', availability: 'Monday-Friday'},
-    { trainersid:4, trainersname: 'Akriti Singh',skill: 'JavaScript',phone: '1234567890', email: 'akriti@gmail.com', availability: 'Monday-Friday'},
+    {
+      trainersid: 1,
+      trainersname: "Ashish Tripathy",
+      skill: "Python",
+      phone: "8630132801",
+      email: "ashish@gmail.com",
+      availability: "Monday-Friday",
+    },
+    {
+      trainersid: 2,
+      trainersname: "Sumit Vasant Patil",
+      skill: "Java",
+      phone: "1234543212",
+      email: "sumit@gmail.com",
+      availability: "Monday-Friday",
+    },
+    {
+      trainersid: 3,
+      trainersname: "Sai Krupananda",
+      skill: "C++",
+      phone: "1234567890",
+      email: "sai@gmail.com",
+      availability: "Monday-Friday",
+    },
+    {
+      trainersid: 4,
+      trainersname: "Akriti Singh",
+      skill: "JavaScript",
+      phone: "1234567890",
+      email: "akriti@gmail.com",
+      availability: "Monday-Friday",
+    },
   ]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [profile, dispprofile] = useState("");
-  const [editingTrainer, setEditingTrainer] = useState(null);
+  const [trainerTemp,settrainerTemp]=useState({});
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const [isOpenCon, setIsOpenCon] = useState(false);
+  const [trainerId,settrainerId]=useState("");
+  const [isAdd, setIsAdd] = useState(false);
+  const [date, setDate] = useState('');
+  const [fromTime, setFromTime] = useState('');
+  const [toTime, setToTime] = useState('');
 
-  const handleEdit = (trainerId) =>{
-    setEditingTrainer(trainerId);
-    const popup = document.getElementById("popup");
-    if (popup) {
-   popup.style.display = 'block';
-   }
-  };
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  }
+
+  const handleFromTimeChange = (e) => {
+    setFromTime(e.target.value);
+  }
+
+  const handleToTimeChange = (e) => {
+    setToTime(e.target.value);
+  }
+
+  const handleDeletePopup=(trainersid)=>{
+    setIsOpenCon(true);
+    settrainerId(trainerId);
+}
 
   const handleDelete = (trainerId) => {
-    const newTrainers = trainers.filter((trainer) => trainer.trainersid !== trainerId);
+    const newTrainers = trainers.filter(
+      (trainer) => trainer.trainersid !== trainerId
+    );
     setTrainers(newTrainers);
-    dispprofile(null); 
+    setIsOpenCon(false);
   };
 
-  const handleProfile = (trainer) =>{
-    dispprofile(trainer);
-    const popup = document.getElementById("popup");
-    if (popup) {
-   popup.style.display = 'block';
-   }
-  };
-  
-  const handleAdd = () => {
-    const newTrainer = {  trainerid: trainers.length+1, trainersname: 'New Trainer', skill: 'New Skill',phone: '1234567890', email: 'newtrainer@gmail.com', availability: 'Monday-Friday' };
-    setTrainers([...trainers, newTrainer]);
+  const handleProfile = (trainer) => {
+    setIsOpenProfile(true);
+    settrainerTemp(trainer);
   };
 
+  const handleEditClick=()=>{
+    console.log("HI");
+    }
 
+
+  const handleAddPopup = () => {
+    setIsAdd(true);
+    // setTrainers([...trainers, newTrainer]);
+  };
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -141,67 +99,251 @@ const Trainers = () => {
   );
 
   return (
-    <div className="trainers">
-      <div className="button-container">
-        <button className="add-button" onClick={handleAdd}>Add&nbsp;Trainer</button>
-        <div className="search-bar">
-          <input type="text" placeholder="byName....bySkill...." value={searchQuery} onChange={handleSearchInputChange} />
-          <button type="submit"><FaSearch /></button>
+    <>
+      <div className="buttonContainer">
+        <button className="add-button" onClick={handleAddPopup}>
+          Add&nbsp;Trainer
+        </button>
+        <div className="search-bar1">
+          <input
+            type="text"
+            placeholder="byName....bySkill...."
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+          <button type="submit">
+            <FaSearch />
+          </button>
         </div>
       </div>
-      <TableHeader /> 
-      {(searchQuery !== "" ? filteredTrainers : trainers).map((trainer) => (
-            <TrainerRow  trainer={trainer}  onProfile={handleProfile}/>
-      ))}
-        {profile && (
-  <div id="popup" className="popup">
-    <div className="popup-content">
-        <div className="trainer-details">
-         <h2>Trainer Details</h2>
-        </div>
-       <div className="popup-data">
-         <div>
-          <div><strong>Id:</strong></div>
-          <div>{profile.trainersid}</div>
-         </div>
-         <div>
-          <div><strong>Name:</strong></div>
-          <div>{profile.trainersname}</div>
-         </div>
-         <div>
-          <div><strong>Skill:</strong></div>
-          <div>{profile.skill}</div>
-         </div>
-         <div>
-          <div><strong>Phone:</strong></div>
-          <div>{profile.phone}</div>
-         </div>
-         <div>
-          <div><strong>Email:</strong></div>
-          <div>{profile.email}</div>
-         </div>
-         <div>
-          <div><strong>Availability:</strong></div>
-          <div>{profile.availability}</div>
-         </div>
-       </div>
-       <div className="button-container">
-        <button className="editIconButton" onClick={() => handleEdit(profile.trainersid)}>
-         {/* <img src={editIcon}></img> */}
-         Edit
-        </button>
-        <button className="popup-close" onClick={() => (document.getElementById("popup").style.display = "none")}>
-          close
-        </button>
-       </div>
-       <button className="deleteIconButton" onClick={() => handleDelete(profile.trainersid)}>
-        <img src={deleteIcon}></img>
-       </button>
+      <div className="trainerContainer">
+        <table>
+          <thead>
+            <tr>
+              <th>TrainerName</th>
+              <th>Skill</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(searchQuery !== "" ? filteredTrainers : trainers).map(
+              (trainer) => (
+                <tr>
+                  <td>{trainer.trainersname}</td>
+                  <td>{trainer.skill}</td>
+                  <td>
+                    <div className="actionButton">
+                      <FaUserAlt
+                        trainer={trainer}
+                        onClick={() => handleProfile(trainer)}
+                        className="profileIconButton"
+                      />
+                      <MdEdit
+                        onClick={() => handleEditClick()}
+                        className="edit-icon"
+                      />
+                      <MdDelete
+                        onClick={() => handleDeletePopup(trainer.trainersid)}
+                        className="del_icon"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
       </div>
-    </div>
-    )}
- </div>
-  );
-}
 
-export default Trainers
+      {isOpenCon && (
+        <div className="popupContainer">
+          <div className="popup-boxd">
+            <div className="popupHeader">
+              <h2>Are you sure to delete this user?</h2>
+            </div>
+            <div className="buttonsContainer">
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={() => handleDelete(trainerId)}
+              >
+                Yes
+              </button>
+              <button
+                type="reset"
+                className="cancel-btn"
+                onClick={() => setIsOpenCon(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAdd && (
+        <form>
+          <div
+            className="popupContainer"
+            onClick={() => {
+              setIsAdd(false);
+            }}
+          >
+            <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader1">
+                <h2>Add New Trainer</h2>
+              </div>
+              <div className="inputContainer1">
+                <div className="input-group1">
+                  <label>Name </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Skill </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Email </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Phone </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={handleDateChange}
+                    />
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    From Time:
+                    </label>
+                    <input
+                      type="time"
+                      value={fromTime}
+                      onChange={handleFromTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    To Time:
+                    </label>
+                    <input
+                      type="time"
+                      value={toTime}
+                      onChange={handleToTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="buttonsContainer">
+                  <button type="submit" className="submit-btn">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => {
+                      setIsAdd(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {isOpenProfile && (
+        <form>
+          <div
+            className="popupContainer"
+            onClick={() => {
+              setIsOpenProfile(false);
+            }}
+          >
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
+                <h2>Profile</h2>
+              </div>
+              <div className="inputContainer">
+                <div className="input-group">
+                  <label>Trainer ID </label>
+                  <p>{trainerTemp.trainersid}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Name </label>
+                  <p>{trainerTemp.trainersname}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Skill </label>
+                  <p>{trainerTemp.skill}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Email </label>
+                  <p>{trainerTemp.email}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Phone </label>
+                  <p>{trainerTemp.phone}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Availabilty </label>
+                  <p>{trainerTemp.availability}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {isOpenCon && (
+        <div className="popupContainer">
+          <div className="popup-boxd">
+            <div className="popupHeader">
+              <h2>Are you sure to delete this user?</h2>
+            </div>
+            <div className="buttonsContainer">
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={() => handleDelete(trainerTemp.trainerid)}
+              >
+                Yes
+              </button>
+              <button
+                type="reset"
+                className="cancel-btn"
+                onClick={() => setIsOpenCon(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Trainers;
