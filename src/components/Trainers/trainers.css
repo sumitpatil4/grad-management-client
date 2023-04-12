@@ -98,14 +98,14 @@
   }
 
 
-  .button-container{
+  /* .button-container{
     display: flex;
     flex-direction: row;
     margin:20px 0px;
     margin-left: 10px;
   }
 
-  .button-container input[type=text]{
+  .buttons-container input[type=text]{
     border: 1px solid #ccc; 
     float: none;
     display: block;
@@ -155,20 +155,19 @@
     background-color: #000000;
   }
   
-  .search-bar button[type="submit"] i {
-    font-size: 24px;
-  }
 
   .profileIconButton {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    /* width: 30px;
+    height: 30px; */
+    /* border-radius: 50%; */
     border: none;
     /* overflow: hidden; */
     cursor: pointer;
-    color: black;
-    background-color:none;
-    font-size: 20px;
+    /* color: black; */
+    /* background-color:none; */
+    padding: 0px 10px;
+    font-size: 25px;
+    cursor: pointer;
   }
 
   /* .profileIconButton>img{
@@ -178,7 +177,7 @@
   } */
 
   .profileIconButton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
  
   .popup {
@@ -330,6 +329,67 @@
   .submit-button:hover {
     background-color: #006F8E;
   } */
+
+  .trainerContainer
+  {
+      display: block;
+      width: 100vw;
+      margin: 5% auto;
+  }
+  
+  table
+  {
+      margin: 0px auto;
+      border-collapse: collapse;
+      font-size: 22px;
+      border-radius: 5px;
+      box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px;
+  }
+  
+  thead
+  {
+      background-color: rgb(19, 28, 44);
+      color: white;
+      border-radius: 5px;
+  }
+  
+  th{
+      padding: 20px 40px;
+  }
+  
+  td{
+      padding: 20px 40px;
+  }
+  
+  tr:nth-child(even)
+  {
+      background-color: rgb(216, 216, 216);
+  }
+  
+  .edit-icon,
+  .del_icon
+  {
+      padding: 0px 10px;
+      font-size: 25px;
+      cursor: pointer;
+  }
+  
+  .edit-icon
+  {
+      color: rgb(94, 132, 255);
+  }
+  
+  .del_icon
+  {
+      color: rgb(255, 54, 54);
+  }
+  
+  .edit-icon:hover,
+  .del_icon:hover
+  {
+      transform: scale(1.1);
+  }
+
 
 
 
