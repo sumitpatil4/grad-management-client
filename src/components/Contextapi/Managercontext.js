@@ -1,23 +1,21 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 
 const ManagerContext=React.createContext();
 
-export const Manager=()=>{
+export const Manager=(props)=>{
     
   const [train, setTrain] = useState()
   const updateTrain=(e)=> setTrain(e);
 
     return (
         
-        <ManagerContext.Provider
-        
+        <ManagerContext.Provider        
             value={{
                 train,
-                setTrain,
                 updateTrain
             }}
         >
-            {/* {props.children} */}
+            {props.children}
         </ManagerContext.Provider>
     );
 }

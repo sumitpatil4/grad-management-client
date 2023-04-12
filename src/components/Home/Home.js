@@ -9,6 +9,8 @@ import AuthContext from '../Contextapi/Authcontext';
 import Users from '../Admin/Users';
 import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
+import {Manager} from "../Contextapi/Managercontext"
+import Training from '../Training/Training';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
@@ -71,14 +73,15 @@ const Home = () => {
     <>
     {
       !isAuthenticated ? (<Login/>) : <>
-         {managerflag && <div>
+         {managerflag && <Manager><div>
             <Navbar role={userrole}/>
             <Routes>
               <Route path="/mytrainings" element={<Mytrainings />}/>
+              <Route path="/mytrainings/training" element={<Training />}/>
               <Route path="/trainers" element={<Trainers />}/>
               <Route path="/aboutus" element={<About />}/>
             </Routes>
-        </div>}
+        </div></Manager>}
 
         {leadershipflag && <div>
         <Navbar role={userrole}/>
