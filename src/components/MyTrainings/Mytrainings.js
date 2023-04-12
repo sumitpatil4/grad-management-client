@@ -1,10 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
 import { IoClose } from 'react-icons/io5';
 import { MdEdit,MdDelete } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import ManagerContext from '../Contextapi/Managercontext';
+import AuthContext from '../Contextapi/Authcontext';
+import axios from 'axios';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
@@ -14,9 +16,20 @@ const Mytrainings = () => {
   const [isOpenCon, setIsOpenCon] = useState(false)
   const [isOpenEdit, setIsOpenEdit] = useState(false)
   const [arrId, setArrId] = useState()
+  const [useeffectreload, setUseeffectreload] = useState(false)
   const managercontext=useContext(ManagerContext);
-  const {updateTrain}=managercontext;
+  const authcontext=useContext(AuthContext);
+  const {updateTrain,updatetrainingsList,trainingsList}=managercontext;
+  const {userid}=authcontext;
 
+  useEffect(()=>{
+    axios.get("http://localhost:8090/training/getTrainings")
+    .then((res)=>{
+      console.log(res)
+      updatetrainingsList(res.data.training);
+      console.log(trainingsList)
+    })
+  },[useeffectreload])
 
   const handleChange = event => {
     setTemp(event.target.value);  
@@ -31,7 +44,14 @@ const Mytrainings = () => {
     }
     else{
       setIsOpen(false);
-      setArr(current => [...current, temp]);
+      // setArr(current => [...current, temp]);
+
+      axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
+        "trainingName":temp
+      }).then((res)=>{
+        console.log(res);
+        setUseeffectreload(!useeffectreload)
+      })
       setTemp('');
     }
   };
@@ -43,30 +63,42 @@ const handleRem =  (i) => {
   setIsOpenCon(true);
 }
 
-const handleRemoveClick = (index) => {
-  const list = [...arr];
-  console.log(arrId);
-  list.splice(index, 1);
-  setArr(list);
+const handleRemoveClick = (i) => {
+  // const list = [...arr];
+  // console.log(arrId);
+  // list.splice(index, 1);
+  // setArr(list);
+  axios.delete(`http://localhost:8090/training/deleteTraining/${trainingsList[i].trainingId}`)
+  .then((res)=>{
+    console.log(res);
+    setUseeffectreload(!useeffectreload);
+  })
   setIsOpenCon(false);
-  console.log(list);
+  // console.log(list);
 };
 
 
 // handle click event of the Edit button
 const handleEdit = (i) => {
   setArrId(i);
-  setTemp(arr[i]);
+  setTemp(trainingsList[i].trainingName);
   setIsOpenEdit(true);
 }
 
-const handleEditClick = (index) => {
-  const list = [...arr];
-  console.log(arrId);
-  list[index] = temp;
-  setArr(list);
+const handleEditClick = (i) => {
+  // const list = [...arr];
+  // console.log(arrId);
+  // list[index] = temp;
+  // setArr(list);
+  axios.put("http://localhost:8090/training/updateTraining",{
+    "trainingId":trainingsList[i].trainingId,
+    "trainingName":temp
+  }).then((res)=>{
+    console.log(res);
+    setUseeffectreload(!useeffectreload)
+  })
+
   setIsOpenEdit(false);
-  console.log(list);
   setTemp('');
 };
 
@@ -75,18 +107,18 @@ const handleEditClick = (index) => {
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {arr.map((e, i)=> <div id={i}> 
-          <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(i)}>
+        {trainingsList.map((e, i)=> <div> 
+          {/* <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(i)}> */}
           <div className='iconContainer'>
-            <div id={i} className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
+            <div className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
               <MdEdit className='edit_icon'/>
             </div>
-            <div id={i} onClick={()=>handleRem(i)}>
+            <div onClick={()=>handleRem(i)}>
               <MdDelete className="close-icon"/>
             </div>
           </div> 
-          <div className='trainingText'>{e}</div>
-          </NavLink>
+          <div className='trainingText'>{e.trainingName}</div>
+          {/* </NavLink> */}
         </div> )}
                         
 
