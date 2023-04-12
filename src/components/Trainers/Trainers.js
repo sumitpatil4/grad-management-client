@@ -1,9 +1,6 @@
 import "./trainers.css";
 import React, { useState } from "react";
 import { FaSearch, FaUserAlt } from "react-icons/fa";
-import profileIcon from "../../images/profileIcon.png";
-import deleteIcon from "../../images/deleteIcon.png";
-import editIcon from "../../images/editIcon.png";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 const Trainers = () => {
@@ -44,13 +41,36 @@ const Trainers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [trainerTemp,settrainerTemp]=useState({});
   const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const [isOpenCon, setIsOpenCon] = useState(false);
+  const [trainerId,settrainerId]=useState("");
+  const [isAdd, setIsAdd] = useState(false);
+  const [date, setDate] = useState('');
+  const [fromTime, setFromTime] = useState('');
+  const [toTime, setToTime] = useState('');
 
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  }
+
+  const handleFromTimeChange = (e) => {
+    setFromTime(e.target.value);
+  }
+
+  const handleToTimeChange = (e) => {
+    setToTime(e.target.value);
+  }
+
+  const handleDeletePopup=(trainersid)=>{
+    setIsOpenCon(true);
+    settrainerId(trainerId);
+}
 
   const handleDelete = (trainerId) => {
     const newTrainers = trainers.filter(
       (trainer) => trainer.trainersid !== trainerId
     );
     setTrainers(newTrainers);
+    setIsOpenCon(false);
   };
 
   const handleProfile = (trainer) => {
@@ -58,22 +78,14 @@ const Trainers = () => {
     settrainerTemp(trainer);
   };
 
-  // const handleEditClick = () => {
-  //   return (  );
-  // }
+  const handleEditClick=()=>{
+    console.log("HI");
+    }
 
-  // export default handleEditClick;
 
-  const handleAdd = () => {
-    const newTrainer = {
-      trainerid: trainers.length + 1,
-      trainersname: "New Trainer",
-      skill: "New Skill",
-      phone: "1234567890",
-      email: "newtrainer@gmail.com",
-      availability: "Monday-Friday",
-    };
-    setTrainers([...trainers, newTrainer]);
+  const handleAddPopup = () => {
+    setIsAdd(true);
+    // setTrainers([...trainers, newTrainer]);
   };
 
   const handleSearchInputChange = (event) => {
@@ -88,11 +100,11 @@ const Trainers = () => {
 
   return (
     <>
-      <div className="buttons-container">
-        <button className="add-button" onClick={handleAdd}>
+      <div className="buttonContainer">
+        <button className="add-button" onClick={handleAddPopup}>
           Add&nbsp;Trainer
         </button>
-        <div className="search-bar">
+        <div className="search-bar1">
           <input
             type="text"
             placeholder="byName....bySkill...."
@@ -120,47 +132,216 @@ const Trainers = () => {
                   <td>{trainer.trainersname}</td>
                   <td>{trainer.skill}</td>
                   <td>
-                    <FaUserAlt
-                      trainer={trainer}
-                      onClick={() => handleProfile(trainer)}
-                      className="profileIconButton"
-                    />
+                    <div className="actionButton">
+                      <FaUserAlt
+                        trainer={trainer}
+                        onClick={() => handleProfile(trainer)}
+                        className="profileIconButton"
+                      />
+                      <MdEdit
+                        onClick={() => handleEditClick()}
+                        className="edit-icon"
+                      />
+                      <MdDelete
+                        onClick={() => handleDeletePopup(trainer.trainersid)}
+                        className="del_icon"
+                      />
+                    </div>
                   </td>
                 </tr>
               )
             )}
           </tbody>
         </table>
-        {isOpenProfile && (
-          <div className="popupContainer">
-            <div className="popup-boxd">
-              <div className="newTrain">
-                <h2>Trainer Details</h2>
+      </div>
+
+      {isOpenCon && (
+        <div className="popupContainer">
+          <div className="popup-boxd">
+            <div className="popupHeader">
+              <h2>Are you sure to delete this user?</h2>
+            </div>
+            <div className="buttonsContainer">
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={() => handleDelete(trainerId)}
+              >
+                Yes
+              </button>
+              <button
+                type="reset"
+                className="cancel-btn"
+                onClick={() => setIsOpenCon(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAdd && (
+        <form>
+          <div
+            className="popupContainer"
+            onClick={() => {
+              setIsAdd(false);
+            }}
+          >
+            <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader1">
+                <h2>Add New Trainer</h2>
               </div>
-              <div className="input-group">
-                <label htmlFor="name">Name </label>
-                <p>{trainerTemp.trainersname}</p>
-              </div>
-              <div>
-                {/* <button
-                  type="submit"
-                  className="submit-btn"
-                  onClick={() => handleEditClick()}
-                >
-                  Submit
-                </button> */}
-                <button
-                  type="reset"
-                  className="cancel-btn"
-                  onClick={() => setIsOpenProfile(false)}
-                >
-                  Cancel
-                </button>
+              <div className="inputContainer1">
+                <div className="input-group1">
+                  <label>Name </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Skill </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Email </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>Phone </label>
+                  <input type="text" />
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    Date:
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={handleDateChange}
+                    />
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    From Time:
+                    </label>
+                    <input
+                      type="time"
+                      value={fromTime}
+                      onChange={handleFromTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="input-group1">
+                  <label>
+                    To Time:
+                    </label>
+                    <input
+                      type="time"
+                      value={toTime}
+                      onChange={handleToTimeChange}
+                    />
+                 
+                </div>
+
+                <div className="buttonsContainer">
+                  <button type="submit" className="submit-btn">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => {
+                      setIsAdd(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </form>
+      )}
+
+      {isOpenProfile && (
+        <form>
+          <div
+            className="popupContainer"
+            onClick={() => {
+              setIsOpenProfile(false);
+            }}
+          >
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
+                <h2>Profile</h2>
+              </div>
+              <div className="inputContainer">
+                <div className="input-group">
+                  <label>Trainer ID </label>
+                  <p>{trainerTemp.trainersid}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Name </label>
+                  <p>{trainerTemp.trainersname}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Skill </label>
+                  <p>{trainerTemp.skill}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Email </label>
+                  <p>{trainerTemp.email}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Phone </label>
+                  <p>{trainerTemp.phone}</p>
+                </div>
+
+                <div className="input-group">
+                  <label>Availabilty </label>
+                  <p>{trainerTemp.availability}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {isOpenCon && (
+        <div className="popupContainer">
+          <div className="popup-boxd">
+            <div className="popupHeader">
+              <h2>Are you sure to delete this user?</h2>
+            </div>
+            <div className="buttonsContainer">
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={() => handleDelete(trainerTemp.trainerid)}
+              >
+                Yes
+              </button>
+              <button
+                type="reset"
+                className="cancel-btn"
+                onClick={() => setIsOpenCon(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
