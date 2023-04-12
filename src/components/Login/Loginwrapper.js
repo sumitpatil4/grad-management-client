@@ -38,20 +38,20 @@ const Loginwrapper = (props) => {
         // updateuserrole("ROLE_MANAGER");
         // handleLogin();
         window.localStorage.setItem('LoggedIn',"YES");
-        // axios.post("http://localhost:8090/user/login",null,{
-        //     headers:{
-        //         "Authorization":response.credential
-        //     }
-        // }).then((res)=>{
-        //     updateuserid(res.data.user.userId);
-        //     updateusername(res.data.user.uname);
-        //     updateusermail(res.data.user.email);
-        //     updateuserpicture(res.data.user.picture);
-        //     updateuserrole(res.data.user.role);
-        //     updateaccessToken(res.data.accessToken);
-        //     updateidToken(response);
-        //     handleLogin();
-        // })
+        axios.post("http://localhost:8090/user/login",null,{
+            headers:{
+                "Authorization":response.credential
+            }
+        }).then((res)=>{
+            updateuserid(res.data.user.userId);
+            updateusername(res.data.user.uname);
+            updateusermail(res.data.user.email);
+            updateuserpicture(res.data.user.picture);
+            updateuserrole(res.data.user.role);
+            updateaccessToken(res.data.accessToken);
+            updateidToken(response);s
+            handleLogin();
+        })
 
     }
 
