@@ -51,7 +51,6 @@ const Loginwrapper = (props) => {
             updateidToken(response);
             handleLogin();
         })
-
     }
 
     return (
