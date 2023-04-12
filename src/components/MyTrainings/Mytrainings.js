@@ -23,7 +23,7 @@ const Mytrainings = () => {
   const {userid}=authcontext;
 
   useEffect(()=>{
-    axios.get("http://localhost:8090/training/getTrainings")
+    axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
     .then((res)=>{
       console.log(res)
       updatetrainingsList(res.data.training);
