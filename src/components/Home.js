@@ -1,23 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Navbar from '../common/Navbar'
-import Mytrainings from '../MyTrainings/Mytrainings'
-import Trainers from '../Trainers/Trainers';
+import Navbar from './common/Navbar'
+import Mytrainings from './MyTrainings/Mytrainings'
+import Trainers from './Trainers/Trainers';
 import { Route,Routes,useNavigate } from 'react-router-dom';
-import About from '../About/About';
-import Login from '../Login/Login';
-import AuthContext from '../Contextapi/Authcontext';
-import Users from '../Admin/Users';
-import User from '../User/User';
-import {Admin} from '../Contextapi/Admincontext';
-import {Manager} from "../Contextapi/Managercontext"
-import Training from '../Training/Training';
-import Interns from '../Interns/Intern';
-import Topic from '../Topics/Topic';
-import Schedules from '../Schedules/Schedules';
+import About from './About/About';
+import Login from './Login/Login';
+import AuthContext from './Contextapi/Authcontext';
+import Users from './Admin/Users';
+import User from './User/User';
+import {Admin} from './Contextapi/Admincontext';
+import {Manager} from './Contextapi/Managercontext';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
-  const {isAuthenticated,userrole}=usecontext;
+  const {isAuthenticated,emprole}=usecontext;
   const [managerflag,setManagerflag]=useState(false);
   const [leadershipflag,setLeadershipflag]=useState(false);
   const [superadminflag,setSuperadminflag]=useState(false);
@@ -25,84 +21,79 @@ const Home = () => {
   const navigate = useNavigate();
   
   useEffect(()=>{
-    if(userrole!=="")
+    if(emprole!=="")
     {
         setManagerflag(false);
         setLeadershipflag(false);
         setSuperadminflag(false);
         setUserflag(false);
-        // console.log(userrole);
-        switch(userrole)
+        console.log(emprole);
+        switch(emprole)
         {
-          case 'ROLE_MANAGER':
+          case 'manager':
             setManagerflag(true);
             break;
-          case 'ROLE_LEADER':
+          case 'leadership':
             setLeadershipflag(true);
             break;
-          case 'ROLE_ADMIN':
+          case 'superadmin':
             setSuperadminflag(true);
             break;
-          case 'ROLE_USER':
+          case 'user':
             setUserflag(true);
             break;
         }
     }
-    // console.log(usecontext)
-    if(!isAuthenticated)
+    if(isAuthenticated)
     {
       navigate("/",true)
     }
     else{
-      switch(userrole)
+      switch(emprole)
         {
-          case 'ROLE_MANAGER':
+          case 'manager':
             navigate("/mytrainings",true);
             break;
-          case 'ROLE_LEADER':
+          case 'leadership':
             navigate("/mytrainings",true);
             break;
-          case 'ROLE_ADMIN':
+          case 'superadmin':
             navigate("/admin",true);
             break;
-          case 'ROLE_USER':
+          case 'user':
             navigate("/user",true);
             break;
         }
     }
+    // isAuthenticated?navigate("/",true):navigate("/mytrainings",true);
   },[isAuthenticated])
 
   return (
     <>
     {
-      !isAuthenticated ? (<Login/>) : <>
+      isAuthenticated ? (<Login/>) : <>
          {managerflag && <Manager><div>
-            <Navbar role={userrole}/>
+            <Navbar role={emprole}/>
             <Routes>
               <Route path="/mytrainings" element={<Mytrainings />}/>
-              <Route path="/mytrainings/training" element={<Training />}/>
-              <Route path="/mytrainings/training/interns" element={<Interns />}/>
-              <Route path="/mytrainings/training/topics" element={<Topic />}/>
-              <Route path="/mytrainings/training/schedules" element={<Schedules />}/>
+              <Route path='/mytrainings/:id' element={<insdieTrainings/>}></Route>
               <Route path="/trainers" element={<Trainers />}/>
               <Route path="/aboutus" element={<About />}/>
             </Routes>
         </div></Manager>}
-
         {leadershipflag && <div>
-        <Navbar role={userrole}/>
+        <Navbar role={emprole}/>
         <h1>Leader ship</h1>
         </div>}
-
         {superadminflag && <Admin><div>
-        <Navbar role={userrole}/>
+        <Navbar role={emprole}/>
         <Routes>
             <Route path="/admin" element={<Users />}/>
+            {/* <Route path="/aboutus" element={<About />}/> */}
         </Routes>
         </div></Admin>}
-
         {userflag && <div>
-        <Navbar role={userrole}/>
+        <Navbar role={emprole}/>
         <Routes>
           <Route path="/user" element={<User />}/>
           <Route path="/aboutus" element={<About />}/>

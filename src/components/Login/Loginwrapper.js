@@ -49,7 +49,7 @@ const Loginwrapper = (props) => {
             updateuserpicture(res.data.user.picture);
             updateuserrole(res.data.user.role);
             updateaccessToken(res.data.accessToken);
-            updateidToken(response);
+            updateidToken(response);s
             handleLogin();
         })
 

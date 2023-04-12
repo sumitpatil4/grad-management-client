@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
 import { IoClose } from 'react-icons/io5';
 import { MdEdit,MdDelete } from 'react-icons/md';
+import { NavLink } from 'react-router-dom';
+import ManagerContext from '../Contextapi/Managercontext';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
@@ -12,6 +14,8 @@ const Mytrainings = () => {
   const [isOpenCon, setIsOpenCon] = useState(false)
   const [isOpenEdit, setIsOpenEdit] = useState(false)
   const [arrId, setArrId] = useState()
+  const managercontext=useContext(ManagerContext);
+  const {updateTrain}=managercontext;
 
 
   const handleChange = event => {
@@ -72,7 +76,7 @@ const handleEditClick = (index) => {
       <div className='mytrainings'>
         
         {arr.map((e, i)=> <div id={i}> 
-          
+          <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(i)}>
           <div className='iconContainer'>
             <div id={i} className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
               <MdEdit className='edit_icon'/>
@@ -82,7 +86,7 @@ const handleEditClick = (index) => {
             </div>
           </div> 
           <div className='trainingText'>{e}</div>
-
+          </NavLink>
         </div> )}
                         
 
