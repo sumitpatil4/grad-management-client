@@ -34,8 +34,9 @@ const Loginwrapper = (props) => {
           updateuserrole}=usecontext;
 
     function handleLoginApi(response){
-        // console.log(response);
-        // updateuserrole("ROLE_ADMIN");
+        console.log(response);
+        // updateuserrole("ROLE_MANAGER");
+        // handleLogin();
         window.localStorage.setItem('LoggedIn',"YES");
         axios.post("http://localhost:8090/user/login",null,{
             headers:{
