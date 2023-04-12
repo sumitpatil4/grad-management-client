@@ -15,6 +15,7 @@ const Users = () => {
     const {notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
+    const [useeffectreload, setUseeffectreload] = useState(false)
     const [userTemp,setUserTemp]=useState({});
     const [userId,setUserId]=useState("");
     const [temprole,setTemprole]=useState("");
@@ -37,11 +38,51 @@ const Users = () => {
         { userid: 4, username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},
       ]);
 
+      const handleEditClick=(emp)=>{
+        console.log(emp,temprole);
+        if(notificationEditCheck){
+          axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
+            "userId":emp.user.userId
+          })
+          .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload)
+          });
+          axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+          .then((res)=>{
+            console.log(res);
+            setUseeffectreload(useeffectreload)
+        });
+        }
+        else{
+          axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
+            "userId":emp.userId
+          })
+          .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload)
+          });
+        }
+        setIsOpenEdit(false);
+        setNotificationEditCheck(false);
+    }
+
+    const handleRejectClick=(emp)=>{
+      axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+          .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload)
+        });
+        setIsOpenEdit(false);
+        setNotificationEditCheck(false);
+    }
+
+
       useEffect(()=>{
 
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
-          console.log(res.data.notificationList);
+          // console.log(res.data.notificationList);
           updatenotificationList(res.data.notificationList)
           // console.log(notificationList)
         });
@@ -61,7 +102,7 @@ const Users = () => {
 
 
         // updatenotificationList();
-      },[notificationCheck])
+      },[useeffectreload])
 
       
 
@@ -92,14 +133,7 @@ const Users = () => {
         setUserId(userId);
     }
 
-    const handleEditClick=(emp)=>{
-        // console.log(temprole);
-        console.log(emp.json(),temprole);
-        //if notification is there then it should be removed from db
-        setUsers(users);
-        setIsOpenEdit(false);
-        setNotificationEditCheck(false);
-    }
+    
 
     return (
         <div className='employeeContainer'>
@@ -133,7 +167,7 @@ const Users = () => {
                         <td>{e.role}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
-                            <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/>
+                            {/* <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/> */}
                         </td>
                     </tr>)
                 }
@@ -243,7 +277,7 @@ const Users = () => {
               <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
                 Approve
               </button>
-              <button type="reset" id="reject-btn" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+              <button type="reset" id="reject-btn" className="cancel-btn" onClick={() => handleRejectClick(userTemp)}>
                 Reject
               </button>
             </div>)}
