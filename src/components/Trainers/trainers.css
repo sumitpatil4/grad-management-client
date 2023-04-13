@@ -170,69 +170,119 @@
       transform: scale(1.1);
   }
 
-  .popup-boxd1 {
-    position: absolute;
-    background: whitesmoke;
-    width: 47vw;
-    border-radius: 3px;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
-    
-  }
 
-  .popupHeader1 h2 {
-    text-align: center;
-    padding: 10px 0;
-    color: white;
-    font-weight: normal;
-    background-color: black;
-  }
+.popupContainer1 {
+  top: 0%;
+  left: 0%;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000046;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-.inputContainer1{
-  width: 45vw;
-  height:30vw;
+.popup-boxd1 {
+  position: absolute;
+  margin-top: 8vh;
+  background: whitesmoke;
+  width: 55vw;
+  height: fit-content;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4);
+}
+
+.popupHeader1 h2 {
+  text-align: center;
+  padding: 2px 0;
+  color: white;
+  font-weight: normal;
+  background-color: black;
+}
+
+.inputContainer1 {
+  width: 50vw;
   display: block;
-  padding: 10px;
+  margin: 0px auto;
 }
 
 .input-group1 {
   display: grid;
-  /* grid-gap: 100px; */
-  grid-template-columns: 40% 60%;
-  /* place-items: center; */
-  margin: 9px auto;
+  grid-template-columns: 30% 70%;
+  margin: 5px auto;
 }
 
 .input-group1 label {
   font-size: 18px;
   padding-top: 10px;
   font-weight: 500;
-} 
-
-.input-group1 input {
-  padding:5px 10px;
-  font-size: 17px;
-  border: 1px solid lightgrey;
 }
 
-/* .input-group1>p {
-  margin-left: ;
-} */
+.input-group1 p {
+  padding: 10px 30px;
+  font-size: 17px;
+}
+
+.availability {
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  padding: 10px;
+}
+
+
+.del_icon {
+  color: red;
+  cursor: pointer;
+}
 
 
 
 
+.add-button1{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 13px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size:12px;
+  font-weight: bold;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 5vw;
+  width:30%;
+}
 
+.add-button1:hover{
+  transform: scale(1.1);
+}
 
+.availablityTable
+{
+    margin: 0px auto;
+    border-collapse: collapse;
+    font-size: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(255, 255, 255, 0.795) 0px 8px 24px;
+}
 
-  
+.availablitytr{
+  padding: 0px;
+}
 
+.availablitytd{
+  padding: 0px;
+  text-align: center;
+}
 
+#val {
+  color: red;
+  font-weight: 500;
+  padding:0px 10px;
+  padding-top: 4px;
+  font-size: 6px;
+}
 
-
-  
-  
-
-  
-  
-  
-  
