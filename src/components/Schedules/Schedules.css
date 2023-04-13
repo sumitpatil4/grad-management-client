@@ -1,0 +1,76 @@
+/* .scheduleContainer {
+  width: 85vw;
+  height: 80vh;
+  margin: 30px auto;
+  box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
+  background-color: whitesmoke;
+} */
+
+.header {
+    /* margin-top: 200px; */
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    /* margin: 20px; */
+    padding: 20px;
+    width: 50vw;
+    background-color: black;
+    color: white;
+}
+
+.schedules{
+    /* padding-top: 40px; */
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 55vw;
+    /* justify-content: center; */
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.schedules>div{
+    width: 50vw;
+    height: 22vh;
+    /* margin: 1vw; */
+    margin-top: 2vw;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    background-color: white;
+}
+
+.schedules>div:hover{
+    transform: scale(1.02);
+}
+
+.schedulesText{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    height: 37%;
+}
+
+.addSchedule {
+    width: 80px;
+    height: 80px;
+    background: transparent;
+    color: #27ae60;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    transition: backgroung 0.25s;
+    border-radius: 100%;
+    outline: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.addSchedule:active {
+    color: #ffffff;
+    background: #27ae60;
+}
