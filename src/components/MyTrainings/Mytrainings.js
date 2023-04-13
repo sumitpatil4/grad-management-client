@@ -3,7 +3,7 @@ import "./mytrainings.css"
 import { GrAdd, GrClose, GrEdit } from 'react-icons/gr';
 import { IoClose } from 'react-icons/io5';
 import { MdEdit,MdDelete } from 'react-icons/md';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate ,useNavigate} from 'react-router-dom';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
@@ -23,7 +23,7 @@ const Mytrainings = () => {
   const {userid}=authcontext;
 
   useEffect(()=>{
-    axios.get("http://localhost:8090/training/getTrainings")
+    axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
     .then((res)=>{
       console.log(res)
       updatetrainingsList(res.data.training);
@@ -101,24 +101,28 @@ const handleEditClick = (i) => {
   setIsOpenEdit(false);
   setTemp('');
 };
+const navigate = useNavigate();
+  const navigatetotrainings=(e)=>{
+    console.log(e)
+    updateTrain(e);
+    navigate("/mytrainings/training",true);
+  }
 
   return (
     <div className='mytrainingsContainer' >
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div> 
-          {/* <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(i)}> */}
-          <div className='iconContainer'>
-            <div className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
+        {trainingsList.map((e, i)=> <div onClick={()=>navigatetotrainings(e)}> 
+          <div className='iconContainer' >
+            <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>
             </div>
-            <div onClick={()=>handleRem(i)}>
+            <div onClick={(e) => {e.stopPropagation();handleRem(i);}}>
               <MdDelete className="close-icon"/>
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
-          {/* </NavLink> */}
         </div> )}
                         
 
