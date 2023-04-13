@@ -49,13 +49,10 @@ const Schedules = () => {
     const [assessment, setAssessmentt] = useState();
     const [feedback, setFeedback] = useState();
     const [description, setDescription] = useState();
+    const [past, setPast] = useState();
+    const [present, setPresent] = useState();
+    const [future, setFuture] = useState();
 
-
-    const handleTopicChange = event => {
-        // arr.name = topic
-        // setTopic(temp.meetTopic);
-        setTopic(event.target.value);  
-    };
 
     const handleDateChange = (e) => {
         // setDate(date);
@@ -156,7 +153,7 @@ const Schedules = () => {
             <div>Today</div>
             <div>Upcoming</div>
         </div>
-        
+
         <div className='schedules'>              
             {scheduleList.map((e, i) => <div>
                 <div className='iconContainer'>
