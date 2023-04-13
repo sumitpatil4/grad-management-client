@@ -116,15 +116,4 @@ tr:nth-child(even)
     width: 45px;
     height: 45px;
     cursor: pointer;
-    border-radius: 50%;
-}
-
-#reject-btn{
-    border:1px solid red;
-    color: red;
-}
-
-#reject-btn:hover{
-    background-color: red;
-    color:white;
 }
