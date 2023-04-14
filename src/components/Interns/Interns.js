@@ -4,6 +4,7 @@ import { MdEdit,MdDelete,MdAddBox } from 'react-icons/md';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import { FaSearch } from 'react-icons/fa';
+import axios from 'axios';
 
 const Interns = () => {
 
@@ -29,9 +30,11 @@ const Interns = () => {
     const [internname,setinternname]=useState("");
     const [phoneno,setphoneno]=useState("");
     const [internemail,setinternemail]=useState("");
+    const [defBatch,setDefBatch] = useState("");
+    const [useeffectreload, setUseeffectreload] = useState(false)
 
     const getInternsListUsingBatchId=(batchid)=>{
-        const internslist=internsList.filter((e)=>e.BatchId===batchid);
+        const internslist=internsList.filter((e)=>e.batch.batchId===batchid);
         return internslist;
     }
 
@@ -42,56 +45,68 @@ const Interns = () => {
         e.target.className+=" active";
     }
 
+    
     useEffect(()=>{
-        updateinternsList([
-            { interId: 1, internName: 'Ashish Tripathy', email: 'ashish@gmail.com', BatchId: 'group1' },
-            { interId: 2, internName: 'Sumit Vasant', email: 'sumit@gmail.com', BatchId: 'group2'},
-            { interId: 3, internName: 'SaiKrupananda', email: 'sai@gmail.com', BatchId: 'group1'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-          ]);
-
-        updategroupsList([
-            { batchId: 1, batchName: 'group1',internList:[{ interId: 1, internName: 'Ashish Tripathy', email: 'ashish@gmail.com', BatchId: 'group1' },
-            { interId: 2, internName: 'Sumit Vasant', email: 'sumit@gmail.com', BatchId: 'group2'},
-            { interId: 3, internName: 'SaiKrupananda', email: 'sai@gmail.com', BatchId: 'group1'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},] },
-            { batchId: 2, batchName: 'group2',internList:[{ interId: 1, internName: 'Ashish Tripathy', email: 'ashish@gmail.com', BatchId: 'group1' },
-            { interId: 2, internName: 'Sumit Vasant', email: 'sumit@gmail.com', BatchId: 'group2'},
-            { interId: 3, internName: 'SaiKrupananda', email: 'sai@gmail.com', BatchId: 'group1'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},] },
-            { batchId: 3, batchName: 'group3',internList:[{ interId: 1, internName: 'Ashish Tripathy', email: 'ashish@gmail.com', BatchId: 'group1' },
-            { interId: 2, internName: 'Sumit Vasant', email: 'sumit@gmail.com', BatchId: 'group2'},
-            { interId: 3, internName: 'SaiKrupananda', email: 'sai@gmail.com', BatchId: 'group1'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},
-            { interId: 4, internName: 'Akriti Singh', email: 'akriti@gmail.com', BatchId: 'group2'},] },
-          ]);
+        const batchName = `${train.trainingName}_${train.trainingId}`;
+        setGroupName(batchName);
         
-    },[])
+        axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
+        .then((res)=>{
+            console.log(res);
+            updateinternsList(res.data.intern);
+        })
 
+        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
+        .then((res)=>{
+            console.log(res);
+            res.data.batch.forEach((e)=>{
+                e.internList=getInternsListUsingBatchId(e.batchId);
+            })
+            return res.data.batch;
+            // console.log(batchName)
+            // const newBatchList = res.data.batch.filter(e=>e.batchName!==batchName);
+            // setDefBatch(res.data.batch.filter(e=>e.batchName===batchName)[0]);
+            // console.log(newBatchList)
+            // updategroupsList(newBatchList);
+        }).then((data)=>{
+            const newBatchList = data.filter(e=>e.batchName!==batchName);
+            setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
+            console.log(newBatchList)
+            updategroupsList(newBatchList);
+        })
+        
+    },[useeffectreload,defaultCheck])
 
-    const handlegroupName=(batchid,name)=>{
-        //compare batchid_name with default if yes  
-        setDefaultCheck(true);
-        //else
-        {
+    // useEffect(()=>{
+
+    // },[currentGroup,internsList])
+
+    const [batchId,setbatchId]=useState("");
+
+    const handlegroupName=(i,e,batchid,name)=>{
+        // setbatchId(i);
+            console.log(batchid)
+            console.log(groupsList)
             console.log(groupsList.filter((e)=>e.batchId===batchid));
             setCurrentGroup(groupsList.filter((e)=>e.batchId===batchid));
+            console.log(currentGroup)
+            console.log(e)
+            // setCurrentGroup(e);
+            console.log(currentGroup)
             setDefaultCheck(false);//make it false when integrated
             setGroupName(name);
-        }
-        console.log(batchid)
     }
 
     const handleAddGroup=()=>{
         console.log(newGroup,train);
         //call the add group api using above data
+        axios.post(`http://localhost:8090/batch/createBatch/${train.trainingId}`,{
+            "batchName":newGroup
+        })
+        .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         setisOpenNewGroup(false);
         setNewGroup("");
     }
@@ -103,6 +118,13 @@ const Interns = () => {
 
     const handleEditGroup=()=>{
         console.log(newGroup,train,currentGroup);
+        axios.put(`http://localhost:8090/batch/updateBatch/${currentGroup[0].batchId}`,{
+            "batchName":newGroup
+        })
+        .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         //call the update group name api using above data
         setisOpenEditGroup(false);
         setNewGroup("");
@@ -110,7 +132,18 @@ const Interns = () => {
 
     const handleDeleteGroup=()=>{
         console.log(train,currentGroup,"call delete api");
+        const internlist=getInternsListUsingBatchId(currentGroup[0].batchId);
+        const arr=[];
+        internlist.forEach((e)=>arr.push(e.internId))
+        console.log(arr);
         //call the delete group name api using above data
+        axios.put(`http://localhost:8090/batch/updateInternBatch/${currentGroup[0].batchId}/${defBatch.batchId}`,{
+            "internIdList":arr
+        }).
+        then((res)=>{
+            console.log(res);
+            setUseeffectreload(useeffectreload);
+        })
         setisOpenDeleteGroup(false);
         setNewGroup("");
     }
@@ -118,6 +151,11 @@ const Interns = () => {
     const handleDeleteForGroup=()=>{
         console.log(internInstance,"default_id");
         //call the api with both of above
+        axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`)
+        .then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         setisOpenDeleteForGroup(false)
     }
 
@@ -128,6 +166,14 @@ const Interns = () => {
             email:internemail
         }
         console.log(intern,train,userid,"default batchid");
+        axios.post(`http://localhost:8090/intern/createIntern/${userid}/${train.trainingId}`,{
+            "internName":internname,
+            "email":internemail,
+            "phoneNumber":phoneno
+        }).then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         //call add api here with above data
         setisOpenDefaultAddIntern(false);
     }
@@ -135,7 +181,7 @@ const Interns = () => {
     const handleEditInternPopup=(e)=>{
         setinternInstance(e);
         setinternname(e.internName);
-        setphoneno(e.BatchId);
+        setphoneno(e.phoneNumber);
         setinternemail(e.email);
         
         setisOpenEditIntern(true);
@@ -149,6 +195,14 @@ const Interns = () => {
         }
         console.log(internInstance,intern,train,userid,"default batchid");
         //call edit api here with above data
+        axios.put(`http://localhost:8090/intern/updateIntern/${internInstance.internId}`,{
+            "internName":internname,
+            "email":internemail,
+            "phoneNumber":phoneno
+        }).then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         setisOpenEditIntern(false);
     }
 
@@ -160,6 +214,10 @@ const Interns = () => {
     const handleDeleteIntern=()=>{
         console.log(internInstance,train,userid,"default batchid");
         //call delete api here with above data
+        axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`).then((res)=>{
+            console.log(res);
+            setUseeffectreload(!useeffectreload);
+        })
         setisOpenDeleteIntern(false);
     }
 
@@ -181,13 +239,20 @@ const Interns = () => {
     }
 
     const handleGroupAddInternPopup=()=>{
-        setdefaultInternList(getInternsListUsingBatchId("group2"))
+        setdefaultInternList(getInternsListUsingBatchId(defBatch.batchId))
         setisOpenGroupAddIntern(true);
     }
 
     const handleGroupAddIntern=()=>{
         console.log(defaultInternIdList,currentGroup);
         //call the add interns to group api
+        axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
+            "internIdList":defaultInternIdList
+        }).
+        then((res)=>{
+            console.log(res);
+            setUseeffectreload(useeffectreload);
+        })
         setisOpenGroupAddIntern(false);
     }
 
@@ -242,7 +307,7 @@ const Interns = () => {
                                 (internsList.map((e)=><tr>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
-                                    <td>{e.BatchId}</td>
+                                    <td>{e.batch.batchName}</td>
                                     <td>
                                         <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
                                         <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
@@ -251,7 +316,6 @@ const Interns = () => {
                                     currentGroup[0].internList.map((e)=><tr>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
-                                    {/* <td>{e.BatchId}</td> */}
                                     <td>
                                         <MdDelete onClick={()=>{setisOpenDeleteForGroup(true);setinternInstance(e)}} className='del_icon'/>
                                     </td>
@@ -262,8 +326,8 @@ const Interns = () => {
                     </table>
                 </div>
                 <div className='internsGroupsContainer'>
-                    <div className='groupbtns active' onClick={(x)=>{setDefaultCheck(true);setGroupName("TrainingName");activeClass(x)}}>Training</div>
-                    {groupsList.map((e)=><div className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
+                    <div className='groupbtns active' onClick={(x)=>{setDefaultCheck(true);setGroupName(defBatch.batchName);activeClass(x)}}>{defBatch.batchName}</div>
+                    {groupsList.map((e,i)=><div className='groupbtns' onClick={(x)=>{handlegroupName(i,e,e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
                 </div>
             </div>
         </div>
@@ -410,7 +474,7 @@ const Interns = () => {
                         {
                             defaultInternList.map((e)=><div className='ListInternWrapper'>
                                 <form>
-                                    <input onClick={(x)=>handleAddList(x,e.interId)} type="checkbox"/>
+                                    <input onClick={(x)=>handleAddList(x,e.internId)} type="checkbox"/>
                                 </form>
                                 <p>{e.internName}</p>
                             </div>)
