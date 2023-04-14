@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Schedules.css'
 import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
 
@@ -8,28 +8,28 @@ const Schedules = () => {
         {
         // meetId: 1,
         meetTopic: "Python",
-        Date: "2001-02-20",
+        Date: "2020-02-20",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
         {
         // meetId: 2,
         meetTopic: "Java",
-        Date: "2001-02-20",
+        Date: "2021-02-20",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
         {
         // meetId: 3,
         meetTopic: "C++",
-        Date: "2001-02-20",
+        Date: "2023-04-14",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
         {
         // meetId: 4,
         meetTopic: "JavaScript",
-        Date: "2001-02-20",
+        Date: "2024-04-14",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
@@ -49,9 +49,9 @@ const Schedules = () => {
     const [assessment, setAssessmentt] = useState();
     const [feedback, setFeedback] = useState();
     const [description, setDescription] = useState();
-    const [past, setPast] = useState();
-    const [present, setPresent] = useState();
-    const [future, setFuture] = useState();
+    const [past, setPast] = useState({});
+    const [present, setPresent] = useState({});
+    const [future, setFuture] = useState({});
 
 
     const handleDateChange = (e) => {
@@ -146,12 +146,49 @@ const Schedules = () => {
     console.log(list);
     };
 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const date = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${date}`;
+      };
+
+    const compareDates = (date1, date2) => {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+        const d1DateOnly = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
+        const d2DateOnly = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
+        if (d1DateOnly.getTime() < d2DateOnly.getTime()) {
+            console.log("-1")
+            return -1;
+        }
+        if (d1DateOnly.getTime() > d2DateOnly.getTime()) {
+            console.log("1")
+            return 1;
+        }
+    }
+
+    useEffect(() => {
+        scheduleList.sort((a, b) => a.Date.localeCompare(b.Date));
+        const currDate = getCurrentDate(); //To get the Current Date
+        // const today = new Date.getDate();
+        // console.log(today);
+        console.log(currDate);
+        setPresent(scheduleList.filter(obj => obj.Date === currDate));
+        console.log(present)
+        setPast(scheduleList.filter(obj => compareDates(obj.Date, currDate) === -1));
+        console.log(past)
+        setFuture(scheduleList.filter(obj => compareDates(obj.Date, currDate) === 1));
+        console.log(future)
+    }, [])
+
     return (
     <div className='scheduleContainer'>
         <div className='header'>
-            <div>Completed</div>
-            <div>Today</div>
-            <div>Upcoming</div>
+            <div className='headerText'>Completed</div>
+            <div className='headerText'>Today</div>
+            <div className='headerText'>Upcoming</div>
         </div>
 
         <div className='schedules'>              
