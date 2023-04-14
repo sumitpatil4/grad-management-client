@@ -108,18 +108,32 @@ const handleEditClick = (i) => {
       <div className='mytrainings'>
         
         {trainingsList.map((e, i)=> <div> 
-          {/* <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(i)}> */}
+          <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(e)}>
           <div className='iconContainer'>
-            <div className='edit_icon_wrapper' onClick={() => handleEdit(i)}>
+            <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>
             </div>
-            <div onClick={()=>handleRem(i)}>
+            <div onClick={(e) => {e.stopPropagation();handleRem(i);}}>
               <MdDelete className="close-icon"/>
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
-          {/* </NavLink> */}
+          </NavLink>
         </div> )}
+
+        <div> 
+          <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(0)}>
+          <div className='iconContainer'>
+            <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(0);}}>
+              <MdEdit className='edit_icon'/>
+            </div>
+            <div onClick={(e) => {e.stopPropagation();handleRem(0);}}>
+              <MdDelete className="close-icon"/>
+            </div>
+          </div> 
+          <div className='trainingText'>TestTraining</div>
+          </NavLink>
+        </div>
                         
 
         <div className='trainingText' onClick={() => setIsOpen(true)}>

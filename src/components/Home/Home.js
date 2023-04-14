@@ -11,7 +11,7 @@ import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
 import {Manager} from "../Contextapi/Managercontext"
 import Training from '../Training/Training';
-import Interns from '../Interns/Intern';
+import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
 import Schedules from '../Schedules/Schedules';
 

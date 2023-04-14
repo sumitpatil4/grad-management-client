@@ -123,14 +123,14 @@
       border-collapse: collapse;
       font-size: 22px;
       border-radius: 5px;
-      box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px;
+      /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
   }
   
   thead
   {
       background-color: rgb(19, 28, 44);
       color: white;
-      border-radius: 5px;
+      /* border-radius: 5px; */
   }
   
   th{
