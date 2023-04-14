@@ -45,9 +45,11 @@ const Interns = () => {
         e.target.className+=" active";
     }
 
+    
     useEffect(()=>{
         const batchName = `${train.trainingName}_${train.trainingId}`;
         setGroupName(batchName);
+        
         axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
         .then((res)=>{
             console.log(res);
@@ -75,9 +77,9 @@ const Interns = () => {
         
     },[useeffectreload,defaultCheck])
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-    },[currentGroup])
+    // },[currentGroup,internsList])
 
     const [batchId,setbatchId]=useState("");
 
