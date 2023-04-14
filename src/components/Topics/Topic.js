@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import "./topic.css"
 import { FaSearch } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { BsFillInfoCircleFill } from "react-icons/bs";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from "axios";
@@ -18,8 +19,10 @@ const Topic = () => {
     const [AddPopup, setAddPopup] = useState(false);
     const [editTopic, setEditTopic] = useState(null);
     const [showEditForm, setShowEditForm] = useState(false);
+    const [showinfo, setShowInfo] = useState(false);
     const [useeffectreload, setUseeffectreload] = useState(false)
     const [topicName,setTopicName] = useState("");
+    const [topicTemp,setTopicTemp] = useState("");
 
 
     useEffect(()=>{
@@ -114,6 +117,11 @@ const Topic = () => {
     })
   }
 
+  const handleInfoPopup = (t) =>{
+    setShowInfo(true);
+    setTopicTemp(t);
+  }
+
     return (
       <div className="topicContainer">
         <div className="topicWrapper">
@@ -154,23 +162,68 @@ const Topic = () => {
                 </div>
               </div>
               <div>
-                <p className="topicAdd"
-                            onClick={(e) => {
-                              setAddPopup(true);
-                            }}
-                >Add&nbsp;Topic</p>
+                <p
+                  className="topicAdd"
+                  onClick={(e) => {
+                    setAddPopup(true);
+                  }}
+                >
+                  Add&nbsp;Topic
+                </p>
               </div>
             </div>
           </div>
           <div className="topicsdiv">
             {completedCheck &&
-              (searchQuery !== "" ? compltedfilteredList : completedList).map((t) => (
+              (searchQuery !== "" ? compltedfilteredList : completedList).map(
+                (t) => (
+                  <div className="topicbar">
+                    <form>
+                      <input
+                        type="checkbox"
+                        checked={t.completed}
+                        onChange={() => handleTopicCompletion(t)}
+                      />
+                    </form>
+                    <p>{t.topicName}</p>
+                    <div>
+                      <BsFillInfoCircleFill
+                        onClick={() => handleInfoPopup(t)}
+                        className="info-icon"
+                      />
+                    </div>
+                    <div>
+                      <MdEdit
+                        className="edit-icon"
+                        onClick={() => {
+                          setEditTopic(t);
+                          setShowEditForm(true);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <MdDelete
+                        className="del_icon"
+                        onClick={() => {
+                          setDeletePopup(true);
+                          setDeleteId(t.topicId);
+                        }}
+                      />
+                    </div>
+                  </div>
+                )
+              )}
+            {!completedCheck &&
+              (searchQuery !== ""
+                ? unCompltedfilteredList
+                : reamainingList
+              ).map((t) => (
                 <div className="topicbar">
                   <form>
                     <input
                       type="checkbox"
                       checked={t.completed}
-                      onChange={() => handleTopicCompletion(t)}
+                      onChange={() => handleTopicUncompletion(t)}
                     />
                   </form>
                   <p>{t.topicName}</p>
@@ -181,35 +234,16 @@ const Topic = () => {
                         setEditTopic(t);
                         setShowEditForm(true);
                       }}
-                      />
+                    />
                   </div>
                   <div>
                     <MdDelete
                       className="del_icon"
-                      onClick={()=>{
+                      onClick={() => {
                         setDeletePopup(true);
-                        setDeleteId(t.topicId)}}
+                        setDeleteId(t.topicId);
+                      }}
                     />
-                  </div>
-                </div>
-              ))}
-            {!completedCheck &&
-              (searchQuery !== "" ? unCompltedfilteredList : reamainingList).map((t) => (
-                <div className="topicbar">
-                  <form>
-                    <input type="checkbox" checked={t.completed} onChange={() => handleTopicUncompletion(t)}/>
-                  </form>
-                  <p>{t.topicName}</p>
-                  <div>
-                    <MdEdit className="edit-icon"  onClick={() => {
-                        setEditTopic(t);
-                        setShowEditForm(true);
-                      }}/>
-                  </div>
-                  <div>
-                    <MdDelete className="del_icon" onClick={()=>{
-                        setDeletePopup(true);
-                        setDeleteId(t.topicId)}}/>
                   </div>
                 </div>
               ))}
@@ -227,7 +261,7 @@ const Topic = () => {
                   type="button"
                   className="submit-btn"
                   onClick={handleDelete}
-                  >
+                >
                   Yes
                 </button>
                 <button
@@ -244,8 +278,63 @@ const Topic = () => {
           </div>
         )}
 
+        {showinfo && (
+          <form>
+            <div
+              className="popupContainer1"
+              onClick={() => {
+                setShowInfo(false);
+              }}
+            >
+              <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
+                <div className="popupHeader1">
+                  <h2>Topic info</h2>
+                </div>
+                <div className="inputContainer1">
+                  <div className="input-group1">
+                    <label>Name </label>
+                    <p>{topicTemp.topicName}</p>
+                  </div>
+
+                  <div className="input-group1">
+                    <label>Meetings </label>
+                    <div className="availability">
+                      <table className="availablityTable">
+                        <thead>
+                          <tr className="availablitytr">
+                            <th>Date</th>
+                            <th>From&nbsp;Time</th>
+                            <th>To&nbsp;Time</th>
+                            <th>Desc</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* {userAvailability.map((item) => (
+                        <tr className="availablitytr">
+                          <td className="availablitytd">{item.date}</td>
+                          <td className="">{item.fromTime}</td>
+                          <td className="availablitytd">{item.toTime}</td>
+                          <td className="availablitytd">
+                            <MdDelete
+                              onClick={() => handleAvlDeletePopup(item.availabilityId)}
+                              className="del_icon"
+                            />
+                          </td>
+                        </tr>
+                      ))} */}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        )}
+
         {showEditForm && (
           <form>
+
             <div className="popupContainer">
               <div className="popup-boxd">
                 <div className="popupHeader">
@@ -255,12 +344,17 @@ const Topic = () => {
                   <div className="input-group">
                     <label htmlFor="name">Name </label>
                     <div>
-                    <input type="text" id="topic-name" value={editTopic.topicName} onChange={(e) => {
-                      setEditTopic({
-                    ...editTopic,
-                    topicName: e.target.value
-                });
-            }} />
+                      <input
+                        type="text"
+                        id="topic-name"
+                        value={editTopic.topicName}
+                        onChange={(e) => {
+                          setEditTopic({
+                            ...editTopic,
+                            topicName: e.target.value,
+                          });
+                        }}
+                        />
                       {/* <p id="val">{validMsg}</p> */}
                     </div>
                   </div>
@@ -269,7 +363,8 @@ const Topic = () => {
                   <button
                     type="button"
                     className="submit-btn"
-                    onClick={handleEditSubmit}>
+                    onClick={handleEditSubmit}
+                    >
                     Submit
                   </button>
                   <button
@@ -285,47 +380,56 @@ const Topic = () => {
           </form>
         )}
 
-
-{AddPopup && (
-  <form>
-            <div className="popupContainer">
-              <div className="popup-boxd">
-                <div className="popupHeader">
-                  <h2>Add Topic</h2>
-                </div>
-                <div className="inputContainer">
-                  <div className="input-group">
-                    <label htmlFor="name">Name </label>
-                    <div>
-                    <input type="text" id="topic-name" onChange={(e)=>setTopicName(e.target.value)}/>
-                      {/* <p id="val">{validMsg}</p> */}
+        {AddPopup && (
+          <form>
+            {/* <div
+              className="popupContainer"
+              onClick={() => {
+                setAddPopup(false);
+              }}
+            > */}
+              <div className="popupContainer">
+                <div className="popup-boxd">
+                  <div className="popupHeader">
+                    <h2>Add Topic</h2>
+                  </div>
+                  <div className="inputContainer">
+                    <div className="input-group">
+                      <label htmlFor="name">Name </label>
+                      <div>
+                        <input
+                          type="text"
+                          id="topic-name"
+                          onChange={(e) => setTopicName(e.target.value)}
+                        />
+                        {/* <p id="val">{validMsg}</p> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="buttonsContainer">
-                  <button
-                    type="button"
-                    className="submit-btn"
-                    onClick={(e) => {
-                      handleAdd(e);
-                    }}>
-                    Submit
-                  </button>
-                  <button
-                    type="reset"
-                    className="cancel-btn"
-                    onClick={() => setAddPopup(false)}
+                  <div className="buttonsContainer">
+                    <button
+                      type="button"
+                      className="submit-btn"
+                      onClick={(e) => {
+                        handleAdd(e);
+                      }}
                     >
-                    Cancel
-                  </button>
+                      Submit
+                    </button>
+                    <button
+                      type="reset"
+                      className="cancel-btn"
+                      onClick={() => setAddPopup(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            {/* </div> */}
           </form>
         )}
-
-
-        </div>
+      </div>
     );
 }
 
