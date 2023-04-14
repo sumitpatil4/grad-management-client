@@ -15,7 +15,7 @@ const Training = () => {
 
     return (
         <div className='trainingsContainer'>
-            <h1>{train}</h1>
+            <h1>{train.trainingName}</h1>
             <div className='trainings'>              
                     <div>
                         <NavLink to={"/mytrainings/training/interns"} >
