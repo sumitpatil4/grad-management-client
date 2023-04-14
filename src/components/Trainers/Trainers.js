@@ -70,6 +70,25 @@ const Trainers = () => {
       phone: "1234567890",
       email: "akriti@gmail.com",
     },
+    {
+      trainersid: 4,
+      trainersname: "Akriti Singh",
+      skill: "JavaScript",
+      phone: "1234567890",
+      email: "akriti@gmail.com",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
+    },{
+      trainersid: 4,
+      trainersname: "Akriti Singh",
+      skill: "JavaScript",
+      phone: "1234567890",
+      email: "akriti@gmail.com",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
+    },
   ]);
 
   const [availability, setAvailabilityList] = useState([
