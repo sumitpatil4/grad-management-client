@@ -24,6 +24,10 @@
     /* background-color: blue; */
 }
 
+.internsTableContainer{
+    height: 60vh;
+}
+
 .internsGroupsContainer
 {
     background-color: rgb(14, 20, 30);
@@ -45,6 +49,7 @@
 
 .titleContainer{
     background-color: rgb(14, 20, 30);
+    height: 10vh;
     color: white;
     padding: 0px 10px;
     display: grid;
@@ -52,6 +57,7 @@
 }
 
 .groupContainer{
+    height: 10vh;
     background-color: rgb(19, 28, 44);
     color: white;
 }
