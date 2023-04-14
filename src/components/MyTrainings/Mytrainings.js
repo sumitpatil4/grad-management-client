@@ -113,7 +113,7 @@ const navigate = useNavigate();
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div onClick={()=>navigatetotrainings(e)}> 
+        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>

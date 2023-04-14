@@ -5,7 +5,6 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from "axios";
-
 const Topic = () => {
     const managercontext=useContext(ManagerContext);
     const {train,topicsList,updateTopicsList}=managercontext;
@@ -20,8 +19,6 @@ const Topic = () => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [useeffectreload, setUseeffectreload] = useState(false)
     const [topicName,setTopicName] = useState("");
-
-
     useEffect(()=>{
         // settopicList([
         //     {topicId:1,topicName:"M Sai Krupananda",isCompleted:true},
@@ -33,7 +30,6 @@ const Topic = () => {
         //     {topicId:7,topicName:"Sai Krupananda",isCompleted:true},
         //     {topicId:8,topicName:"Sai Krupananda",isCompleted:true},
         // ])
-
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
           console.log(res);
@@ -44,28 +40,21 @@ const Topic = () => {
           console.log(completedList);
           console.log(reamainingList);
         })
-        
     },[useeffectreload])
-
-    
-
     const activeClass=(e)=>{
         let btns = document.getElementsByClassName("topicBtns");
         let x=[...btns]
         x.forEach((t)=>t.className="topicBtns")
         e.target.className+=" active";
     }
-
     const unCompltedfilteredList = reamainingList.filter(
       (t) =>
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
     const compltedfilteredList = completedList.filter(
       (t) =>
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
   const handleTopicCompletion = (topic) => {
     axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/0`)
     .then((res)=>{
@@ -73,7 +62,6 @@ const Topic = () => {
       setUseeffectreload(!useeffectreload);
     })
   };
-
   const handleTopicUncompletion = (topic) => {
     axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/1`)
     .then((res)=>{
@@ -81,8 +69,6 @@ const Topic = () => {
       setUseeffectreload(!useeffectreload);
     })
   };
-
-
   const handleAdd = () =>{
       console.log(topicName);
       axios.post(`http://localhost:8090/topic/createTopic/${train.trainingId}`,{
@@ -104,7 +90,6 @@ const Topic = () => {
     setShowEditForm(false);
   })
   }
-
   const handleDelete = () =>{
     axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`)
     .then((res)=>{
@@ -113,7 +98,6 @@ const Topic = () => {
       setDeletePopup(false);
     })
   }
-
     return (
       <div className="topicContainer">
         <div className="topicWrapper">
@@ -215,7 +199,6 @@ const Topic = () => {
               ))}
           </div>
         </div>
-
         {deletePopup && (
           <div className="popupContainer">
             <div className="popup-boxd">
@@ -243,7 +226,6 @@ const Topic = () => {
             </div>
           </div>
         )}
-
         {showEditForm && (
           <form>
             <div className="popupContainer">
@@ -284,8 +266,6 @@ const Topic = () => {
             </div>
           </form>
         )}
-
-
 {AddPopup && (
   <form>
             <div className="popupContainer">
@@ -323,10 +303,7 @@ const Topic = () => {
             </div>
           </form>
         )}
-
-
         </div>
     );
 }
-
 export default Topic;
