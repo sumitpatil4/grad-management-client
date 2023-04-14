@@ -7,9 +7,12 @@ export const Manager=(props)=>{
   const [train, setTrain] = useState();
   const [trainingsList, setTrainingsList] = useState([]);
   const [trainerList, setTrainerList] = useState([]);
+  const [topicsList, setTopicsList] = useState([]);
   const updateTrain=(e)=> setTrain(e);
   const updatetrainingsList=(e)=> setTrainingsList(e);
   const updateTrainerList=(e)=> setTrainerList(e);
+  const updateTopicsList=(e)=> setTopicsList(e);
+
 
     return (
         
@@ -18,9 +21,11 @@ export const Manager=(props)=>{
                 train,
                 trainingsList,
                 trainerList,
+                topicsList,
                 updateTrain,
                 updatetrainingsList,
-                updateTrainerList
+                updateTrainerList,
+                updateTopicsList
             }}
         >
             {props.children}

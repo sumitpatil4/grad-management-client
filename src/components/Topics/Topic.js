@@ -1,157 +1,14 @@
-// import "./topic.css";
-// import React, { useState ,useContext, useEffect} from "react";
-// import { FaSearch, FaUserAlt } from "react-icons/fa";
-// import { ImCheckboxChecked } from "react-icons/im";
-// import { MdEdit, MdDelete } from "react-icons/md";
-
-// const Topic = () => {
-
-    
-
-//     const [searchQuery,setSearchQuery] = useState("");
-//     const [checkValue,setCheckValue] = useState();
-//     const [showAllTopics, setShowAllTopics] = useState(false);
-//     const [filter, setFilter] = useState("All"); 
-
-//     const [topics, setTopics] = useState([
-//         {
-//             topicId:1,
-//             topicName:"Java Core"
-//         },
-//         {
-//             topicId:2,
-//             topicName:"Advanced Java"
-//         },
-//         {
-//             topicId:3,
-//             topicName:"Multithreading"
-//         },
-//         {
-//             topicId:4,
-//             topicName:"Generics"
-//         },
-//       ]);
-
-//       const handleAddPopup = () => {
-
-//       }
-
-
-
-//       const handleEditPopup = () => {
-
-//       }
-
- 
-
-
-//         const handleShowAllTopics = () => {
-//             setShowAllTopics(true);
-//           }; 
-
-//           const handleDeletePopup = (topicId) => {
-//             setTopics(topics.filter((topic) => topic.topicId !== topicId));
-//           };
-        
-//           const handleCheckbox = (topicId) => {
-//             setTopics(
-//               topics.map((topic) =>
-//                 topic.topicId === topicId ? { ...topic, completed: !topic.completed } : topic
-//               )
-//             );
-//           };
-
-//           const filteredTopics = topics.filter((topic) => {
-//             if (filter === "All") {
-//               return true; 
-//             } else if (filter === "Completed") {
-//               return topic.completed; 
-//             } else {
-//               return !topic.completed; 
-//             }
-//         });
-   
-//     return (
-//       <>
-//         <div className="topicContainer">
-//           <div className="heading">
-//              <div>
-//                 <button className="comp-button"  onClick={() => setFilter("All")}
-//               disabled={filter === "All"}>
-//                   ALL
-//                 </button>
-//               </div>
-//               <div>
-//                 <button className="comp-button" onClick={() => setFilter("Completed")}
-//               disabled={filter === "Completed"}>
-//                   Completed
-//                 </button>
-//               </div>
-//               <div>
-//                 <button className="comp-button" onClick={() => setFilter("NotCompleted")}
-//               disabled={filter === "NotCompleted"}
-// >
-//                   NotCompleted
-//                 </button>
-//               </div>
-//               <div>
-//                 <button className="addbutton" onClick={handleAddPopup}>
-//                   Add&nbsp;Topic
-//                 </button>
-//               </div>
-
-//               <div className="searchbar">
-//                 <input
-//                   type="text"
-//                   placeholder="Search..."
-                  
-//                 />
-//                 <button type="submit" >
-//                   <FaSearch />
-//                 </button>
-//               </div>
-//             </div>
-//           <div className="topicContents">
-//           {filteredTopics.map((topic) => (
-//             <div key={topic.topicId} className="topic">
-//               <div className="topicCheckbox">
-//                 <input
-//                   type="checkbox"
-//                   checked={topic.completed}
-//                   onChange={() => handleCheckbox(topic.topicId)}
-//                 />
-//                 <label>{topic.topicName}</label>
-//               </div>
-//               <div className="topicButtons">
-//                      <MdEdit
-//                         onClick={() => handleEditPopup(topic)}
-//                         className="edit-icon"
-//                       />
-//                       <MdDelete
-//                         onClick={() =>  handleDeletePopup(topic.topicId)}
-//                         className="del_icon"
-//                       />
-//               </div>
-//             </div>
-//           ))}
-//           </div>
-//         </div>
-//       </>
-//     );
-
-
-//   }         
-
-// export default Topic;
-
 import React, { useContext, useEffect, useState } from 'react'
 import "./topic.css"
 import { FaSearch } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import ManagerContext from '../Contextapi/Managercontext';
+import AuthContext from '../Contextapi/Authcontext';
+import axios from "axios";
 
 const Topic = () => {
-
-    const [topicList,settopicList]=useState([]);
+    const managercontext=useContext(ManagerContext);
+    const {train,topicsList,updateTopicsList}=managercontext;
     const [completedList,setcompletedList]=useState([]);
     const [reamainingList,setreamainingList]=useState([]);
     const [completedCheck,setcompletedCheck]=useState(false);
@@ -161,24 +18,34 @@ const Topic = () => {
     const [AddPopup, setAddPopup] = useState(false);
     const [editTopic, setEditTopic] = useState(null);
     const [showEditForm, setShowEditForm] = useState(false);
+    const [useeffectreload, setUseeffectreload] = useState(false)
+    const [topicName,setTopicName] = useState("");
 
 
     useEffect(()=>{
-        settopicList([
-            {topicId:1,topicName:"M Sai Krupananda",isCompleted:true},
-            {topicId:2,topicName:"Ashish Tripathy",isCompleted:false},
-            {topicId:3,topicName:"Sumit",isCompleted:true},
-            {topicId:4,topicName:"Sai Krupananda",isCompleted:false},
-            {topicId:5,topicName:"Sai Krupananda",isCompleted:true},
-            {topicId:6,topicName:"Sai Krupananda",isCompleted:false},
-            {topicId:7,topicName:"Sai Krupananda",isCompleted:true},
-            {topicId:8,topicName:"Sai Krupananda",isCompleted:true},
-        ])
+        // settopicList([
+        //     {topicId:1,topicName:"M Sai Krupananda",isCompleted:true},
+        //     {topicId:2,topicName:"Ashish Tripathy",isCompleted:false},
+        //     {topicId:3,topicName:"Sumit",isCompleted:true},
+        //     {topicId:4,topicName:"Sai Krupananda",isCompleted:false},
+        //     {topicId:5,topicName:"Sai Krupananda",isCompleted:true},
+        //     {topicId:6,topicName:"Sai Krupananda",isCompleted:false},
+        //     {topicId:7,topicName:"Sai Krupananda",isCompleted:true},
+        //     {topicId:8,topicName:"Sai Krupananda",isCompleted:true},
+        // ])
 
-        setcompletedList(filteredList.filter((t) => t.isCompleted));
-        setreamainingList(filteredList.filter((t) => !t.isCompleted));
+        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
+        .then((res)=>{
+          console.log(res);
+          updateTopicsList(res.data.topicList);
+          console.log(topicsList);
+          setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
+          setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
+          console.log(completedList);
+          console.log(reamainingList);
+        })
         
-    },[topicList])
+    },[useeffectreload])
 
     
 
@@ -189,33 +56,63 @@ const Topic = () => {
         e.target.className+=" active";
     }
 
-    const filteredList = topicList.filter(
+    const unCompltedfilteredList = reamainingList.filter(
       (t) =>
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    );
+
+    const compltedfilteredList = completedList.filter(
+      (t) =>
+          t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const handleTopicCompletion = (topic) => {
-    const updatedTopicList = topicList.map((t) => {
-      if (t.id === topic.id) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    });
-    settopicList(updatedTopicList);
+    axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/0`)
+    .then((res)=>{
+      console.log(res);
+      setUseeffectreload(!useeffectreload);
+    })
+  };
+
+  const handleTopicUncompletion = (topic) => {
+    axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/1`)
+    .then((res)=>{
+      console.log(res);
+      setUseeffectreload(!useeffectreload);
+    })
   };
 
 
-  const handleAdd = (topic) =>{
-    const updateRemainingList = topicList.map((t) => {
-      if (t.topicName != topic.topicName){
-        // setreamainingList[...remainingList,topic]
-      }
+  const handleAdd = () =>{
+      console.log(topicName);
+      axios.post(`http://localhost:8090/topic/createTopic/${train.trainingId}`,{
+        "topicName":topicName
     })
-
+      .then((res)=>{
+        console.log(res);
+        setUseeffectreload(!useeffectreload);
+      })
+      setAddPopup(false);
   }
-  
+  const handleEditSubmit = ()=>{
+    console.log(editTopic);
+    axios.put(`http://localhost:8090/topic/updateTopic/${editTopic.topicId}`,{
+      "topicName":editTopic.topicName
+  }).then((res)=>{
+    console.log(res);
+    setUseeffectreload(!useeffectreload);
+    setShowEditForm(false);
+  })
+  }
 
-
+  const handleDelete = () =>{
+    axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`)
+    .then((res)=>{
+      console.log(res);
+      setUseeffectreload(!useeffectreload);
+      setDeletePopup(false);
+    })
+  }
 
     return (
       <div className="topicContainer">
@@ -267,12 +164,12 @@ const Topic = () => {
           </div>
           <div className="topicsdiv">
             {completedCheck &&
-              completedList.map((t) => (
+              (searchQuery !== "" ? compltedfilteredList : completedList).map((t) => (
                 <div className="topicbar">
                   <form>
                     <input
                       type="checkbox"
-                      checked={t.isCompleted}
+                      checked={t.completed}
                       onChange={() => handleTopicCompletion(t)}
                     />
                   </form>
@@ -289,26 +186,30 @@ const Topic = () => {
                   <div>
                     <MdDelete
                       className="del_icon"
-                      onClick={() => {
-                        setDeleteId(t.topicId);
+                      onClick={()=>{
                         setDeletePopup(true);
-                      }}
+                        setDeleteId(t.topicId)}}
                     />
                   </div>
                 </div>
               ))}
             {!completedCheck &&
-              reamainingList.map((t) => (
+              (searchQuery !== "" ? unCompltedfilteredList : reamainingList).map((t) => (
                 <div className="topicbar">
                   <form>
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={t.completed} onChange={() => handleTopicUncompletion(t)}/>
                   </form>
                   <p>{t.topicName}</p>
                   <div>
-                    <MdEdit className="edit-icon" />
+                    <MdEdit className="edit-icon"  onClick={() => {
+                        setEditTopic(t);
+                        setShowEditForm(true);
+                      }}/>
                   </div>
                   <div>
-                    <MdDelete className="del_icon" />
+                    <MdDelete className="del_icon" onClick={()=>{
+                        setDeletePopup(true);
+                        setDeleteId(t.topicId)}}/>
                   </div>
                 </div>
               ))}
@@ -319,23 +220,18 @@ const Topic = () => {
           <div className="popupContainer">
             <div className="popup-boxd">
               <div className="popupHeader">
-                <h2>Are you sure to delete this user?</h2>
+                <h2>Are you sure to delete this topic?</h2>
               </div>
               <div className="buttonsContainer">
                 <button
-                  type="submit"
+                  type="button"
                   className="submit-btn"
-                  onClick={() => {
-                    settopicList(
-                      topicList.filter((t) => t.topicId !== deleteId)
-                    );
-                    setDeletePopup(false);
-                  }}
+                  onClick={handleDelete}
                   >
                   Yes
                 </button>
                 <button
-                  type="reset"
+                  type="button"
                   className="cancel-btn"
                   onClick={() => {
                     setDeletePopup(false);
@@ -371,15 +267,9 @@ const Topic = () => {
                 </div>
                 <div className="buttonsContainer">
                   <button
-                    type="submit"
+                    type="button"
                     className="submit-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      // update the topic in the list
-                      // setTopicList(topicList.map((t) => t.topicId === editTopic.topicId ? editTopic : t));
-                      // close the edit form popup
-                      setShowEditForm(false);
-                    }}>
+                    onClick={handleEditSubmit}>
                     Submit
                   </button>
                   <button
@@ -407,18 +297,16 @@ const Topic = () => {
                   <div className="input-group">
                     <label htmlFor="name">Name </label>
                     <div>
-                    <input type="text" id="topic-name" />
+                    <input type="text" id="topic-name" onChange={(e)=>setTopicName(e.target.value)}/>
                       {/* <p id="val">{validMsg}</p> */}
                     </div>
                   </div>
                 </div>
                 <div className="buttonsContainer">
                   <button
-                    type="submit"
+                    type="button"
                     className="submit-btn"
                     onClick={(e) => {
-                      e.preventDefault();
-                      setAddPopup(false);
                       handleAdd(e);
                     }}>
                     Submit

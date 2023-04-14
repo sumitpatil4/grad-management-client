@@ -14,7 +14,7 @@ const About = () => {
 
             <div className='about'>
             <div>
-            <h6>This Application was &nbsp;&nbsp;Designed by</h6>
+            <h6>Designed by</h6>
             <ul>
                <li>
                    {/* <div class="circleContainer"> 
@@ -43,7 +43,7 @@ const About = () => {
             </ul>
             </div>
             <div>
-            <h6>Our Manager</h6>
+            <h6>Manager</h6>
             <ul>
               <li> 
                  {/* <div class="circleContainer"> 
@@ -54,7 +54,7 @@ const About = () => {
             </ul>
             </div>
             <div>
-            <h6>Our Mentors</h6>
+            <h6>Mentors</h6>
             <ul>
               <li> 
                  {/* <div class="circleContainer"> 
@@ -68,6 +68,7 @@ const About = () => {
                   </div> */}
                   Deepak Sahu
                 </li>
+                <li>Ayush Gupta</li>
             </ul>
             </div>           
           </div>
