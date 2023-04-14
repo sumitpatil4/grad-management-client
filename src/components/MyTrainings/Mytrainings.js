@@ -124,13 +124,13 @@ const navigate = useNavigate();
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
         </div> )}
-                        
-
+        
         <div className='trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd className='add_icon'/>                           
         </div>            
       </div>
         
+
       {isOpenCon && <div className='popupContainer'>
        <div className='popup-boxd'>
         <div className='popupHeader'>
