@@ -288,5 +288,9 @@
 
 
 #avlpop{
-  z-index: 10;;
+  z-index: 1;
+}
+
+#avldelpop{
+  z-index: 2;
 }
