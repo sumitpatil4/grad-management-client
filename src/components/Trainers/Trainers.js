@@ -268,21 +268,27 @@ const Trainers = () => {
 
   return (
     <>
-      <div className="buttonContainer">
+    <div className="trainernavbar">
+      <div>
         <button className="add-button" onClick={handleAddPopup}>
           Add&nbsp;Trainer
         </button>
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          />
-          <button type="submit" onClick={handleSearchInputChange}>
-            <FaSearch />
-          </button>
+      </div>
+      <div>
+        <div className="buttonContainer2">
+            <div className="search-bar2">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                />
+            </div>
+            <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
+              <FaSearch className="searchIcon"/>
+            </div>
         </div>
+      </div>
       </div>
       <div className="trainerContainer">
         <table>
@@ -446,29 +452,6 @@ const Trainers = () => {
                   <input type="text" onChange={(event)=>{setPhone(event.target.value)}}/>
                 </div>
 
-                {/* <div className="input-group">
-                  <label>Date:</label>
-                  <input type="date" value={date} onChange={handleDateChange} />
-                </div>
-
-                <div className="input-group">
-                  <label>From Time:</label>
-                  <input
-                    type="time"
-                    value={fromTime}
-                    onChange={handleFromTimeChange}
-                  />
-                </div>
-
-                <div className="input-group">
-                  <label>To Time:</label>
-                  <input
-                    type="time"
-                    value={toTime}
-                    onChange={handleToTimeChange}
-                  />
-                </div> */}
-
                 <div className="buttonsContainer">
                   <button type="submit" onClick={handleClick} className="submit-btn">
                     Submit
@@ -545,60 +528,55 @@ const Trainers = () => {
       {isOpenProfile && (
         <form>
           <div
-            className="popupContainer1"
+            className="popupContainer"
             onClick={() => {
               setIsOpenProfile(false);
             }}
           >
-            <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
-              <div className="popupHeader1">
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
                 <h2>Profile</h2>
               </div>
-              <div className="inputContainer1">
-                {/* <div className="input-group1">
-                  <label>Trainer ID </label>
-                  <p>{trainerTemp.trainerId}</p>
-                </div> */}
-
-                <div className="input-group1">
+              <div className="inputContainer">
+                <div className="input-group">
                   <label>Name </label>
                   <p>{trainerTemp.trainerName}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Skill </label>
                   <p>{trainerTemp.skill}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Email </label>
                   <p>{trainerTemp.email}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Phone </label>
                   <p>{trainerTemp.phoneNumber}</p>
                 </div>
-
-                <div className="input-group1">
-                  <label>Availabilty </label>
+                </div>
+                <div className="availabilityContainer">
+                  <h2>Availabilty </h2>
                   <div className="availability">
-                  <table className="availablityTable">
-                    <thead>
-                      <tr className="availablitytr">
-                        <th>Date</th>
-                        <th>From&nbsp;Time</th>
-                        <th>To&nbsp;Time</th>
-                        <th>Action</th>
+                  <table className="popuptable">
+                    <thead className="popuphead">
+                      <tr className="popuptr">
+                        <th className="popupth">Date</th>
+                        <th className="popupth">From&nbsp;Time</th>
+                        <th className="popupth">To&nbsp;Time</th>
+                        <th className="popupth">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="popupbody">
                       {userAvailability.map((item) => (
-                        <tr className="availablitytr">
-                          <td className="availablitytd">{item.date}</td>
+                        <tr className="popuptr">
+                          <td className="popuptd">{item.date}</td>
                           <td className="">{item.fromTime}</td>
-                          <td className="availablitytd">{item.toTime}</td>
-                          <td className="availablitytd">
+                          <td className="popuptd">{item.toTime}</td>
+                          <td className="popuptd">
                             <MdDelete
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
@@ -609,10 +587,9 @@ const Trainers = () => {
                     </tbody>
                   </table>
                 </div>
-                </div>
-                <div className="input-group1">
-                  <label></label>
-                  <button type="button" className="add-button1" onClick={handleAvaliabiltyPopup}>
+                
+                <div className="buttonsContainer">
+                  <button type="button" onClick={handleAvaliabiltyPopup}>
                        Add&nbsp;Availability
                   </button>
                 </div>

@@ -32,38 +32,21 @@
     background-color: rgb(46, 200, 102);
 }
 .searchWrapper{
-    display: flex;
+    /* display: flex; */
 }
 .topicAdd{
     font-weight: 500;
     background-color: rgb(46, 200, 102);
     font-size: 18px;
-    margin: 10px;
-    padding: 5px 15px;
+    margin: 14px 8px;
+    padding: 4px 15px;
     border-radius: 3px;
     cursor: pointer;
 }
 .topicAdd:hover{
     background-color: rgb(45, 177, 94);
 }
-.buttonContainer2
-{
-    display: flex;
-    margin: 10px 5px;
-}
-.search-bar2>input{
-    border: none;
-    padding: 10px 10px;
-    border-radius: 3px 0px 0px 3px;
-}
-.searchIcon{
-    background-color: rgb(45, 177, 94);
-    padding: 9.5px 10px;
-    border-radius: 0px 3px 3px 0px;
-}
-.search-bar2>input:focus{
-    outline: none;
-}
+
 .topicsdiv{
     height: 70vh;
     overflow-y: scroll;
@@ -127,6 +110,7 @@ input[type=checkbox] {
   .info-icon{
     padding: 0px 10px;
     font-size: 25px;
+    color: rgb(25, 40, 66);
     cursor: pointer;
   }
 

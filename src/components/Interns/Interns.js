@@ -12,8 +12,8 @@ const Interns = () => {
     const {train,internsList,groupsList,updateinternsList,updategroupsList}=managercontext;
     const authcontext=useContext(AuthContext);
     const {userid}=authcontext;
-    const [groupName,setGroupName]=useState("TrainingName");
-    const [currentGroup,setCurrentGroup]=useState({});
+    const [groupName,setGroupName]=useState("");
+    const [currentGroup,setCurrentGroup]=useState([]);
     const [defaultInternList,setdefaultInternList]=useState([]);
     const [defaultInternIdList,setdefaultInternIdList]=useState([]);
     const [newGroup,setNewGroup]=useState("");
@@ -31,7 +31,24 @@ const Interns = () => {
     const [phoneno,setphoneno]=useState("");
     const [internemail,setinternemail]=useState("");
     const [defBatch,setDefBatch] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const [useeffectreload, setUseeffectreload] = useState(false)
+    const [useeffectreload1, setUseeffectreload1] = useState(false)
+    const [useeffectreload2, setUseeffectreload2] = useState(false)
+    const [useeffectreload3, setUseeffectreload3] = useState(false)
+    const batchName = `${train.trainingName}_${train.trainingId}`;
+
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+      };
+
+      const filteredInterns = defaultCheck ? internsList.filter(
+        (intern) =>
+          intern.internName.toLowerCase().includes(searchQuery.toLowerCase())
+      ):currentGroup[0].internList.filter(
+        (intern) =>
+          intern.internName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
     const getInternsListUsingBatchId=(batchid)=>{
         const internslist=internsList.filter((e)=>e.batch.batchId===batchid);
@@ -45,16 +62,29 @@ const Interns = () => {
         e.target.className+=" active";
     }
 
-    
+    const defactiveClass=()=>{
+        document.getElementById("defBatch").className+=" active";
+    }
+
+    const handleDefaultGroup=()=>{
+        setDefaultCheck(true);
+        setGroupName(train.trainingName);
+        setSearchQuery("");
+    }
+
     useEffect(()=>{
-        const batchName = `${train.trainingName}_${train.trainingId}`;
-        setGroupName(batchName);
-        
         axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
         .then((res)=>{
             console.log(res);
             updateinternsList(res.data.intern);
+            setUseeffectreload2(!useeffectreload2);
         })
+    },[useeffectreload,defaultCheck,useeffectreload1])
+
+    useEffect(()=>{
+        console.log(groupName)
+        if(groupName.length===0)
+            setGroupName(train.trainingName);
 
         axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
         .then((res)=>{
@@ -63,37 +93,32 @@ const Interns = () => {
                 e.internList=getInternsListUsingBatchId(e.batchId);
             })
             return res.data.batch;
-            // console.log(batchName)
-            // const newBatchList = res.data.batch.filter(e=>e.batchName!==batchName);
-            // setDefBatch(res.data.batch.filter(e=>e.batchName===batchName)[0]);
-            // console.log(newBatchList)
-            // updategroupsList(newBatchList);
         }).then((data)=>{
             const newBatchList = data.filter(e=>e.batchName!==batchName);
             setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
+            console.log(defBatch)
+            console.log(defBatch)
             console.log(newBatchList)
             updategroupsList(newBatchList);
+            setUseeffectreload3(!useeffectreload3);
         })
         
-    },[useeffectreload,defaultCheck])
+    },[useeffectreload,defaultCheck,useeffectreload2])
 
-    // useEffect(()=>{
+    useEffect(()=>{
+        if(currentGroup.length!==0)
+        {
+            setCurrentGroup(groupsList.filter((e)=>e.batchId===currentGroup[0].batchId));
+            if(!defaultCheck)
+                setGroupName(currentGroup[0].batchName);
+        }
+    },[useeffectreload3])
 
-    // },[currentGroup,internsList])
-
-    const [batchId,setbatchId]=useState("");
-
-    const handlegroupName=(i,e,batchid,name)=>{
-        // setbatchId(i);
-            console.log(batchid)
-            console.log(groupsList)
-            console.log(groupsList.filter((e)=>e.batchId===batchid));
+    const handlegroupName=(batchid,name)=>{
+            setSearchQuery("");
             setCurrentGroup(groupsList.filter((e)=>e.batchId===batchid));
-            console.log(currentGroup)
-            console.log(e)
-            // setCurrentGroup(e);
-            console.log(currentGroup)
-            setDefaultCheck(false);//make it false when integrated
+            setUseeffectreload1(!useeffectreload1);
+            setDefaultCheck(false);
             setGroupName(name);
     }
 
@@ -142,8 +167,11 @@ const Interns = () => {
         }).
         then((res)=>{
             console.log(res);
-            setUseeffectreload(useeffectreload);
+            setUseeffectreload(!useeffectreload);
         })
+        setGroupName(train.trainingName)
+        setDefaultCheck(true);
+        defactiveClass()
         setisOpenDeleteGroup(false);
         setNewGroup("");
     }
@@ -183,7 +211,6 @@ const Interns = () => {
         setinternname(e.internName);
         setphoneno(e.phoneNumber);
         setinternemail(e.email);
-        
         setisOpenEditIntern(true);
     }
 
@@ -246,12 +273,14 @@ const Interns = () => {
     const handleGroupAddIntern=()=>{
         console.log(defaultInternIdList,currentGroup);
         //call the add interns to group api
-        axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
+        axios.post(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
             "internIdList":defaultInternIdList
         }).
         then((res)=>{
             console.log(res);
-            setUseeffectreload(useeffectreload);
+            setdefaultInternIdList([]);
+            setUseeffectreload1(!useeffectreload1);
+            setDefaultCheck(false);
         })
         setisOpenGroupAddIntern(false);
     }
@@ -266,21 +295,23 @@ const Interns = () => {
                         <p className='titleIntern'>{groupName}</p>
                         {!defaultCheck ?
                         <>
-                        <p><MdAddBox className='addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
+                        <p><MdAddBox title='Add Intern to Group' className='addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
                         <p><MdEdit onClick={()=>handleEditPopup(groupName)} className='edit-icon'/></p>
                         <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} className='del_icon'/></p>
-                        </>:<p><MdAddBox className='addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
+                        </>:<p><MdAddBox title='Add Intern to Training' className='addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
                         }
                     </div>
-                    <div className='searchWrapper'>
+                    <div className='internsearchwrapper'>
                         <div className="buttonContainer2">
                             <div className="search-bar2">
                             <input
                                 type="text"
                                 placeholder="Search..."
+                                value={searchQuery}
+                                onChange={handleSearchInputChange}
                             />
                             </div>
-                            <div type="submit">
+                            <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
                                 <FaSearch className='searchIcon'/>
                             </div>
                         </div>
@@ -293,7 +324,7 @@ const Interns = () => {
                     </div>
                 </div>
                 <div className='internsTableContainer'>
-                    <table>
+                    <table style={{boxShadow:"none"}}>
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -304,19 +335,20 @@ const Interns = () => {
                         </thead>
                         <tbody>
                             {defaultCheck ? 
-                                (internsList.map((e)=><tr>
+                                ((searchQuery !== "" ? filteredInterns : internsList).map((e)=><tr>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
-                                    <td>{e.batch.batchName}</td>
+                                    <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
                                     <td>
                                         <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
                                         <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
                                     </td>
                                 </tr>)):(
-                                    currentGroup[0].internList.map((e)=><tr>
+                                    (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e)=><tr>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>
+                                        <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
                                         <MdDelete onClick={()=>{setisOpenDeleteForGroup(true);setinternInstance(e)}} className='del_icon'/>
                                     </td>
                                 </tr>)
@@ -326,8 +358,8 @@ const Interns = () => {
                     </table>
                 </div>
                 <div className='internsGroupsContainer'>
-                    <div className='groupbtns active' onClick={(x)=>{setDefaultCheck(true);setGroupName(defBatch.batchName);activeClass(x)}}>{defBatch.batchName}</div>
-                    {groupsList.map((e,i)=><div className='groupbtns' onClick={(x)=>{handlegroupName(i,e,e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
+                    <div className='groupbtns active' id='defBatch' onClick={(x)=>{handleDefaultGroup();activeClass(x)}}>{train.trainingName}</div>
+                    {groupsList.map((e)=><div className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
                 </div>
             </div>
         </div>
