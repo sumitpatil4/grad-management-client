@@ -370,7 +370,11 @@ const Topic = () => {
                         </tbody>
                       </table>
                     </div>
-                  
+                </div>
+                <div className="buttonsContainer">
+                  <button type="button" onClick={()=>setShowInfo(false)}>
+                       Cancel
+                  </button>
                 </div>
               </div>
             </div>
