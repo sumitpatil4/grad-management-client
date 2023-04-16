@@ -181,17 +181,17 @@ const Trainers = () => {
 const handleEditSubmitAvailability = () => {
 //   axios.put(`http://localhost:8090/availability/updateAvailabilty`,{
 //     "trainerId":trainerTemp.trainerId,
-//     "date":Name,
-//     "from_time":fromTime1,
-//     "to_time":toTime1,
+//     "date":date,
+//     "from_time":fromTime,
+//     "to_time":toTime,
 // }).then((res)=>{
 //     console.log(res);
 //     setUseeffectreload(!useeffectreload)
 //   })
   setIsEditAvailability(false);
-//   setDate1('');
-//   setFromTime1('');
-//   setToTime1('');
+  // setDate('');
+  // setFromTime('');
+  // setToTime('');
 };
 
   const handleDateChange = (e) => {
@@ -761,6 +761,10 @@ const handleEditSubmitAvailability = () => {
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
                             />
+                              <MdEdit
+                              onClick={() => handleEditAvailablity(item)}
+                              className="edit_icon"
+                            />
                           </td>
                         </tr>
                       ))}
@@ -771,6 +775,9 @@ const handleEditSubmitAvailability = () => {
                 <div className="buttonsContainer">
                   <button type="button" onClick={handleAvaliabiltyPopup}>
                        Add&nbsp;Availability
+                  </button>
+                  <button type="button" onClick={()=>setIsOpenProfile(false)}>
+                       Cancel
                   </button>
                 </div>
               </div>
@@ -783,7 +790,7 @@ const handleEditSubmitAvailability = () => {
         <div className="popupContainer">
           <div className="popup-boxd">
             <div className="popupHeader">
-              <h2>Are you sure to delete this user?</h2>
+              <h2>Are you sure to delete this Trainer?</h2>
             </div>
             <div className="buttonsContainer">
               <button
