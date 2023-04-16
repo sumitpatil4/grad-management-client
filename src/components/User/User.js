@@ -8,6 +8,7 @@ const User = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [temprole,setTemprole]=useState("");
     const [tempdesc,setTempdesc]=useState("manager");
+    const [popUp,setPopUp] = useState(false);
     const usecontext=useContext(AuthContext);
     const {userid,username}=usecontext;
 
@@ -18,7 +19,11 @@ const User = () => {
             requestedRole:temprole
         }
         //API
-        axios.post(`http://localhost:8090/notification/create/${userid}`,req).then((res)=>console.log(res));
+        axios.post(`http://localhost:8090/notification/create/${userid}`,req)
+        .then((res)=>{
+            console.log(res)
+            setPopUp(true);
+        });
         console.log(req);
         setIsOpen(false);
     }
@@ -65,6 +70,25 @@ const User = () => {
             </div>
             </div>
         </div></form>}
+
+        {popUp && (
+        <div className="popupContainer">
+          <div className="popup-boxd">
+            <div className="popupHeader">
+              <h2>Request sent to Admin</h2>
+            </div>
+            <div className="buttonsContainer">
+              <button
+                type="submit"
+                className="submit-btn"
+                onClick={()=>{setPopUp(false)}}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
         </>
     )
 }

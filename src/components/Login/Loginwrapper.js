@@ -37,7 +37,6 @@ const Loginwrapper = (props) => {
         console.log(response);
         // updateuserrole("ROLE_MANAGER");
         // handleLogin();
-        window.localStorage.setItem('LoggedIn',"YES");
         axios.post("http://localhost:8090/user/login",null,{
             headers:{
                 "Authorization":response.credential
@@ -49,14 +48,17 @@ const Loginwrapper = (props) => {
             updateuserpicture(res.data.user.picture);
             updateuserrole(res.data.user.role);
             updateaccessToken(res.data.accessToken);
-            updateidToken(response);
+            updateidToken(response.credential);
+            localStorage.setItem('accessToken',res.data.accessToken);
+            localStorage.setItem('IDToken',response.credential);
+            localStorage.setItem('userId',res.data.user.userId);
             handleLogin();
         })
     }
 
     return (
         <div className='loginWrapper'>
-                <h2>Welcome</h2>
+                <h2>GRAD MANAGEMENT SYSTEM</h2>
                 <div className="google_btn" onClick={handleLoginApi}>
                     <div id="LoginButton"></div>
                 </div>
