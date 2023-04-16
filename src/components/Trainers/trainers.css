@@ -1,5 +1,14 @@
   
 
+  .trainersHeader>h1{
+    width: 70vw;
+    text-align: center;
+    font-size: 26px;
+    padding: 10px;
+    margin:0px auto;
+    border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
   .profileIconButton {
     border: none;
     cursor: pointer;

@@ -32,7 +32,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  /* z-index: 2; */
 }
 
 .popup-boxd {
@@ -287,6 +287,7 @@ thead
 {
     background-color: rgb(19, 28, 44);
     color: white;
+    border-radius: 5px 5px 0px 0px;
 }
 
 th{

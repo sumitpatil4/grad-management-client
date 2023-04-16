@@ -325,7 +325,7 @@ const Interns = () => {
                 </div>
                 <div className='internsTableContainer'>
                     <table style={{boxShadow:"none"}}>
-                        <thead>
+                        <thead style={{borderRadius:"0px"}}>
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>

@@ -300,6 +300,9 @@ const handleEditSubmitAvailability = () => {
 
   return (
     <>
+    <div className='trainersHeader' >
+      <h1>Trainers</h1>
+    </div>
     <div className="trainernavbar">
       <div>
         <button className="add-button" onClick={handleAddPopup}>
