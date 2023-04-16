@@ -12,7 +12,7 @@ const Users = () => {
     const useAdmincontext=useContext(AdminContext);
     const useAuthcontext=useContext(AuthContext);
     const {userList,notificationList,updateuserList,updatenotificationList}=useAdmincontext;
-    const {notificationCheck,updatenotificationCheck}=useAuthcontext;
+    const {updatenotificationBadge,notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
     const [useeffectreload, setUseeffectreload] = useState(false)
@@ -83,7 +83,13 @@ const Users = () => {
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
           // console.log(res.data.notificationList);
-          updatenotificationList(res.data.notificationList)
+          updatenotificationList(res.data.notificationList);
+          if(res.data.notificationList.length > 0){
+            updatenotificationBadge(true);
+          }
+          else{
+            updatenotificationBadge(false);
+          }
           // console.log(notificationList)
         });
 
@@ -124,6 +130,10 @@ const Users = () => {
         setUserId(userId);
     }
 
+    const displayRole = (role) =>{
+      return role.substring(5);
+    }
+
     
 
     return (
@@ -160,7 +170,7 @@ const Users = () => {
                     (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
-                        <td>{e.role}</td>
+                        <td>{displayRole(e.role)}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
                             {/* <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/> */}

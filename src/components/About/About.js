@@ -6,11 +6,10 @@ const About = () => {
   return (
     <div >
       <div className='aboutUs'>
-          <h4>Welcome to GradManagement</h4>
           <div className='aboutUsContent'>
           {/* <img src={gradmanagement}></img> */}
-            <p>The GradManagement Helps the Manager in managing and kepping a record of Interns their Trainer along with their Trainings.</p>
-            <p> The Manager can schedule a meeting for a particular Topic for a group of Interns.</p>
+            <p>The Grad Management System is an application for managing the trainings of the grads who are hired by the organisation.</p>
+            <p>It makes it easy to maintain the records of interns, trainers, topics and their trainings.</p>
 
             <div className='about'>
             <div>
