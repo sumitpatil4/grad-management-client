@@ -110,6 +110,7 @@ const Topic = () => {
     // .then((res)=>{
     //   console.log(res.data.availability);
     //   setTopicMeetings(res.data.availability);
+    //   console.log(userAvailability)
     // })
   }
 
@@ -254,7 +255,7 @@ const Topic = () => {
           <div className="popupContainer">
             <div className="popup-boxd">
               <div className="popupHeader">
-                <h2> Mark it as Uncomplete</h2>
+                <h2>Mark it as Uncomplete</h2>
               </div>
               <div className="buttonsContainer">
                 <button
@@ -369,11 +370,7 @@ const Topic = () => {
                         </tbody>
                       </table>
                     </div>
-                </div>
-                <div className="buttonsContainer">
-                  <button type="button" onClick={()=>setShowInfo(false)}>
-                       Cancel
-                  </button>
+                  
                 </div>
               </div>
             </div>

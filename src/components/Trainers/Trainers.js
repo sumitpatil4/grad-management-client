@@ -181,17 +181,17 @@ const Trainers = () => {
 const handleEditSubmitAvailability = () => {
 //   axios.put(`http://localhost:8090/availability/updateAvailabilty`,{
 //     "trainerId":trainerTemp.trainerId,
-//     "date":Name,
-//     "from_time":fromTime1,
-//     "to_time":toTime1,
+//     "date":date,
+//     "from_time":fromTime,
+//     "to_time":toTime,
 // }).then((res)=>{
 //     console.log(res);
 //     setUseeffectreload(!useeffectreload)
 //   })
   setIsEditAvailability(false);
-//   setDate1('');
-//   setFromTime1('');
-//   setToTime1('');
+  // setDate('');
+  // setFromTime('');
+  // setToTime('');
 };
 
   const handleDateChange = (e) => {
@@ -558,13 +558,15 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
+                  <div>
                     <input
                       type="text"
                       onChange={(event) => {
                         setName(event.target.value);
                       }}
                     />
-                    {/* <p id="val">{validMsg}</p> */}
+                    <p id="val">{validMsg}</p>
+                  </div>
                 </div>
 
                 <div className="input-group">
@@ -759,7 +761,7 @@ const handleEditSubmitAvailability = () => {
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
                             />
-                             <MdEdit
+                              <MdEdit
                               onClick={() => handleEditAvailablity(item)}
                               className="edit_icon"
                             />
