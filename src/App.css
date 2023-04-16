@@ -13,6 +13,10 @@ text-decoration:none;
 cursor:pointer;  
 }
 
+body{
+  background-color: #fff5f5;
+  overflow-x:hidden;
+}
 
 /* new styling for popup */
 
@@ -28,6 +32,7 @@ cursor:pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* z-index: 2; */
 }
 
 .popup-boxd {
@@ -43,7 +48,7 @@ cursor:pointer;
     padding: 10px 0;
     color: white;
     font-weight: normal;
-    background-color: black;
+    background-color:rgb(14, 20, 30);;
   }
 
 .inputContainer{
@@ -93,6 +98,16 @@ cursor:pointer;
   border: 1px solid lightgrey;
 }
 
+.availabilityContainer>h2{
+  text-align: center;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.availabilityContainer{
+  margin: 10px 0px;
+}
+
 .buttonsContainer{
   display: flex;
   justify-content: center;
@@ -136,19 +151,17 @@ cursor:pointer;
   background-color: #4CAF50;
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 8px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
-  margin-left: 14vw;
 }
 
 .add-button:hover{
-  transform: scale(1.1);
+  transform: scale(1.03);
 }
 
 .search-bar {
@@ -188,3 +201,201 @@ cursor:pointer;
 }
 
 /*end of searchbar styling */
+
+/* new searchbar styling */
+
+.buttonContainer2
+{
+    display: flex;
+    float: right;
+    
+    /* margin-top: 10px; */
+  }
+
+  .buttonContainer3
+{
+    display: flex;
+    float: right;
+    padding-top: 15px;
+    /* margin-top: 10px; */
+  }
+
+  .searchWrapper{
+    display: flex;
+  }
+
+  .internsearchwrapper{
+    padding-top: 15px;
+  }
+
+  .search-bar2{
+  }
+  .search-bar2>input{
+    padding: 8px 10px;
+    border: none;
+    border-radius: 3px 0px 0px 3px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  
+  .searchdiv{
+    
+  }
+  .search-bar2>input:focus{
+    outline: none;
+  }
+  .searchIcon{
+    background-color: #4CAF50;
+    border-radius: 0px 3px 3px 0px;
+  padding: 7.5px 8px;
+}
+
+/* end of search bar */
+
+
+/* table styling */
+
+
+table
+{
+    margin: 0px auto;
+    border-collapse: collapse;
+    font-size: 18px;
+    border-radius: 5px;
+    width: 70vw;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
+}
+
+tbody{
+    display: block;
+    max-height:51vh;
+    width: 70vw;
+    font-size: 18px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+thead, tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 70vw;
+    text-align: center;
+    /* even columns width , fix width of table too*/
+}
+
+thead
+{
+    background-color: rgb(19, 28, 44);
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+
+th{
+    font-size: 22px;
+    padding: 15px 0px;
+}
+
+td{
+  padding: 15px 10px;
+  word-wrap: break-word;
+}
+
+tr:nth-child(even)
+{
+    background-color: rgb(216, 216, 216);
+}
+
+.edit-icon,
+.del_icon
+{
+    padding: 0px 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.edit-icon
+{
+    color: rgb(94, 132, 255);
+}
+
+.del_icon
+{
+    color: rgb(255, 54, 54);
+}
+
+.edit-icon:hover,
+.del_icon:hover
+{
+    transform: scale(1.1);
+}
+
+.popuptable
+{
+    margin: 0px auto;
+    border-collapse: collapse;
+    width: 33vw;
+
+    /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
+}
+
+.popupbody{
+    display: block;
+    max-height:20vh;
+    width: 33vw;
+    font-size: 14px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.popuphead, .popupbody .popuptr {
+    display: table;
+    table-layout: fixed;
+    width: 33vw;
+    text-align: center;
+    /* even columns width , fix width of table too*/
+}
+
+.popuphead
+{
+    background-color: rgb(19, 28, 44);
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.popupth{
+    font-size: 18px;
+    padding: 15px 0px;
+}
+
+.popuptd{
+  padding: 15px 10px;
+  word-wrap: break-word;
+}
+
+/* end of table styling */
+
+/* scrollbar styling */
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(182, 182, 182); 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(0, 255, 89); 
+  border-radius: 10px;
+  padding: 0px 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(199, 255, 219); 
+}

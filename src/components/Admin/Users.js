@@ -93,15 +93,6 @@ const Users = () => {
           updateuserList(res.data.userList)
           // console.log(userList)
         });
-        //get users and notification from db and store in userlists and notificationlist
-
-        // const x=[{ userid: 1,timestamp:"10 Apr 2023", username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
-        // { userid: 2,timestamp:"10 Apr 2023", username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
-        // { userid: 3,timestamp:"10 Apr 2023", username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
-        // { userid: 4,timestamp:"10 Apr 2023", username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},]
-
-
-        // updatenotificationList();
       },[useeffectreload])
 
       
@@ -137,17 +128,22 @@ const Users = () => {
 
     return (
         <div className='employeeContainer'>
-        <div className="buttonContainer">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          />
-          <button type="submit" onClick={handleSearchInputChange}>
-            <FaSearch />
-          </button>
+      <div className="trainernavbar">
+        <div></div>
+        <div>
+          <div className="buttonContainer2">
+              <div className="search-bar2">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  />
+              </div>
+              <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
+                <FaSearch className="searchIcon"/>
+              </div>
+          </div>
         </div>
       </div>
         <table>

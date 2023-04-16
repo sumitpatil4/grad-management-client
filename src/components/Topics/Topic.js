@@ -29,16 +29,6 @@ const Topic = () => {
 
 
     useEffect(()=>{
-        // settopicList([
-        //     {topicId:1,topicName:"M Sai Krupananda",isCompleted:true},
-        //     {topicId:2,topicName:"Ashish Tripathy",isCompleted:false},
-        //     {topicId:3,topicName:"Sumit",isCompleted:true},
-        //     {topicId:4,topicName:"Sai Krupananda",isCompleted:false},
-        //     {topicId:5,topicName:"Sai Krupananda",isCompleted:true},
-        //     {topicId:6,topicName:"Sai Krupananda",isCompleted:false},
-        //     {topicId:7,topicName:"Sai Krupananda",isCompleted:true},
-        //     {topicId:8,topicName:"Sai Krupananda",isCompleted:true},
-        // ])
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
           console.log(res);
@@ -150,7 +140,7 @@ const Topic = () => {
               </p>
             </div>
             <div className="searchWrapper">
-              <div className="buttonContainer2">
+              <div className="buttonContainer3">
                 <div className="search-bar2">
                   <input
                     type="text"
@@ -159,7 +149,7 @@ const Topic = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <div>
+                <div className="searchdiv">
                   <FaSearch className="searchIcon" />
                 </div>
               </div>
@@ -237,6 +227,7 @@ const Topic = () => {
                     />
                   </form>
                   <p>{t.topicName}</p>
+                  <div></div>
                   <div>
                     <MdEdit
                       className="edit-icon"
@@ -348,46 +339,38 @@ const Topic = () => {
         {showinfo && (
           <form>
             <div
-              className="popupContainer1"
+              className="popupContainer"
               onClick={() => {
                 setShowInfo(false);
               }}
             >
-              <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
-                <div className="popupHeader1">
-                  <h2>Topic info</h2>
+              <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+                <div className="popupHeader">
+                  <h2>Scheduled Date & Time</h2>
                 </div>
-                <div className="inputContainer1">
-                  <div className="input-group1">
-                    <label>Name </label>
-                    <p>{topicTemp.topicName}</p>
-                  </div>
-
-                  <div className="input-group1">
-                    <label>Meetings </label>
-                    <div className="availability">
-                      <table className="availablityTable">
-                        <thead>
-                          <tr className="availablitytr">
-                            <th>Date</th>
-                            <th>From&nbsp;Time</th>
-                            <th>To&nbsp;Time</th>
-                            <th>Description</th>
+                  <div className="availabilityContainer">
+                  <h2>{topicTemp.topicName}</h2>
+                  <div className="availability">
+                  <table className="popuptable">
+                    <thead className="popuphead">
+                      <tr className="popuptr">
+                        <th className="popupth">Date</th>
+                        <th className="popupth">From&nbsp;Time</th>
+                        <th className="popupth">To&nbsp;Time</th>
+                        <th className="popupth">Desc</th>
+                      </tr>
+                    </thead>
+                        <tbody className="popupbody">
+                          <tr className="popuptr">
+                            <td className="popuptd">Date</td>
+                            <td className="">Time</td>
+                            <td className="popuptd">Time</td>
+                            <td className="popuptd">Desc</td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {/* {topicMeetings.map((item) => (
-                        <tr className="topictr">
-                          <td className="topictd">{item.date}</td>
-                          <td className="topictd">{item.fromTime}</td>
-                          <td className="topictd">{item.toTime}</td>
-                          <td className="topictd">{item.description}</td>
-                        </tr>
-                      ))} */}
                         </tbody>
                       </table>
                     </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
