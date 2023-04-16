@@ -37,7 +37,7 @@ const Loginwrapper = (props) => {
         console.log(response);
         updateuserrole("ROLE_MANAGER");
         handleLogin();
-        window.localStorage.setItem('LoggedIn',"YES");
+        // window.localStorage.setItem('LoggedIn',"YES");
         // axios.post("http://localhost:8090/user/login",null,{
         //     headers:{
         //         "Authorization":response.credential

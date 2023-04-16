@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './Schedules.css'
 import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
+import {BsFillInfoCircleFill} from 'react-icons/bs'
+import { FaSearch } from 'react-icons/fa';
 
 
 const Schedules = () => {
@@ -22,14 +24,14 @@ const Schedules = () => {
         {
         // meetId: 3,
         meetTopic: "C++",
-        Date: "2023-04-14",
+        Date: "2023-04-15",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
         {
         // meetId: 4,
         meetTopic: "JavaScript",
-        Date: "2024-04-14",
+        Date: "2024-04-15",
         from_time: "10:00",
         // to_time: "05:00PM"
         },
@@ -45,13 +47,23 @@ const Schedules = () => {
     const [fromTime, setFromTime] = useState('');
     // const [toTime, setToTime] = useState('');
     const [trainer, setTrainer] = useState("");
+    const [defaultGroupList, setdefaultGroupList] = useState([
+        {batchId:5, batchName:"murex"},
+        {batchId:7, batchName:"non-murex"}])
+    const [defaultGroupIdList,setdefaultGroupIdList]=useState([]);
     const [meet, setMeet] = useState();
     const [assessment, setAssessmentt] = useState();
     const [feedback, setFeedback] = useState();
     const [description, setDescription] = useState();
-    const [past, setPast] = useState({});
-    const [present, setPresent] = useState({});
-    const [future, setFuture] = useState({});
+    const [past, setPast] = useState([]);
+    const [present, setPresent] = useState([]);
+    const [future, setFuture] = useState([]);
+    const [presentCheck, setPresentCheck] = useState(true);
+    const [pastCheck, setPastCheck] = useState(false);
+    const [futureCheck, setFutureCheck] = useState(false);
+    const [viewList, setViewList] = useState({});
+    const [searchQuery, setSearchQuery] = useState("");
+    const [useEffectReload, setUseEffectReload] = useState(false);
 
 
     const handleDateChange = (e) => {
@@ -67,6 +79,24 @@ const Schedules = () => {
     // const handleToTimeChange = (e) => {
     //     setToTime(e.target.value);
     // }
+
+    const handleAddList=(chk,id)=>{
+        if(chk.target.checked)
+        {
+            defaultGroupIdList.push(id);
+            setdefaultGroupIdList(defaultGroupIdList);
+            console.log(defaultGroupIdList)
+        }
+        else{
+            if(defaultGroupIdList.includes(id))
+            {
+                defaultGroupIdList.splice(defaultGroupIdList.indexOf(id), 1);
+                setdefaultGroupIdList(defaultGroupIdList);
+                console.log(defaultGroupIdList)
+            }
+        }
+    }
+
 
     const handleMeet = event => {
         setMeet(event.target.value);  
@@ -84,6 +114,8 @@ const Schedules = () => {
         setDescription(event.target.value);  
       };
 
+    
+    
     const handleClick = () => {
         if(temp=={}){
         setValidMsg("Invalid Entry!!");
@@ -98,13 +130,28 @@ const Schedules = () => {
             Date: date,
             from_time: fromTime,
         }
-        // console.log(temp)
+        console.log(x)
         setscheduleList(current => [...current, x]);
+        setUseEffectReload(!useEffectReload)
+        console.log(scheduleList)
         setTopic('');
         setDate('');
         setFromTime('');
+        setTrainer('');
+        setMeet('');
+        setAssessmentt('');
+        setFeedback('');
+        setFeedback('');
         }
     };
+
+    const handleView = (e, i) => {
+        
+        console.log(e)
+        setViewList(e);
+        
+        console.log(viewList)
+    }
 
     // handle click event of the Edit button
     const handleEdit = (e,i) => {
@@ -123,10 +170,17 @@ const Schedules = () => {
         meetTopic: topic,
         Date: date,
         from_time: fromTime,
+        meetTrainer: trainer,
+        // meetGroups: defaultGroupList,
+        meetLink: meet,
+        assessmentLink: assessment,
+        feedbackLink: feedback,
+        descriptionLink: description
     }
     list[index] = x;
     setscheduleList(list);
     setIsOpenEdit(false);
+    setUseEffectReload(!useEffectReload)
     console.log(list);
     };
 
@@ -143,6 +197,7 @@ const Schedules = () => {
     list.splice(index, 1);
     setscheduleList(list);
     setIsOpenCon(false);
+    setUseEffectReload(!useEffectReload)
     console.log(list);
     };
 
@@ -172,8 +227,6 @@ const Schedules = () => {
     useEffect(() => {
         scheduleList.sort((a, b) => a.Date.localeCompare(b.Date));
         const currDate = getCurrentDate(); //To get the Current Date
-        // const today = new Date.getDate();
-        // console.log(today);
         console.log(currDate);
         setPresent(scheduleList.filter(obj => obj.Date === currDate));
         console.log(present)
@@ -181,19 +234,118 @@ const Schedules = () => {
         console.log(past)
         setFuture(scheduleList.filter(obj => compareDates(obj.Date, currDate) === 1));
         console.log(future)
-    }, [])
+    }, [useEffectReload])
+
+    const activeClass=(e)=>{
+        let btns = document.getElementsByClassName("headerText");
+        let x=[...btns]
+        x.forEach((t)=>t.className="headerText")
+        e.target.className+=" active";
+    }
 
     return (
     <div className='scheduleContainer'>
-        <div className='header'>
-            <div className='headerText'>Completed</div>
-            <div className='headerText'>Today</div>
-            <div className='headerText'>Upcoming</div>
+        <div className="scheduleWrapper">
+            <h2>Schedules</h2>
+        <div className='scheduleNavbar'>
+            <div className='buttonsWrapper'>
+            <p className='headerText' onClick={(e) => {
+                  setPastCheck(true);
+                  setPresentCheck(false);
+                  setFutureCheck(false);
+                  activeClass(e);
+                }}>Completed</p>
+            <p className='headerText active' onClick={(e) => {
+                  setPastCheck(false);
+                  setPresentCheck(true);
+                  setFutureCheck(false);
+                  activeClass(e);
+                }}>Today</p>
+            <p className='headerText' onClick={(e) => {
+                  setPastCheck(false);
+                  setPresentCheck(false);
+                  setFutureCheck(true);
+                  activeClass(e);
+                }}>Upcoming</p>
+            </div>
+
+            <div className="searchWrapper">
+              <div className="buttonContainer2">
+                <div className="search-bar2">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <FaSearch className="searchIcon" />
+                </div>
+              </div>
+              <div>
+                <p className="topicAdd" onClick={() => setIsOpen(true)}>
+                    Add&nbsp;Topic</p>
+                {/* <div onClick={() => setIsOpen(true)}>
+            <MdAddCircle className='addSchedule'/>                           
+        </div> */}
+              </div>
+            </div>
+
         </div>
 
-        <div className='schedules'>              
-            {scheduleList.map((e, i) => <div>
+        {/* onclick */}
+        <div className='schedules'>            
+            {pastCheck && past.map((e, i) => <div onClick={() => handleView(e, i)}>
+                <div className='schedulesText'>
+                    <div>{e.meetTopic}</div>
+                    <div>{e.Date}</div>
+                    <div>{e.from_time}</div>
+                </div>
                 <div className='iconContainer'>
+                    <div className='edit_icon_wrapper' >
+                    <div className='infoSchedule'>
+                        <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
+                    </div>
+                        <MdEdit className='edit_icon' onClick={() => handleEdit(e,i)}/>
+                    </div>
+                    <div >
+                        <MdDelete className="close-icon" onClick={()=>handleRem(i)}/>
+                    </div>
+                </div>
+            </div>
+            )}
+
+            {presentCheck && present.map((e, i) => <div onClick={() => handleView(e, i)}>
+                <div className='schedulesText'>
+                    <div>{e.meetTopic}</div>
+                    <div>{e.Date}</div>
+                    <div>{e.from_time}</div>
+                </div>
+                <div className='iconContainer'>
+                    <div className='edit_icon_wrapper' >
+                    <div className='infoSchedule'>
+                        <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
+                    </div>
+                        <MdEdit className='edit_icon' onClick={() => handleEdit(e,i)}/>
+                    </div>
+                    <div >
+                        <MdDelete className="close-icon" onClick={()=>handleRem(i)}/>
+                    </div>
+                </div>
+            </div>
+            )}
+
+            {futureCheck && future.map((e, i) => <div className='eachSchedule' onClick={() => handleView(e, i)}>
+                <div className='schedulesText'>
+                    <div>{e.meetTopic}</div>
+                    <div>{e.Date}</div>
+                    <div>{e.from_time}</div>
+                </div>
+                <div className='iconContainer'>
+                    <div className='infoSchedule'>
+                        <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
+                    </div>
                     <div className='edit_icon_wrapper' >
                         <MdEdit className='edit_icon' onClick={() => handleEdit(e,i)}/>
                     </div>
@@ -201,17 +353,12 @@ const Schedules = () => {
                         <MdDelete className="close-icon" onClick={()=>handleRem(i)}/>
                     </div>
                 </div>
-                <div className='schedulesText'>
-                    <div>{e.meetTopic}</div>
-                    <div>{e.Date}</div>
-                    <div>{e.from_time}</div>
-                </div>
             </div>
             )}
             
         </div> 
-        <div onClick={() => setIsOpen(true)}>
-            <MdAddCircle className='addSchedule'/>                           
+        
+
         </div>
 
         {isOpen && <form><div className='popupContainer'>
@@ -250,6 +397,20 @@ const Schedules = () => {
                             <option value={"Aman"}>Aman</option>
                             <option value={"Kunal"}>Kunal</option>
                         </select>                                                            
+                    </div>
+
+                    <div className='inputContainer'>
+                        <h2>Select Groups</h2>
+                        <div className='grpWrapperDiv'>
+                            {
+                                defaultGroupList.map((e)=><div className='grpInternWrapper'>
+                                    <form>
+                                        <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
+                                    </form>
+                                    <p>{e.batchName}</p>
+                                </div>)
+                            }
+                        </div>
                     </div>
 
                     <div className="input-group">
@@ -322,6 +483,20 @@ const Schedules = () => {
                         </select>                                                            
                     </div>
 
+                    <div className='inputContainer'>
+                        <h2>Select Groups</h2>
+                        <div className='grpWrapperDiv'>
+                            {
+                                defaultGroupList.map((e)=><div className='grpInternWrapper'>
+                                    <form>
+                                        <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
+                                    </form>
+                                    <p>{e.batchName}</p>
+                                </div>)
+                            }
+                        </div>
+                    </div>
+
                     <div className="input-group">
                         <label htmlFor="name">Meet Link</label>
                         <input type="text" id="link" onChange={handleMeet} value={meet} />                                                             
@@ -370,6 +545,11 @@ const Schedules = () => {
             </div>
         </div>
         }
+
+        <div className='schedule Details'>
+            hello 
+            {viewList.meetTopic}
+        </div>
 
     </div>       
     )

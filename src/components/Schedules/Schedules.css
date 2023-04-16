@@ -1,12 +1,35 @@
-/* .scheduleContainer {
-  width: 85vw;
+.scheduleContainer {
+  /* width: 85vw;
   height: 80vh;
   margin: 30px auto;
   box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
-  background-color: whitesmoke;
+  background-color: whitesmoke; */
+  /* grid-template-columns: 40% 60%; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* .schedule {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.Wrapper {
+    left: 0;
 } */
 
-.header {
+.scheduleWrapper {
+    width: 50%;
+    /* float: left; */
+
+}
+
+.scheduleNavbar {
     /* margin-top: 200px; */
     display: grid;
     grid-template-columns: repeat(3,1fr);
@@ -17,19 +40,20 @@
     color: white;
 }
 
-.headerText {
-    width: fit-content;
-    color: white;
+
+.headerText>p {
+    /* width: fit-content; */
+    /* color: white; */
     font-size: 17px;
     padding: 0px 2vw;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     font-weight: bold;
     cursor: pointer;
-    height: inherit;
+    /* height: inherit; */
 }
 
-.header>div:hover
+.headerText>p:hover
 {
     background-color: rgb(46, 200, 102);
 }
@@ -38,7 +62,7 @@
     /* padding-top: 40px; */
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    height: 60vh;
     width: 55vw;
     /* justify-content: center; */
     align-items: center;
@@ -91,3 +115,13 @@
     color: #ffffff;
     background: #27ae60;
 }
+
+/* details of the schedules */
+.Details {
+    right: 0;
+    width: 50%;
+    float: right;
+    margin-top: 100px;
+    margin-right: 0%;
+}
+
