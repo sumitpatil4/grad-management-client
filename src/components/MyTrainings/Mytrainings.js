@@ -113,7 +113,7 @@ const navigate = useNavigate();
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div onClick={()=>navigatetotrainings(e)}> 
+        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>
@@ -123,22 +123,7 @@ const navigate = useNavigate();
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
-        </div> )}
-
-        <div>
-          <NavLink to={"/mytrainings/training"} onClick={()=>updateTrain(0)}>
-          <div className='iconContainer'>
-            <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(0);}}>
-              <MdEdit className='edit_icon'/>
-            </div>
-            <div onClick={(e) => {e.stopPropagation();handleRem(0);}}>
-              <MdDelete className="close-icon"/>
-            </div>
-          </div>
-          <div className='trainingText'>TestTraining</div>
-          </NavLink>
-        </div>
-        
+        </div> )}        
         <div className='trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd className='add_icon'/>                           
         </div>            

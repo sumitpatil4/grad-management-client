@@ -13,12 +13,15 @@ const Trainers = () => {
   const {userid}=authcontext;
   const [searchQuery, setSearchQuery] = useState("");
   const [trainerTemp, settrainerTemp] = useState({});
+  const [availabilityTemp, setAvailabilityTemp] = useState({});
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [isOpenCon, setIsOpenCon] = useState(false);
+  const [isOpenAvlDel, setIsOpenAvlDel] = useState(false);
   const [trainerId, settrainerId] = useState("");
   const [isAdd, setIsAdd] = useState(false);
   const [isAvailabilty, setIsAvaliabilty] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isEditAvailability, setIsEditAvailability] = useState(false);
   const [Name, setName] = useState("");
   const [Skill, setSkill] = useState("");
   const [Email, setEmail] = useState("");
@@ -69,6 +72,25 @@ const Trainers = () => {
       skill: "JavaScript",
       phone: "1234567890",
       email: "akriti@gmail.com",
+    },
+    {
+      trainersid: 4,
+      trainersname: "Akriti Singh",
+      skill: "JavaScript",
+      phone: "1234567890",
+      email: "akriti@gmail.com",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
+    },{
+      trainersid: 4,
+      trainersname: "Akriti Singh",
+      skill: "JavaScript",
+      phone: "1234567890",
+      email: "akriti@gmail.com",
+      Date: "2001-20-02",
+      from_time: "10:00AM",
+      to_time: "05:00PM"
     },
   ]);
 
@@ -156,6 +178,27 @@ const Trainers = () => {
     setPhone('');
 };
 
+const handleEditSubmitAvailability = () => {
+  console.log(date,toTime,fromTime);
+  axios.put(`http://localhost:8090/availability/updateAvailability/${availabilityTemp.availabilityId}`,{
+    "date":date,
+    "fromTime":fromTime,
+    "toTime":toTime,
+}).then((res)=>{
+    console.log(res);
+    axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
+    .then((res)=>{
+      console.log(res.data.availability);
+      setUserAvailability(res.data.availability);
+      console.log(userAvailability)
+    })
+  })
+  setIsEditAvailability(false);
+  setDate('');
+  setFromTime('');
+  setToTime('');
+};
+
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
@@ -189,11 +232,12 @@ const Trainers = () => {
         })
     }
     setIsOpenCon(false);
+    setIsOpenAvlDel(false);
   };
 
   const handleAvlDeletePopup = (avlId) =>{
     setAvlId(avlId);
-    setIsOpenCon(true);
+    setIsOpenAvlDel(true);
   }
 
   const handleProfile = (trainer) => {
@@ -226,6 +270,9 @@ const Trainers = () => {
     handleProfile(trainerTemp);
   })
   setIsAvaliabilty(false);
+  setDate('');
+  setFromTime('');
+  setToTime('');
   }
 
   const handleEdit = (trainer) => {
@@ -235,6 +282,15 @@ const Trainers = () => {
     setEmail(trainer.email);
     setSkill(trainer.skill);
     setPhone(trainer.phoneNumber);
+  };
+
+  const handleEditAvailablity = (item) => {
+    console.log(item);
+    setIsEditAvailability(true);
+    setAvailabilityTemp(item);
+    setDate(item.date);
+    setFromTime(item.fromtime);
+    setToTime(item.totime);
   };
 
   const handleSearchInputChange = (event) => {
@@ -249,21 +305,30 @@ const Trainers = () => {
 
   return (
     <>
-      <div className="buttonContainer">
+    <div className='trainersHeader' >
+      <h1>Trainers</h1>
+    </div>
+    <div className="trainernavbar">
+      <div>
         <button className="add-button" onClick={handleAddPopup}>
           Add&nbsp;Trainer
         </button>
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          />
-          <button type="submit" onClick={handleSearchInputChange}>
-            <FaSearch />
-          </button>
+      </div>
+      <div>
+        <div className="buttonContainer2">
+            <div className="search-bar2">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                />
+            </div>
+            <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
+              <FaSearch className="searchIcon"/>
+            </div>
         </div>
+      </div>
       </div>
       <div className="trainerContainer">
         <table>
@@ -303,11 +368,11 @@ const Trainers = () => {
         </table>
       </div>
 
-      {isOpenCon && (
+      {isOpenAvlDel && (
         <div className="popupContainer">
-          <div className="popup-boxd">
+          <div id="avldelpop" className="popup-boxd">
             <div className="popupHeader">
-              <h2>Are you sure to delete this user?</h2>
+              <h2>Are you sure to delete this availability?</h2>
             </div>
             <div className="buttonsContainer">
               <button
@@ -320,7 +385,7 @@ const Trainers = () => {
               <button
                 type="reset"
                 className="cancel-btn"
-                onClick={() => setIsOpenCon(false)}
+                onClick={() => setIsOpenAvlDel(false)}
               >
                 No
               </button>
@@ -329,22 +394,27 @@ const Trainers = () => {
         </div>
       )}
 
-
-
-{isAvailabilty && (
+      {isAvailabilty && (
         <form>
-          <div id="avlpop"
+          <div
+            id="avlpop"
             className="popupContainer"
             onClick={() => {
               setIsAvaliabilty(false);
+              setDate('');
+              setFromTime('');
+              setToTime('');
             }}
           >
-            <div id="avlpop" className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+            <div
+              id="avlpop"
+              className="popup-boxd"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="popupHeader">
                 <h2>Add Availability</h2>
               </div>
               <div className="inputContainer">
-                
                 <div className="input-group">
                   <label>Date:</label>
                   <input type="date" value={date} onChange={handleDateChange} />
@@ -371,7 +441,11 @@ const Trainers = () => {
                 </div>
 
                 <div className="buttonsContainer">
-                  <button type="button" className="submit-btn" onClick={handleAddAvailability}>
+                  <button
+                    type="button"
+                    className="submit-btn"
+                    onClick={handleAddAvailability}
+                  >
                     Submit
                   </button>
                   <button
@@ -379,6 +453,9 @@ const Trainers = () => {
                     className="cancel-btn"
                     onClick={() => {
                       setIsAvaliabilty(false);
+                      setDate('');
+                      setFromTime('');
+                      setToTime('');
                     }}
                   >
                     Cancel
@@ -389,6 +466,87 @@ const Trainers = () => {
           </div>
         </form>
       )}
+
+
+{isEditAvailability && (
+        <form>
+          <div
+            id="avlpop"
+            className="popupContainer"
+            onClick={() => {
+              setIsEditAvailability(false);
+              setDate('');
+              setFromTime('');
+              setToTime('');
+            }}
+          >
+            <div
+              id="avlpop"
+              className="popup-boxd"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="popupHeader">
+                <h2>Edit Availability</h2>
+              </div>
+              <div className="inputContainer">
+                <div className="input-group">
+                  <label>Date:</label>
+                  <input type="date" Value={availabilityTemp.date}
+                      onChange={(event) => {
+                      setDate(event.target.value);
+                    }} />
+                </div>
+                <div className="input-group">
+                  <label>From Time:</label>
+                  <input
+                    type="time"
+                    step="2"
+                    Value={availabilityTemp.fromTime}
+                    onChange={(event) => {
+                      setFromTime(event.target.value);
+                    }}
+                  />
+                </div>
+
+                <div className="input-group">
+                  <label>To Time:</label>
+                  <input
+                    type="time"
+                    step="2"
+                    Value={availabilityTemp.toTime}
+                    onChange={(event) => {
+                      setToTime(event.target.value);
+                    }}
+                  />
+                </div>
+
+                <div className="buttonsContainer">
+                  <button
+                    type="button"
+                    className="submit-btn"
+                    onClick={handleEditSubmitAvailability}
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => {
+                      setIsEditAvailability(false);
+                      setDate('');
+                      setFromTime('');
+                      setToTime('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
 
       {isAdd && (
         <form>
@@ -405,53 +563,51 @@ const Trainers = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
-                  <div>
-
-                  <input type="text" onChange={(event)=>{setName(event.target.value)}} />
-                  <p id="val">{validMsg}</p>
-                  </div>
+                    <input
+                      type="text"
+                      onChange={(event) => {
+                        setName(event.target.value);
+                      }}
+                    />
+                    {/* <p id="val">{validMsg}</p> */}
                 </div>
 
                 <div className="input-group">
                   <label>Skill </label>
-                  <input type="text" onChange={(event)=>{setSkill(event.target.value)}}/>
+                  <input
+                    type="text"
+                    onChange={(event) => {
+                      setSkill(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="input-group">
                   <label>Email </label>
-                  <input type="text" onChange={(event)=>{setEmail(event.target.value)}}/>
+                  <input
+                    type="text"
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="input-group">
                   <label>Phone </label>
-                  <input type="text" onChange={(event)=>{setPhone(event.target.value)}}/>
-                </div>
-
-                {/* <div className="input-group">
-                  <label>Date:</label>
-                  <input type="date" value={date} onChange={handleDateChange} />
-                </div>
-
-                <div className="input-group">
-                  <label>From Time:</label>
                   <input
-                    type="time"
-                    value={fromTime}
-                    onChange={handleFromTimeChange}
+                    type="text"
+                    onChange={(event) => {
+                      setPhone(event.target.value);
+                    }}
                   />
                 </div>
-
-                <div className="input-group">
-                  <label>To Time:</label>
-                  <input
-                    type="time"
-                    value={toTime}
-                    onChange={handleToTimeChange}
-                  />
-                </div> */}
 
                 <div className="buttonsContainer">
-                  <button type="submit" onClick={handleClick} className="submit-btn">
+                  <button
+                    type="submit"
+                    onClick={handleClick}
+                    className="submit-btn"
+                  >
                     Submit
                   </button>
                   <button
@@ -485,26 +641,54 @@ const Trainers = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
-                  <input type="text" defaultValue={trainerTemp.trainerName} onChange={(event)=>{setName(event.target.value)}} />
+                  <input
+                    type="text"
+                    Value={trainerTemp.trainerName}
+                    onChange={(event) => {
+                      setName(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="input-group">
                   <label>Skill </label>
-                  <input type="text" defaultValue={trainerTemp.skill} onChange={(event)=>{setSkill(event.target.value)}}/>
+                  <input
+                    type="text"
+                    defaultValue={trainerTemp.skill}
+                    onChange={(event) => {
+                      setSkill(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="input-group">
                   <label>Email </label>
-                  <input type="text" defaultValue={trainerTemp.email} onChange={(event)=>{setEmail(event.target.value)}}/>
+                  <input
+                    type="text"
+                    defaultValue={trainerTemp.email}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="input-group">
                   <label>Phone </label>
-                  <input type="text" defaultValue={trainerTemp.phoneNumber} onChange={(event)=>{setPhone(event.target.value)}}/>
+                  <input
+                    type="text"
+                    defaultValue={trainerTemp.phoneNumber}
+                    onChange={(event) => {
+                      setPhone(event.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button type="submit" className="submit-btn" onClick={handleEditSubmitClick}>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    onClick={handleEditSubmitClick}
+                  >
                     Submit
                   </button>
                   <button
@@ -526,63 +710,63 @@ const Trainers = () => {
       {isOpenProfile && (
         <form>
           <div
-            className="popupContainer1"
+            className="popupContainer"
             onClick={() => {
               setIsOpenProfile(false);
+              setUserAvailability([]);
             }}
           >
-            <div className="popup-boxd1" onClick={(e) => e.stopPropagation()}>
-              <div className="popupHeader1">
+            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popupHeader">
                 <h2>Profile</h2>
               </div>
-              <div className="inputContainer1">
-                {/* <div className="input-group1">
-                  <label>Trainer ID </label>
-                  <p>{trainerTemp.trainerId}</p>
-                </div> */}
-
-                <div className="input-group1">
+              <div className="inputContainer">
+                <div className="input-group">
                   <label>Name </label>
                   <p>{trainerTemp.trainerName}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Skill </label>
                   <p>{trainerTemp.skill}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Email </label>
                   <p>{trainerTemp.email}</p>
                 </div>
 
-                <div className="input-group1">
+                <div className="input-group">
                   <label>Phone </label>
                   <p>{trainerTemp.phoneNumber}</p>
                 </div>
-
-                <div className="input-group1">
-                  <label>Availabilty </label>
+                </div>
+                <div className="availabilityContainer">
+                  <h2>Availabilty </h2>
                   <div className="availability">
-                  <table className="availablityTable">
-                    <thead>
-                      <tr className="availablitytr">
-                        <th>Date</th>
-                        <th>From&nbsp;Time</th>
-                        <th>To&nbsp;Time</th>
-                        <th>Action</th>
+                  <table className="popuptable">
+                    <thead className="popuphead">
+                      <tr className="popuptr">
+                        <th className="popupth">Date</th>
+                        <th className="popupth">From&nbsp;Time</th>
+                        <th className="popupth">To&nbsp;Time</th>
+                        <th className="popupth">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="popupbody">
                       {userAvailability.map((item) => (
-                        <tr className="availablitytr">
-                          <td className="availablitytd">{item.date}</td>
+                        <tr className="popuptr">
+                          <td className="popuptd">{item.date}</td>
                           <td className="">{item.fromTime}</td>
-                          <td className="availablitytd">{item.toTime}</td>
-                          <td className="availablitytd">
+                          <td className="popuptd">{item.toTime}</td>
+                          <td className="popuptd">
                             <MdDelete
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
+                            />
+                              <MdEdit
+                              onClick={() => handleEditAvailablity(item)}
+                              className="edit_icon"
                             />
                           </td>
                         </tr>
@@ -590,11 +774,13 @@ const Trainers = () => {
                     </tbody>
                   </table>
                 </div>
-                </div>
-                <div className="input-group1">
-                  <label></label>
-                  <button type="button" className="add-button1" onClick={handleAvaliabiltyPopup}>
+                
+                <div className="buttonsContainer">
+                  <button type="button" onClick={handleAvaliabiltyPopup}>
                        Add&nbsp;Availability
+                  </button>
+                  <button type="button" onClick={()=>setIsOpenProfile(false)}>
+                       Cancel
                   </button>
                 </div>
               </div>
@@ -607,7 +793,7 @@ const Trainers = () => {
         <div className="popupContainer">
           <div className="popup-boxd">
             <div className="popupHeader">
-              <h2>Are you sure to delete this user?</h2>
+              <h2>Are you sure to delete this Trainer?</h2>
             </div>
             <div className="buttonsContainer">
               <button

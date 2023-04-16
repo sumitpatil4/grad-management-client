@@ -12,7 +12,7 @@ const Users = () => {
     const useAdmincontext=useContext(AdminContext);
     const useAuthcontext=useContext(AuthContext);
     const {userList,notificationList,updateuserList,updatenotificationList}=useAdmincontext;
-    const {notificationCheck,updatenotificationCheck}=useAuthcontext;
+    const {updatenotificationBadge,notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
     const [useeffectreload, setUseeffectreload] = useState(false)
@@ -83,7 +83,13 @@ const Users = () => {
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
           // console.log(res.data.notificationList);
-          updatenotificationList(res.data.notificationList)
+          updatenotificationList(res.data.notificationList);
+          if(res.data.notificationList.length > 0){
+            updatenotificationBadge(true);
+          }
+          else{
+            updatenotificationBadge(false);
+          }
           // console.log(notificationList)
         });
 
@@ -93,15 +99,6 @@ const Users = () => {
           updateuserList(res.data.userList)
           // console.log(userList)
         });
-        //get users and notification from db and store in userlists and notificationlist
-
-        // const x=[{ userid: 1,timestamp:"10 Apr 2023", username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
-        // { userid: 2,timestamp:"10 Apr 2023", username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
-        // { userid: 3,timestamp:"10 Apr 2023", username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
-        // { userid: 4,timestamp:"10 Apr 2023", username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},]
-
-
-        // updatenotificationList();
       },[useeffectreload])
 
       
@@ -133,21 +130,30 @@ const Users = () => {
         setUserId(userId);
     }
 
+    const displayRole = (role) =>{
+      return role.substring(5);
+    }
+
     
 
     return (
         <div className='employeeContainer'>
-        <div className="buttonContainer">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          />
-          <button type="submit" onClick={handleSearchInputChange}>
-            <FaSearch />
-          </button>
+      <div className="trainernavbar">
+        <div></div>
+        <div>
+          <div className="buttonContainer2">
+              <div className="search-bar2">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  />
+              </div>
+              <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
+                <FaSearch className="searchIcon"/>
+              </div>
+          </div>
         </div>
       </div>
         <table>
@@ -164,7 +170,7 @@ const Users = () => {
                     (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
-                        <td>{e.role}</td>
+                        <td>{displayRole(e.role)}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
                             {/* <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/> */}

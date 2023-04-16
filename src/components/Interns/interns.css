@@ -1,0 +1,130 @@
+/* styling for interns */
+
+.internsContainerWrapper{
+    width: 100vw;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.internsContainerWrapper>h2
+{
+    text-align: center;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.internsContainer{
+    width: 85vw;
+    height: 70vh;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    /* background-color: blue; */
+}
+
+.internsTableContainer{
+    height: 60vh;
+}
+
+.internsGroupsContainer
+{
+    background-color: rgb(14, 20, 30);
+    max-height:60vh;
+    overflow-y: scroll;
+}
+
+.internsGroupsContainer>div{
+    font-size: 22px;
+    text-align: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.internsGroupsContainer>div:hover{
+    background-color:rgb(46, 200, 102);
+}
+
+.titleContainer{
+    background-color: rgb(14, 20, 30);
+    height: 10vh;
+    color: white;
+    padding: 0px 10px;
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
+
+.groupContainer{
+    height: 10vh;
+    background-color: rgb(19, 28, 44);
+    color: white;
+}
+
+.titleWrapper{
+    display: flex;
+}
+
+.searchWrapper{
+    /* display: flex; */
+}
+
+.addIntern{
+    color: rgb(46, 200, 102);
+    padding: 0px 10px;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+.addIntern:hover{
+    transform: scale(1.1);
+}
+
+.groupWrapper{
+    display: flex;
+}
+
+.groupWrapper>p{
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.titleIntern{
+    font-weight: 600;
+    font-size: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.titleWrapper>p{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.groupWrapper>p{
+    padding-top: 15px;
+    padding-left: 25px;
+}
+
+.inputContainer>h2{
+    text-align: center;
+    margin: 5px 0px;
+}
+
+.internWrapperDiv{
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.ListInternWrapper{
+    display: flex;
+    padding: 5px 0px;
+}
+
+.ListInternWrapper>p{
+    padding: 3px 0px;
+    font-weight: 500;
+}

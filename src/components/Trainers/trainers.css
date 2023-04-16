@@ -1,5 +1,14 @@
   
 
+  .trainersHeader>h1{
+    width: 70vw;
+    text-align: center;
+    font-size: 26px;
+    padding: 10px;
+    margin:0px auto;
+    border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
   .profileIconButton {
     border: none;
     cursor: pointer;
@@ -99,14 +108,9 @@
     cursor: pointer;
   }
 
-
-
   .editIconButton:hover{
     transform : scale(1.2);
   }
-
- 
-
 
 
   .trainerContainer
@@ -115,114 +119,7 @@
       display: block;
       width: 100vw;
       align-items: center;
-  }
-  
-  table
-  {
-      margin: 0px auto;
-      border-collapse: collapse;
-      font-size: 22px;
-      border-radius: 5px;
-      box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px;
-  }
-  
-  thead
-  {
-      background-color: rgb(19, 28, 44);
-      color: white;
-      border-radius: 5px;
-  }
-  
-  th{
-      padding: 20px 40px;
-  }
-  
-  td{
-      padding: 20px 40px;
-  }
-  
-  tr:nth-child(even)
-  {
-      background-color: rgb(216, 216, 216);
-  }
-  
-  .edit-icon,
-  .del_icon
-  {
-      padding: 0px 10px;
-      font-size: 25px;
-      cursor: pointer;
-  }
-  
-  .edit-icon
-  {
-      color: rgb(94, 132, 255);
-  }
-  
-  .del_icon
-  {
-      color: rgb(255, 54, 54);
-  }
-  
-  .edit-icon:hover,
-  .del_icon:hover
-  {
-      transform: scale(1.1);
-  }
-
-
-.popupContainer1 {
-  top: 0%;
-  left: 0%;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background-color: #00000046;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup-boxd1 {
-  position: absolute;
-  margin-top: 8vh;
-  background: whitesmoke;
-  width: 55vw;
-  height: fit-content;
-  border-radius: 3px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4);
-}
-
-.popupHeader1 h2 {
-  text-align: center;
-  padding: 2px 0;
-  color: white;
-  font-weight: normal;
-  background-color: black;
-}
-
-.inputContainer1 {
-  width: 50vw;
-  display: block;
-  margin: 0px auto;
-}
-
-.input-group1 {
-  display: grid;
-  grid-template-columns: 30% 70%;
-  margin: 5px auto;
-}
-
-.input-group1 label {
-  font-size: 18px;
-  padding-top: 10px;
-  font-weight: 500;
-}
-
-.input-group1 p {
-  padding: 10px 30px;
-  font-size: 17px;
-}
+    }
 
 .availability {
   /* border: 1px solid #ccc; */
@@ -236,7 +133,13 @@
   cursor: pointer;
 }
 
-
+.trainernavbar{
+  margin: 0px auto;
+  width: 70vw;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  margin-top: 20px;
+}
 
 
 .add-button1{
@@ -260,23 +163,7 @@
   transform: scale(1.1);
 }
 
-.availablityTable
-{
-    margin: 0px auto;
-    border-collapse: collapse;
-    font-size: 10px;
-    border-radius: 5px;
-    box-shadow: rgba(255, 255, 255, 0.795) 0px 8px 24px;
-}
 
-.availablitytr{
-  padding: 0px;
-}
-
-.availablitytd{
-  padding: 0px;
-  text-align: center;
-}
 
 #val {
   color: red;
@@ -288,5 +175,9 @@
 
 
 #avlpop{
-  z-index: 10;;
+  z-index: 1;
+}
+
+#avldelpop{
+  z-index: 2;
 }
