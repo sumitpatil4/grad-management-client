@@ -22,6 +22,10 @@ const Topic = () => {
     const [useeffectreload, setUseeffectreload] = useState(false)
     const [topicName,setTopicName] = useState("");
     const [topicTemp,setTopicTemp] = useState("");
+    const [completePopup,setCompletePopup] = useState(false);
+    const [compTemp,setCompTemp] = useState(null);
+    const [remainingPopup,setRemainingPopup] = useState(false);
+    const [topicMeetings,setTopicMeetings] = useState([]);
 
 
     useEffect(()=>{
@@ -50,19 +54,22 @@ const Topic = () => {
       (t) =>
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  const handleTopicCompletion = (topic) => {
-    axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/0`)
+  const handleTopicCompletion = () => {
+    console.log(compTemp);
+    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/0`)
     .then((res)=>{
       console.log(res);
       setUseeffectreload(!useeffectreload);
     })
+    setCompletePopup(false);
   };
-  const handleTopicUncompletion = (topic) => {
-    axios.put(`http://localhost:8090/topic/updateCompleted/${topic.topicId}/1`)
+  const handleTopicUncompletion = () => {
+    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/1`)
     .then((res)=>{
       console.log(res);
       setUseeffectreload(!useeffectreload);
     })
+    setRemainingPopup(false);
   };
   const handleAdd = () =>{
       console.log(topicName);
@@ -94,9 +101,17 @@ const Topic = () => {
     })
   }
 
+
+
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
     setTopicTemp(t);
+    // axios.get(`http://localhost:8090/meetings/getMeeting/${t.topicId}`)
+    // .then((res)=>{
+    //   console.log(res.data.availability);
+    //   setTopicMeetings(res.data.availability);
+    //   console.log(userAvailability)
+    // })
   }
 
     return (
@@ -151,6 +166,7 @@ const Topic = () => {
             </div>
           </div>
           <div className="topicsdiv">
+
             {completedCheck &&
               (searchQuery !== "" ? compltedfilteredList : completedList).map(
                 (t) => (
@@ -159,7 +175,10 @@ const Topic = () => {
                       <input
                         type="checkbox"
                         checked={t.completed}
-                        onChange={() => handleTopicCompletion(t)}
+                        onChange={() => {
+                          setCompletePopup(true);
+                          setCompTemp(t);
+                        }}
                       />
                     </form>
                     <p>{t.topicName}</p>
@@ -190,6 +209,7 @@ const Topic = () => {
                   </div>
                 )
               )}
+
             {!completedCheck &&
               (searchQuery !== ""
                 ? unCompltedfilteredList
@@ -200,7 +220,10 @@ const Topic = () => {
                     <input
                       type="checkbox"
                       checked={t.completed}
-                      onChange={() => handleTopicUncompletion(t)}
+                      onChange={() => {
+                        setRemainingPopup(true);
+                        setCompTemp(t);
+                      }}
                     />
                   </form>
                   <p>{t.topicName}</p>
@@ -227,6 +250,64 @@ const Topic = () => {
               ))}
           </div>
         </div>
+
+        {completePopup && (
+          <div className="popupContainer">
+            <div className="popup-boxd">
+              <div className="popupHeader">
+                <h2>Are you sure you want to mark it as uncomplete?</h2>
+              </div>
+              <div className="buttonsContainer">
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={handleTopicCompletion}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => {
+                    setCompletePopup(false);
+                  }}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+{remainingPopup && (
+          <div className="popupContainer">
+            <div className="popup-boxd">
+              <div className="popupHeader">
+                <h2>Are you sure you want to mark it as &nbsp; complete?</h2>
+              </div>
+              <div className="buttonsContainer">
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={handleTopicUncompletion}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => {
+                    setRemainingPopup(false);
+                  }}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
         {deletePopup && (
           <div className="popupContainer">
             <div className="popup-boxd">
