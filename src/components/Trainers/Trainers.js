@@ -558,15 +558,13 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
-                  <div>
                     <input
                       type="text"
                       onChange={(event) => {
                         setName(event.target.value);
                       }}
                     />
-                    <p id="val">{validMsg}</p>
-                  </div>
+                    {/* <p id="val">{validMsg}</p> */}
                 </div>
 
                 <div className="input-group">
@@ -761,6 +759,10 @@ const handleEditSubmitAvailability = () => {
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
                             />
+                             <MdEdit
+                              onClick={() => handleEditAvailablity(item)}
+                              className="edit_icon"
+                            />
                           </td>
                         </tr>
                       ))}
@@ -771,6 +773,9 @@ const handleEditSubmitAvailability = () => {
                 <div className="buttonsContainer">
                   <button type="button" onClick={handleAvaliabiltyPopup}>
                        Add&nbsp;Availability
+                  </button>
+                  <button type="button" onClick={()=>setIsOpenProfile(false)}>
+                       Cancel
                   </button>
                 </div>
               </div>
@@ -783,7 +788,7 @@ const handleEditSubmitAvailability = () => {
         <div className="popupContainer">
           <div className="popup-boxd">
             <div className="popupHeader">
-              <h2>Are you sure to delete this user?</h2>
+              <h2>Are you sure to delete this Trainer?</h2>
             </div>
             <div className="buttonsContainer">
               <button

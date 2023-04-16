@@ -110,7 +110,6 @@ const Topic = () => {
     // .then((res)=>{
     //   console.log(res.data.availability);
     //   setTopicMeetings(res.data.availability);
-    //   console.log(userAvailability)
     // })
   }
 
@@ -122,21 +121,21 @@ const Topic = () => {
             <div className="buttonsWrapper">
               <p
                 onClick={(e) => {
-                  setcompletedCheck(true);
-                  activeClass(e);
-                }}
-                className="topicBtns"
-              >
-                Completed
-              </p>
-              <p
-                onClick={(e) => {
                   setcompletedCheck(false);
                   activeClass(e);
                 }}
                 className="topicBtns active"
               >
                 Remaining
+              </p>
+              <p
+                onClick={(e) => {
+                  setcompletedCheck(true);
+                  activeClass(e);
+                }}
+                className="topicBtns"
+              >
+                Completed
               </p>
             </div>
             <div className="searchWrapper">
@@ -255,7 +254,7 @@ const Topic = () => {
           <div className="popupContainer">
             <div className="popup-boxd">
               <div className="popupHeader">
-                <h2>Are you sure you want to mark it as uncomplete?</h2>
+                <h2> Mark it as Uncomplete</h2>
               </div>
               <div className="buttonsContainer">
                 <button
@@ -283,7 +282,7 @@ const Topic = () => {
           <div className="popupContainer">
             <div className="popup-boxd">
               <div className="popupHeader">
-                <h2>Are you sure you want to mark it as &nbsp; complete?</h2>
+                <h2>Mark it as Complete</h2>
               </div>
               <div className="buttonsContainer">
                 <button
@@ -361,16 +360,20 @@ const Topic = () => {
                       </tr>
                     </thead>
                         <tbody className="popupbody">
-                          <tr className="popuptr">
+                          {/* <tr className="popuptr">
                             <td className="popuptd">Date</td>
                             <td className="">Time</td>
                             <td className="popuptd">Time</td>
                             <td className="popuptd">Desc</td>
-                          </tr>
+                          </tr> */}
                         </tbody>
                       </table>
                     </div>
-                  
+                </div>
+                <div className="buttonsContainer">
+                  <button type="button" onClick={()=>setShowInfo(false)}>
+                       Cancel
+                  </button>
                 </div>
               </div>
             </div>
