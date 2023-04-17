@@ -234,8 +234,8 @@ const Users = () => {
                   </div>
 
                   <div className="input-group">
-                    <label>Request&nbsp;Role </label>
-                    <input type="text" value={userTemp.requestedRole} readOnly={true}/>                                                            
+                    <label>Requested<br/>Role </label>
+                    <input type="text" value={displayRole(userTemp.requestedRole)} readOnly={true}/>                                                            
                   </div>
 
                   <div className="input-group">
