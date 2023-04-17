@@ -48,7 +48,7 @@ const Mytrainings = () => {
 
       axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
         "trainingName":temp
-      }).then((res)=>{
+       }).then((res)=>{
         console.log(res);
         setUseeffectreload(!useeffectreload)
       })
@@ -123,7 +123,9 @@ const navigate = useNavigate();
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
-        </div> )}        
+        </div> )}    
+        
+
         <div className='trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd className='add_icon'/>                           
         </div>            
