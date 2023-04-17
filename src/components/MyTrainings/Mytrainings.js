@@ -123,7 +123,9 @@ const navigate = useNavigate();
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
-        </div> )}        
+        </div> )}    
+        
+
         <div className='trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd className='add_icon'/>                           
         </div>            
