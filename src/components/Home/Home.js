@@ -14,6 +14,8 @@ import Training from '../Training/Training';
 import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
 import Schedules from '../Schedules/Schedules';
+import Leadership from '../Leadership/Leadership';
+import Result from '../Result/result';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
@@ -60,7 +62,7 @@ const Home = () => {
             navigate("/mytrainings",true);
             break;
           case 'ROLE_LEADER':
-            navigate("/mytrainings",true);
+            navigate("/leadership",true);
             break;
           case 'ROLE_ADMIN':
             navigate("/admin",true);
@@ -91,7 +93,10 @@ const Home = () => {
 
         {leadershipflag && <div>
         <Navbar role={userrole}/>
-        <h1>Leader ship</h1>
+        <Routes>
+            <Route path="/leadership" element={<Leadership />}/>
+            <Route path="/leadership/result" element={<Result />}/>
+        </Routes>
         </div>}
 
         {superadminflag && <Admin><div>
