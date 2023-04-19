@@ -58,6 +58,7 @@ const Loginwrapper = (props) => {
 
     return (
         <div className='loginWrapper'>
+                <h2>WELCOME TO</h2>
                 <h2>GRAD MANAGEMENT SYSTEM</h2>
                 <div className="google_btn" onClick={handleLoginApi}>
                     <div id="LoginButton"></div>

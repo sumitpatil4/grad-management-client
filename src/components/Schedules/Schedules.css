@@ -10,20 +10,21 @@
     grid-template-columns: 55% 45%;
     margin: 0px 30px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: auto;
 }
 
 .scheduleWrapper{
-
 }
 
 .scheduleNavbar{
-    display: grid;
-    grid-template-columns: 50% 50%;
+    display: flex;
     background-color: rgb(14, 20, 30);
     color: white;
+    justify-content: space-between;
 }
 .SchbuttonsWrapper{
     display: flex;
+    flex-direction: row;
 }
 .SchbuttonsWrapper>p{
     font-size: 20px;
@@ -38,7 +39,6 @@
 .schsearchWrapper{
     display: flex;
     justify-content: center;
-
 }
 
 .topicAdd{
@@ -58,9 +58,11 @@
 
 .schedules{
     padding:0px 10px;
-    height: 71vh;
+    height: 68vh;
     overflow-y: scroll;
-    background-color: rgb(16, 255, 215);
+    background-color: whitesmoke;
+    border-right:1px solid grey;
+    /* border:1px solid blue; */
 }
 
 .schedule{
@@ -70,6 +72,7 @@
     display: grid;
     grid-template-columns: 70% 30%;
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .schedule:hover{
@@ -103,7 +106,7 @@
 
 
 .scheduleDetails{
-    background-color: rgb(255, 255, 255);
+    background-color: whitesmoke;
 }
 
 /* new styling for popup */
@@ -111,9 +114,16 @@
 .sch_popup-boxd {
     width: inherit;
     height: inherit;
+    /* overflow-y: scroll; */
   }
 
+.sch_input_box{
+    height:68vh;
+    overflow-y: scroll;
+}
+
 .sch_popupHeader h2 {
+    position: sticky;
     text-align: center;
     padding: 14px 0;
     color: white;
@@ -125,8 +135,8 @@
   width: 35vw;
   display: block;
   margin: 0px auto;
-  height: 63vh;
-  overflow-y: scroll;
+  /* height: 63vh; */
+  /* overflow-y: scroll; */
 }
 
 .sch_input-group {
@@ -189,13 +199,17 @@
 }
 
 .sch_internWrapperDiv{
-    height: 20vh;
-    overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    height: fit-content;
 }
 
 .sch_ListInternWrapper{
+    /* border: 1px solid black; */
     display: flex;
-    padding:5px 30px;
+    flex-direction: row;
+    padding: 0 20px;
 }
 
 .sch_ListInternWrapper>p{

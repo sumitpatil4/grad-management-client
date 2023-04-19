@@ -189,7 +189,7 @@ const Users = () => {
                 <div>
                   <div className='notification_data'>
                     <div className='empname'>{e.user.uname}</div>
-                    <div className='emprole'>Request For {e.requestedRole}</div>
+                    <div className='emprole'>Request For {displayRole(e.requestedRole)}</div>
                   </div>
                   <div className='notification_time'>{e.timestamp.substring(0,10)}&nbsp;&nbsp;{e.timestamp.substring(11,19)}</div>
                 </div> 
@@ -247,7 +247,8 @@ const Users = () => {
                   <label>Role </label>
                   <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
                     <option value={"ROLE_MANAGER"}>Manager</option>
-                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                    <option value={"ROLE_LEADER"}>Leadership</option>
+                    <option value={"ROLE_USER"}>User</option>
                   </select>                                                            
                 </div> 
                 </>:<>
@@ -265,7 +266,8 @@ const Users = () => {
                   <label>Role </label>
                   <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
                     <option value={"ROLE_MANAGER"}>Manager</option>
-                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                    <option value={"ROLE_LEADER"}>Leadership</option>
+                    <option value={"ROLE_USER"}>User</option>
                   </select>                                                            
                   </div> 
                 </>
