@@ -1,0 +1,226 @@
+.scheduleHeader{
+    text-align: center;
+    margin: 10px 0;
+}
+
+.scheduleContainer{
+    border-radius: 10px;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    margin: 0px 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: auto;
+}
+
+.scheduleWrapper{
+}
+
+.scheduleNavbar{
+    display: flex;
+    background-color: rgb(14, 20, 30);
+    color: white;
+    justify-content: space-between;
+}
+.SchbuttonsWrapper{
+    display: flex;
+    flex-direction: row;
+}
+.SchbuttonsWrapper>p{
+    font-size: 20px;
+    padding: 15px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.SchbuttonsWrapper>p:hover{
+    background-color: rgb(46, 200, 102);
+}
+
+.schsearchWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.topicAdd{
+    font-weight: 500;
+    background-color: rgb(46, 200, 102);
+    font-size: 18px;
+    margin: 14px 0px;
+    margin-left: 20px;
+    padding: 4px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    float: right;
+}
+.topicAdd:hover{
+    background-color: rgb(45, 177, 94);
+}
+
+.schedules{
+    padding:0px 10px;
+    height: 68vh;
+    overflow-y: scroll;
+    background-color: whitesmoke;
+    border-right:1px solid grey;
+    /* border:1px solid blue; */
+}
+
+.schedule{
+    background-color: white;
+    border-radius: 5px;
+    margin: 15px 0px;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.schedule:hover{
+    transform: scale(1.01);
+}
+
+.edit_icon_wrapper{
+    display: flex;
+}
+
+.schedulesText{
+    padding:10px;
+}
+
+.schedulesText>h3{
+    font-size: 22px;
+    padding-bottom: 3px;
+}
+
+.schedulesText>p{
+    font-size: 17px;
+    font-style: italic;
+}
+
+.schedulesText>div{
+    color: gray;
+    font-weight: 500;
+    padding: 2px 0px;
+}
+
+
+
+.scheduleDetails{
+    background-color: whitesmoke;
+}
+
+/* new styling for popup */
+
+.sch_popup-boxd {
+    width: inherit;
+    height: inherit;
+    /* overflow-y: scroll; */
+  }
+
+.sch_input_box{
+    height:68vh;
+    overflow-y: scroll;
+}
+
+.sch_popupHeader h2 {
+    position: sticky;
+    text-align: center;
+    padding: 14px 0;
+    color: white;
+    font-weight:500;
+    background-color:rgb(19, 28, 44);
+}
+
+.sch_inputContainer{
+  width: 35vw;
+  display: block;
+  margin: 0px auto;
+  /* height: 63vh; */
+  /* overflow-y: scroll; */
+}
+
+.sch_input-group {
+  display: grid;
+  grid-template-columns: 35% 65%;
+  margin: 25px auto;
+}
+
+.sch_input-group>label {
+  font-size: 18px;
+  padding-top: 10px;
+  font-weight: 500;
+} 
+
+.sch_input-group>input {
+  padding:5px 20px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+.sch_input-group>p {
+    font-style: italic;
+  padding:0px 30px;
+  padding-top: 10px;
+  font-size: 17px;
+}
+
+.sch_input-group>textarea {
+  padding:5px 20px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+.sch_input-group>select {
+  padding:10px 20px;
+  font-size: 17px;
+  border: 1px solid lightgrey;
+}
+
+.sch_buttonsContainer{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  width: inherit;
+}
+
+.sch_buttonsContainer>button{
+    background-color: white;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+    padding: 10px 0;
+    border-radius: 3px;
+    margin:3px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.sch_buttonsContainer>button:hover{
+  background: #27ae60;
+  color: white;
+}
+
+.sch_internWrapperDiv{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    height: fit-content;
+}
+
+.sch_ListInternWrapper{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: row;
+    padding: 0 20px;
+}
+
+.sch_ListInternWrapper>p{
+    padding: 3px 0px;
+    font-weight: 500;
+}
+
+.avl_List{
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* end of popup styling */

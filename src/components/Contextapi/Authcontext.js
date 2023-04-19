@@ -1,8 +1,26 @@
-import React, { useState } from "react"
+import axios from "axios";
+import React, { useEffect, useState } from "react"
 
 const AuthContext=React.createContext();
 
 export const Auth=(props)=>{
+    useEffect(()=>{
+      if(isAuthenticated===false && localStorage.getItem('accessToken')!=null){
+        axios.get(`http://localhost:8090/user/getUserById/${localStorage.getItem('userId')}`)
+        .then((res)=>{
+            updateuserid(res.data.user.userId);
+            updateusername(res.data.user.uname);
+            updateusermail(res.data.user.email);
+            updateuserpicture(res.data.user.picture);
+            updateuserrole(res.data.user.role);
+            updateaccessToken(res.data.accessToken);
+            updateidToken(localStorage.getItem('IDToken'));
+            handleLogin();
+        })
+      }
+    })
+
+
     const [isAuthenticated,setIsAuthenticated]=useState(false);
     const [userid,setUserid]=useState("1001");
     const [username,setUsername]=useState("");
@@ -12,6 +30,7 @@ export const Auth=(props)=>{
     const [accessToken,setAccessToken]=useState("");
     const [idToken,setIdToken]=useState("");
     const [notificationCheck,setNotificationCheck]=useState(false);
+    const [notificationBadge,setNotificationBadge] = useState(false);
 
     const updateuserid=(e)=>setUserid(e);
     const updateusername=(e)=>setUsername(e);
@@ -21,6 +40,7 @@ export const Auth=(props)=>{
     const updateaccessToken=(e)=>setAccessToken(e);
     const updateidToken=(e)=>setIdToken(e);
     const updatenotificationCheck=(e)=>setNotificationCheck(e);
+    const updatenotificationBadge=(e)=>setNotificationBadge(e);
 
     const handleLogin=()=>{
         // if(username!=="" && userid!=="" && usermail!=="" && userpicture!=="")
@@ -37,6 +57,9 @@ export const Auth=(props)=>{
         setUserrole("");
         setIdToken("");
         setAccessToken("");
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('IDToken');
+        localStorage.removeItem('userId');
     }
 
     return (
@@ -51,6 +74,7 @@ export const Auth=(props)=>{
           accessToken,
           idToken,
           notificationCheck,
+          notificationBadge,
           handleLogout,
           handleLogin,
           updateuserid,
@@ -60,7 +84,8 @@ export const Auth=(props)=>{
           updateuserrole,
           updateaccessToken,
           updateidToken,
-          updatenotificationCheck
+          updatenotificationCheck,
+          updatenotificationBadge
         }}
       >
         {props.children}

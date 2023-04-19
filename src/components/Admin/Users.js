@@ -12,7 +12,7 @@ const Users = () => {
     const useAdmincontext=useContext(AdminContext);
     const useAuthcontext=useContext(AuthContext);
     const {userList,notificationList,updateuserList,updatenotificationList}=useAdmincontext;
-    const {notificationCheck,updatenotificationCheck}=useAuthcontext;
+    const {updatenotificationBadge,notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
     const [useeffectreload, setUseeffectreload] = useState(false)
@@ -83,7 +83,13 @@ const Users = () => {
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
           // console.log(res.data.notificationList);
-          updatenotificationList(res.data.notificationList)
+          updatenotificationList(res.data.notificationList);
+          if(res.data.notificationList.length > 0){
+            updatenotificationBadge(true);
+          }
+          else{
+            updatenotificationBadge(false);
+          }
           // console.log(notificationList)
         });
 
@@ -124,6 +130,10 @@ const Users = () => {
         setUserId(userId);
     }
 
+    const displayRole = (role) =>{
+      return role.substring(5);
+    }
+
     
 
     return (
@@ -160,7 +170,7 @@ const Users = () => {
                     (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
-                        <td>{e.role}</td>
+                        <td>{displayRole(e.role)}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
                             {/* <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/> */}
@@ -179,7 +189,7 @@ const Users = () => {
                 <div>
                   <div className='notification_data'>
                     <div className='empname'>{e.user.uname}</div>
-                    <div className='emprole'>Request For {e.requestedRole}</div>
+                    <div className='emprole'>Request For {displayRole(e.requestedRole)}</div>
                   </div>
                   <div className='notification_time'>{e.timestamp.substring(0,10)}&nbsp;&nbsp;{e.timestamp.substring(11,19)}</div>
                 </div> 
@@ -224,8 +234,8 @@ const Users = () => {
                   </div>
 
                   <div className="input-group">
-                    <label>Request&nbsp;Role </label>
-                    <input type="text" value={userTemp.requestedRole} readOnly={true}/>                                                            
+                    <label>Requested<br/>Role </label>
+                    <input type="text" value={displayRole(userTemp.requestedRole)} readOnly={true}/>                                                            
                   </div>
 
                   <div className="input-group">
@@ -237,7 +247,8 @@ const Users = () => {
                   <label>Role </label>
                   <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
                     <option value={"ROLE_MANAGER"}>Manager</option>
-                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                    <option value={"ROLE_LEADER"}>Leadership</option>
+                    <option value={"ROLE_USER"}>User</option>
                   </select>                                                            
                 </div> 
                 </>:<>
@@ -255,7 +266,8 @@ const Users = () => {
                   <label>Role </label>
                   <select onClick={(e)=>setTemprole(e.target.value)} required={true}>
                     <option value={"ROLE_MANAGER"}>Manager</option>
-                    <option value={"ROLE_LEADER"}>Leader&nbsp;Ship</option>
+                    <option value={"ROLE_LEADER"}>Leadership</option>
+                    <option value={"ROLE_USER"}>User</option>
                   </select>                                                            
                   </div> 
                 </>

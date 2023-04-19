@@ -273,7 +273,7 @@ const Interns = () => {
     const handleGroupAddIntern=()=>{
         console.log(defaultInternIdList,currentGroup);
         //call the add interns to group api
-        axios.post(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
+        axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
             "internIdList":defaultInternIdList
         }).
         then((res)=>{

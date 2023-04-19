@@ -179,19 +179,24 @@ const Trainers = () => {
 };
 
 const handleEditSubmitAvailability = () => {
-//   axios.put(`http://localhost:8090/availability/updateAvailabilty`,{
-//     "trainerId":trainerTemp.trainerId,
-//     "date":date,
-//     "from_time":fromTime,
-//     "to_time":toTime,
-// }).then((res)=>{
-//     console.log(res);
-//     setUseeffectreload(!useeffectreload)
-//   })
+  console.log(date,toTime,fromTime);
+  axios.put(`http://localhost:8090/availability/updateAvailability/${availabilityTemp.availabilityId}`,{
+    "date":date,
+    "fromTime":fromTime,
+    "toTime":toTime,
+}).then((res)=>{
+    console.log(res);
+    axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
+    .then((res)=>{
+      console.log(res.data.availability);
+      setUserAvailability(res.data.availability);
+      console.log(userAvailability)
+    })
+  })
   setIsEditAvailability(false);
-  // setDate('');
-  // setFromTime('');
-  // setToTime('');
+  setDate('');
+  setFromTime('');
+  setToTime('');
 };
 
   const handleDateChange = (e) => {
@@ -558,15 +563,13 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
-                  <div>
                     <input
                       type="text"
                       onChange={(event) => {
                         setName(event.target.value);
                       }}
                     />
-                    <p id="val">{validMsg}</p>
-                  </div>
+                    {/* <p id="val">{validMsg}</p> */}
                 </div>
 
                 <div className="input-group">
