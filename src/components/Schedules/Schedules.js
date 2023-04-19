@@ -3,63 +3,24 @@ import './Schedules.css'
 import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
 import {BsFillInfoCircleFill} from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
+import ManagerContext from '../Contextapi/Managercontext';
+import AuthContext from '../Contextapi/Authcontext';
+import axios from 'axios';
+import Select from "react-select";
 
 
 const Schedules = () => {
-    const [scheduleList, setscheduleList] = useState([
-        {
-        // meetId: 1,
-        meetTopic: "Python",
-        Date: "2020-02-20",
-        from_time: "10:00",
-        // to_time: "05:00PM"
-            meetTrainer: "Tanuja",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet1",
-            assessmentLink: "assessment2",
-            feedbackLink: "feedback3",
-            descriptionLink: "description4"
-        },
-        {
-        // meetId: 2,
-        meetTopic: "Java",
-        Date: "2021-02-20",
-        from_time: "10:00",
-        // to_time: "05:00PM"
-            meetTrainer: "Nikita",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet2",
-            assessmentLink: "assessment1",
-            feedbackLink: "feedback2",
-            descriptionLink: "description2"
-        },
-        {
-        // meetId: 3,
-        meetTopic: "C++",
-        Date: "2023-04-15",
-        from_time: "10:00",
-        // to_time: "05:00PM"
-            meetTrainer: "Devki",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet3",
-            assessmentLink: "assessment3",
-            feedbackLink: "feedback1",
-            descriptionLink: "description3"
-        },
-        {
-        // meetId: 4,
-        meetTopic: "JavaScript",
-        Date: "2024-04-15",
-        from_time: "10:00",
-        // to_time: "05:00PM"
-            meetTrainer: "Jyothi",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet4",
-            assessmentLink: "assessment4",
-            feedbackLink: "feedback4",
-            descriptionLink: "description1"
-        },
-    ]);
+    const options = [
+        { value: "blues", label: "Blues" },
+        { value: "rock", label: "Rock" },
+        { value: "jazz", label: "Jazz" },
+        { value: "orchestra", label: "Orchestra" },
+      ];
+    const managerContext = useContext(ManagerContext);
+    const authContext = useContext(AuthContext);
+    const {train} = managerContext;
+    const {userid} = authContext;
+    const [scheduleList, setscheduleList] = useState([]);
     const [temp, setTemp] = useState({})
     const [arrId, setArrId] = useState()
     const [validMsg,setValidMsg] = useState("");
@@ -67,14 +28,12 @@ const Schedules = () => {
     const [isOpenCon, setIsOpenCon] = useState(false)
     const [isOpenDets, setIsOpenDets] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
-    const [topic, setTopic] = useState('');
+    const [topic, setTopic] = useState();
     const [date, setDate] = useState('');
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
-    const [trainer, setTrainer] = useState("");
-    const [defaultGroupList, setdefaultGroupList] = useState([
-        {batchId:5, batchName:"murex"},
-        {batchId:7, batchName:"non-murex"}])
+    const [trainer, setTrainer] = useState();
+    const [defaultGroupList, setdefaultGroupList] = useState([])
     const [defaultGroupIdList,setdefaultGroupIdList]=useState([]);
     const [meet, setMeet] = useState();
     const [assessment, setAssessmentt] = useState();
@@ -89,7 +48,12 @@ const Schedules = () => {
     const [viewList, setViewList] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
     const [useEffectReload, setUseEffectReload] = useState(false);
-
+    const [topicList,setTopicList] = useState([]);
+    const [trainerList,setTrainerList] = useState([]);
+    const [meetingObj,setMeetingObj] = useState(null);
+    const [popUp,setPopUp] = useState(false);
+    const [grpAvlValueArr,setGrpAvlValueArr] = useState([]);
+    const [defBatchName,setDefBatchName] = useState(train.trainingName+"_"+train.trainingId);
 
     const handleCreateSch=()=>{
         setIsOpen(true);
@@ -120,11 +84,26 @@ const Schedules = () => {
         setAssessmentt("");
         setFeedback("");
         setDescription("");
+
     }
 
     const handleDateChange = (e) => {
         // setDate(date);
         setDate(e.target.value);
+        console.log(userid);
+        console.log(topic)
+        console.log(date)
+        const data = {
+            "topicId":topic,
+            "date":e.target.value
+        }
+        console.log(data) 
+        axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,data)
+        .then((res)=>{
+            console.log(res)
+            setTrainerList(res.data.trainers)
+            // console.log(res.data.trainers)
+        })
     }
     
     const handleFromTimeChange = (e) => {
@@ -139,11 +118,32 @@ const Schedules = () => {
     const handleAddList=(chk,id)=>{
         if(chk.target.checked)
         {
-            defaultGroupIdList.push(id);
-            setdefaultGroupIdList(defaultGroupIdList);
-            console.log(defaultGroupIdList)
+            const data = {
+                "meetingDesc":description,
+                "date":date,
+                "fromTime":fromTime,
+                "toTime":toTime,
+                "meetingLink":meet,
+                "feedbackLink":feedback,
+                "assessmentLink":assessment,
+                "topicId":topic,
+                "trainingId":train.trainingId,
+                "trainerId":trainer,
+                "batchList":defaultGroupIdList
+            }
+            axios.post(`http://localhost:8090/batch/checkBatchAvailability/${id}`,data)
+            .then((res)=>{
+                console.log(res);
+                if(res.data.result==1){
+                    setGrpAvlValueArr([...grpAvlValueArr,id]);
+                }
+                defaultGroupIdList.push(id);
+                setdefaultGroupIdList(defaultGroupIdList);
+                console.log(defaultGroupIdList)
+            })
         }
         else{
+            setGrpAvlValueArr(grpAvlValueArr.filter(val=>val!=id));
             if(defaultGroupIdList.includes(id))
             {
                 defaultGroupIdList.splice(defaultGroupIdList.indexOf(id), 1);
@@ -186,32 +186,36 @@ const Schedules = () => {
     
     
     const handleClick = () => {
-        if(temp=={}){
-            setValidMsg("Invalid Entry!!");
-            setTimeout(()=>{
-                document.getElementById("val").style.display="none";
-            },5000);
+        console.log("HELLO")
+        console.log(topic);
+        console.log(trainer)
+        const data = {
+            "meetingDesc":description,
+            "date":date,
+            "fromTime":fromTime,
+            "toTime":toTime,
+            "meetingLink":meet,
+            "feedbackLink":feedback,
+            "assessmentLink":assessment,
+            "topicId":topic,
+            "trainingId":train.trainingId,
+            "trainerId":trainer,
+            "batchList":defaultGroupIdList
         }
-        else{
-            const x={
-                meetTopic: topic,
-                Date: date,
-                from_time: fromTime,
-            }
-            console.log(x)
-            setscheduleList(current => [...current, x]);
+        axios.post(`http://localhost:8090/meeting/createMeeting`,data)
+        .then((res)=>{
+            console.log(res);
             setUseEffectReload(!useEffectReload)
-            console.log(scheduleList)
             handleSetEmpty();
             handleCreateSch();
-        }
+            setPopUp(true);
+        })
     };
 
     const handleView = (e, i) => {
-        console.log(e)
         setViewList(e);
+        console.log(e)
         handleDetsSch();
-        console.log(viewList)
     }
 
     // handle click event of the Edit button
@@ -219,11 +223,14 @@ const Schedules = () => {
         // setTopic(e.meetTopic);
         // setDate(e.Date);
         // setFromTime(e.from_time);
-        setViewList(e);
-    setArrId(i);
-    handleEditClick();
-    setTemp(scheduleList[arrId]);
-    setViewList('');
+        console.log(e)
+        setMeetingObj(e)
+        handleEditSch();
+        // handleSetEmpty();
+        // setUseEffectReload(!useEffectReload)
+        // setViewList(e);
+        // setArrId(i);
+        // setViewList('');
     }
 
     const handleEditClick = (index) => {
@@ -249,20 +256,19 @@ const Schedules = () => {
     };
 
     // handle click event of the Remove button
-    const handleRem =  (i) => {
-        // console.log(i);
-        setArrId(i);
+    const handleRem =  (e,i) => {
+        console.log(e);
+        setMeetingObj(e);
         setIsOpenCon(true);
     }
 
-    const handleRemoveClick = (index) => {
-        const list = [...scheduleList];
-        console.log(arrId);
-        list.splice(index, 1);
-        setscheduleList(list);
-        setIsOpenCon(false);
-        setUseEffectReload(!useEffectReload)
-        console.log(list);
+    const handleRemoveClick = () => {
+        axios.delete(`http://localhost:8090/meeting/deleteMeeting/${meetingObj.meetingId}`)
+        .then((res)=>{
+            console.log(res)
+            setIsOpenCon(false);
+            setUseEffectReload(!useEffectReload)
+        })
     };
 
     const getCurrentDate = () => {
@@ -279,25 +285,41 @@ const Schedules = () => {
         const d1DateOnly = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
         const d2DateOnly = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
         if (d1DateOnly.getTime() < d2DateOnly.getTime()) {
-            console.log("-1")
+            // console.log("-1")
             return -1;
         }
         if (d1DateOnly.getTime() > d2DateOnly.getTime()) {
-            console.log("1")
+            // console.log("1")
             return 1;
         }
     }
 
     useEffect(() => {
-        scheduleList.sort((a, b) => a.Date.localeCompare(b.Date));
-        const currDate = getCurrentDate(); //To get the Current Date
-        console.log(currDate);
-        setPresent(scheduleList.filter(obj => obj.Date === currDate));
-        console.log(present)
-        setPast(scheduleList.filter(obj => compareDates(obj.Date, currDate) === -1));
-        console.log(past)
-        setFuture(scheduleList.filter(obj => compareDates(obj.Date, currDate) === 1));
-        console.log(future)
+        axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
+        .then((res)=>{
+            setscheduleList(res.data.meeting);
+            const currDate = getCurrentDate(); //To get the Current Date
+            scheduleList.sort((a, b) => a.date.localeCompare(b.date));
+            setPresent(res.data.meeting.filter(obj => obj.date == currDate));
+            setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == -1));
+            setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == 1));
+        })
+        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
+        .then((res)=>{
+            console.log(res);
+            setTopicList(res.data.topicList)
+        })
+        axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
+        .then((res)=>{
+            console.log(res);
+            setTrainerList(res.data.trainers)
+        })
+        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
+        .then((res)=>{
+            console.log(res);
+            setdefaultGroupList(res.data.batch);
+            console.log("GROUPS ",res.data.batch)
+        })
     }, [useEffectReload])
 
     const activeClass=(e)=>{
@@ -328,14 +350,17 @@ const Schedules = () => {
         activeClass(e);
     }
 
+    const handlePopUpOk = ()=>{
+        setPopUp(false);
+    }
     return (<>
     <h2 className='scheduleHeader'>Schedules</h2>
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">
             <div className='scheduleNavbar'>
                 <div className='SchbuttonsWrapper'>
-                    <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                     <p className='headerText active' onClick={(e) => {handleClickToday(e)}}>Today</p>
+                    <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                     <p className='headerText' onClick={(e) => {handleClickUpcoming(e)}}>Upcoming</p>
                 </div>
 
@@ -366,21 +391,28 @@ const Schedules = () => {
         <div className='schedules'>            
             {pastCheck && past.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
-                    <h3>{e.meetTopic}</h3>
-                    <p>{e.meetTrainer}</p>
-                    <p>Groups</p>
-                    <div>{e.Date}&nbsp;&nbsp;{e.from_time}</div>
+                    <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    {e.batchList.map((batch,i)=>{
+                        return(
+                            // <span>{batch.batchName}&nbsp;</span>
+                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                        )
+                    })}
+                    {/* <p>{e.batchList[0].batchName}</p> */}
+                    <div>Date&nbsp;-&nbsp;{e.date}</div>
+                    <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
                 <div className='iconContainer'>
                     <div className='edit_icon_wrapper' >
-                        <div className='infoSchedule'>
+                        {/* <div className='infoSchedule'>
                             <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                        </div>
+                        </div> */}
                         <div>
                             <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                         </div>
                         <div>
-                            <MdDelete className="close-icon" onClick={(x)=>{handleRem(i);x.stopPropagation();}}/>
+                            <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                         </div>
                     </div>
                 </div>
@@ -389,20 +421,27 @@ const Schedules = () => {
 
             {presentCheck && present.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
-                    <h3>{e.meetTopic}</h3>
-                    <p>{e.meetTrainer}</p>
-                    <p>Groups</p>
-                    <div>{e.Date}&nbsp;&nbsp;{e.from_time}</div>
+                    <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    {e.batchList.map((batch,i)=>{
+                        return(
+                            // <span>{batch.batchName}&nbsp;</span>
+                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                        )
+                    })}
+                    {/* <p>{e.batchList[0].batchName}</p> */}
+                    <div>Date&nbsp;-&nbsp;{e.date}</div>
+                    <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
                 <div className='iconContainer'>
                     <div className='edit_icon_wrapper' >
-                    <div className='infoSchedule'>
+                    {/* <div className='infoSchedule'>
                         <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                    </div>
+                    </div> */}
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
                     <div >
-                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(i);x.stopPropagation();}}/>
+                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
                 </div>
             </div>
@@ -410,20 +449,27 @@ const Schedules = () => {
 
             {futureCheck && future.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
-                    <h3>{e.meetTopic}</h3>
-                    <p>{e.meetTrainer}</p>
-                    <p>Groups</p>
-                    <div>{e.Date}&nbsp;&nbsp;{e.from_time}</div>
+                    <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    {e.batchList.map((batch,i)=>{
+                        return(
+                            // <span>{batch.batchName}&nbsp;</span>
+                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                        )
+                    })}
+                    {/* <p>{e.batchList[0].batchName}</p> */}
+                    <div>Date&nbsp;-&nbsp;{e.date}</div>
+                    <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
                 <div className='iconContainer'>
-                    <div className='infoSchedule'>
+                    {/* <div className='infoSchedule'>
                         <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                    </div>
+                    </div> */}
                     <div className='edit_icon_wrapper' >
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
                     <div >
-                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(i);x.stopPropagation();}}/>
+                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
                 </div>
             </div>
@@ -437,13 +483,17 @@ const Schedules = () => {
             <div className='sch_popupHeader'>
                 <h2>Add a new schedule</h2>
             </div>
-
+            <div className="sch_input_box">
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic </label>
                     <select onClick={(e)=>setTopic(e.target.value)} required={true}>
-                        <option value={"Spring"}>Spring</option>
-                        <option value={"MySQL"}>MySQL</option>
+                        {topicList.filter(topic=>topic.completed==false).map((e,i)=>{
+                            return(
+                            <option value={e.topicId} selected={i==0}>{e.topicName}</option>
+                            )
+                        })}
+                        <option>---End of List---</option>
                     </select>                                                            
                 </div>
 
@@ -453,20 +503,24 @@ const Schedules = () => {
                 </div>
 
                 <div className="sch_input-group">
-                    <label> From Time: </label>
+                    <label> Start Time: </label>
                     <input step="2" type="time" value={fromTime} onChange={handleFromTimeChange} />                    
                 </div>
 
-                {/* <div className="sch_input-group">
-                    <label> To Time:  </label>
+                <div className="sch_input-group">
+                    <label> End Time:  </label>
                     <input step="2" type="time"  value={toTime} onChange={handleToTimeChange} />                 
-                </div> */}
+                </div>
 
                 <div className="sch_input-group">
                     <label>Trainer </label>
                     <select onClick={(e)=>setTrainer(e.target.value)} required={true}>
-                        <option value={"Aman"}>Aman</option>
-                        <option value={"Kunal"}>Kunal</option>
+                    {trainerList.map((e,i)=>{
+                            return(
+                            <option value={e.trainerId} selected={i==0}>{e.trainerName}</option>
+                            )
+                        })}
+                        <option>---End of List---</option>
                     </select>                                                            
                 </div>
 
@@ -494,11 +548,11 @@ const Schedules = () => {
                     <label htmlFor="name">Select Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            defaultGroupList.map((e)=><div className='sch_ListInternWrapper'>
+                            defaultGroupList.filter(batch=>batch.batchName!=defBatchName).map((e)=><div className='sch_ListInternWrapper'>
                                 <form>
                                     <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
                                 </form>
-                                <p>{e.batchName}</p>
+                                <p>{e.batchName} <span hidden={!grpAvlValueArr.includes(e.batchId)} style={{color:"red"}}>X</span></p>
                             </div>)
                         }
                     </div>                                                           
@@ -513,6 +567,7 @@ const Schedules = () => {
                     Cancel
                 </button>
             </div>
+            </div>
         </div>}
 
 
@@ -520,57 +575,63 @@ const Schedules = () => {
             <div className='sch_popupHeader'>
                 <h2>Edit meeting details</h2>
             </div>
-        
+            <div className="sch_input_box">
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
-                    <label>Topic </label>
-                    <select onClick={(e)=>setTopic(e.target.value)} value={temp.meetTopic} required={true}>
-                        <option value={"Spring"}>Spring</option>
-                        <option value={"MySQL"}>MySQL</option>
+                    <label>Topic</label>
+                    <select onClick={(e)=>console.log(e.target.value)} value={topic} required={true}>
+                    {topicList.map((e,i)=>{
+                            return(
+                            <option value={e.topicName}>{e.topicName}</option>
+                            )
+                        })}
                     </select>                                                         
                 </div>
 
                 <div className="sch_input-group">
                     <label> Date </label>
-                    <input type="date" onChange={handleDateChange} value={temp.Date} />
+                    <input type="date" value={date} onChange={handleDateChange} />
                 </div>
 
                 <div className="sch_input-group">
-                    <label> From Time </label>
-                    <input step="2" type="time" onChange={handleFromTimeChange} value={temp.fromTime} />                    
+                    <label> Start Time </label>
+                    <input step="2" value={fromTime} type="time" onChange={handleFromTimeChange}/>                    
                 </div>
 
-                {/* <div className="sch_input-group">
-                    <label> To Time </label>
+                <div className="sch_input-group">
+                    <label> End Time </label>
                     <input  type="time" value={toTime} onChange={handleToTimeChange} />                 
-                </div> */}
+                </div>
 
                 <div className="sch_input-group">
                     <label>Trainer </label>
-                    <select onClick={(e)=>setTrainer(e.target.value)} value={temp.trainer} required={true}>
-                        <option value={"Aman"}>Aman</option>
-                        <option value={"Kunal"}>Kunal</option>
+                    <select onClick={(e)=>setTrainer(e.target.value)} defaultValue={trainer} required={true}>
+                    {trainerList.map((e,i)=>{
+                            return(
+                            <option value={e.trainerName}>{e.trainerName}</option>
+                            )
+                        })}
                     </select>                                                            
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Meet Link</label>
-                    <input type="text" id="link" onChange={handleMeet} value={temp.meet} />                                                             
+                    <input type="text" id="link" onChange={handleMeet} value={meet}/>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Assessment Link</label>
-                    <input type="text" id="link" onChange={handleAssessment} value={temp.assessment} />                                                             
+                    <input type="text" id="link" onChange={handleAssessment} value={assessment}/>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Feedback Link</label>
-                    <input type="text" id="link" onChange={handleFeedback} value={temp.feedback} />                                                             
+                    <input type="text" id="link" onChange={handleFeedback} value={feedback}/>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription}  value={temp.description} >{description}</textarea>                                                             
+                    <textarea  onChange={handleDescription} value={description}>{description}</textarea>                                                             
                 </div>
 
                 <div className="sch_input-group">
@@ -596,39 +657,45 @@ const Schedules = () => {
                     Cancel
                 </button>
             </div>
+            </div>
         </div>}
 
 
-        {isOpenDets && scheduleList.map((e, i) => <div className="sch_popup-boxd">
+        {isOpenDets && <div className="sch_popup-boxd">
             <div className='sch_popupHeader'>
                 <h2>Details Of schedule</h2>
             </div>
-
+            <div className="sch_input_box">
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic </label>                                                            
-                    <p>{viewList.meetTopic}</p>                                                            
+                    <p>{viewList.topic.topicName}</p>                                                            
                 </div>
 
                 <div className="sch_input-group">
                     <label> Date </label>                                                          
-                    <p>{viewList.Date}</p> 
+                    <p>{viewList.date}</p> 
                 </div>
 
                 <div className="sch_input-group">
-                    <label> From Time: </label>                                                           
-                    <p>{viewList.from_time}</p>                     
+                    <label> Start Time: </label>                                                           
+                    <p>{viewList.fromTime}</p>                     
+                </div>
+
+                <div className="sch_input-group">
+                    <label> End Time: </label>                                                           
+                    <p>{viewList.toTime}</p>                     
                 </div>
 
                 <div className="sch_input-group">
                     <label>Trainer </label>                                                            
-                    <p>{viewList.meetTrainer}</p>                                                             
+                    <p>{viewList.trainer.trainerName}</p>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Meet Link</label>
         
-                    <p>{viewList.meetLink}</p>                                                              
+                    <p>{viewList.meetingLink}</p>                                                              
                 </div>
 
                 <div className="sch_input-group">
@@ -645,33 +712,31 @@ const Schedules = () => {
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
                     {/* <p>{description}</p>                                                             */}
-                    <p>{viewList.descriptionLink}</p>                                                             
+                    <p>{viewList.meetingDesc}</p>                                                             
                 </div>
 
                 <div className="sch_input-group">
-                    <label htmlFor="name">Select Groups</label>
+                    <label htmlFor="name">Selected Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            defaultGroupList.map((e)=><div className='sch_ListInternWrapper'>
-                                <form>
-                                    <input checked={true} type="checkbox"/>
-                                </form>
+                            viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
                                 <p>{e.batchName}</p>
                             </div>)
                         }
                     </div>                                                           
                 </div>
             </div>
-            <div className='sch_buttonsContainer'>
+            {/* <div className='sch_buttonsContainer'>
                 <button type="submit" className="submit-btn" onClick={() => {handleEditSch();}}>
                     Edit
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();}}>
                     Close
                 </button>
-            </div>
+            </div> */}
         </div>
-        )}
+        </div>
+        }
 
 
     </div>
@@ -683,7 +748,7 @@ const Schedules = () => {
             <h2>Are you sure to delete this schedule?</h2>
         </div>
         <div className='buttonsContainer'>
-            <button type="submit" className="submit-btn" onClick={() => handleRemoveClick(arrId)}>
+            <button type="submit" className="submit-btn" onClick={() => handleRemoveClick()}>
                 Yes
             </button>
             <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
@@ -691,8 +756,19 @@ const Schedules = () => {
             </button>
         </div>
     </div>
-</div>
-}
+</div>}
+{popUp && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Schedule Created</h2>
+        </div>
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => handlePopUpOk()}>
+                Ok
+            </button>
+        </div>
+    </div>
+</div>}
 </>     
     )
 }
