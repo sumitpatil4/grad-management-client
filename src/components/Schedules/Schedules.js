@@ -23,6 +23,7 @@ const Schedules = () => {
     const {userid} = authContext;
     const [scheduleList, setscheduleList] = useState([]);
     const [avlList, setavlList] = useState([]);
+    const [instance, setInstance] = useState("");
     const [temp, setTemp] = useState({})
     const [arrId, setArrId] = useState()
     const [validMsg,setValidMsg] = useState("");
@@ -30,14 +31,17 @@ const Schedules = () => {
     const [isOpenCon, setIsOpenCon] = useState(false)
     const [isOpenDets, setIsOpenDets] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
+    const [isOpenGroups, setIsOpenGroups] = useState(false)
     const [topic, setTopic] = useState();
     const [date, setDate] = useState('');
     const [dateArr, setDateArr] = useState("");
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
     const [trainer, setTrainer] = useState();
-    const [defaultGroupList, setdefaultGroupList] = useState([])
+    const [defaultGroupList, setdefaultGroupList] = useState([]);
+    const [tempGroupList, settempGroupList] = useState([]);
     const [defaultGroupIdList,setdefaultGroupIdList]=useState([]);
+    const [availGroups,setavailGroups]=useState([]);
     const [meet, setMeet] = useState();
     const [assessment, setAssessmentt] = useState();
     const [feedback, setFeedback] = useState();
@@ -50,12 +54,16 @@ const Schedules = () => {
     const [futureCheck, setFutureCheck] = useState(false);
     const [viewList, setViewList] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
+    const [currentTrainerInstance, setcurrentTrainerInstance] = useState({});
+    const [finalList, setfinalList] = useState([]);
     const [useEffectReload, setUseEffectReload] = useState(false);
     const [useEffectReload1, setUseEffectReload1] = useState(false);
     const [topicList,setTopicList] = useState([]);
     const [trainerList,setTrainerList] = useState([]);
     const [meetingObj,setMeetingObj] = useState(null);
     const [popUp,setPopUp] = useState(false);
+    const [checkFlag,setcheckFlag] = useState(false);
+    const [checkedArr,setCheckedArr] = useState([]);
     const [grpAvlValueArr,setGrpAvlValueArr] = useState([]);
     const [selectTrainerCheck,setselectTrainerCheck] = useState(false);
     const [defBatchName,setDefBatchName] = useState(train.trainingName+"_"+train.trainingId);
@@ -92,10 +100,22 @@ const Schedules = () => {
 
     }
 
+    const handleCancelForAdd=()=>{
+        const x=document.getElementById("datePicker");
+        console.log(x)
+        x.value="";
+        x.selected="";
+        console.log(x.value)
+        setDateArr([])
+        setselectTrainerCheck(false)
+        handleSetEmpty();
+    }
+
 
 
     const handleGetTrainersByDate = () => {
         // setDate(date);
+        setavlList([]);
         const arr=dateArr.split(" ");
         console.log(arr)
         let newarr=[];
@@ -131,6 +151,162 @@ const Schedules = () => {
                 console.log(avlList);
                 setselectTrainerCheck(true)
             })
+    }
+
+    const handleAvlCheck=(r,e,i,j)=>{
+        let inp1 = document.getElementById(`time${i}${j}0`);
+        let inp2 = document.getElementById(`time${i}${j}1`);
+        console.log(inp1.checkValidity())
+        console.log(inp2.checkValidity());
+        if(inp1.checkValidity() && inp2.checkValidity()){
+            document.getElementById(`check${i}${j}`).disabled=false;
+        }
+        else{
+            document.getElementById(`check${i}${j}`).checked=false;
+            document.getElementById(`check${i}${j}`).disabled=true;
+        }
+    }
+
+    const handleAvlCheckBox=(r,e,i,j,row)=>{
+        console.log("H")
+        console.log(r)
+        setInstance(e);
+        console.log(checkedArr)
+        if(e.target.checked){
+            if(checkedArr.length==0){
+                setCheckedArr([...checkedArr,r])
+                handleTrainerSelect(e,r,row)
+            }
+            else{
+                const filteredArr = checkedArr.filter(avl=>avl.date==r.date);
+                let flag=0;
+                filteredArr.forEach(avl=>{
+                    if(r.fromTime>=avl.fromTime && r.fromTime<avl.toTime){
+                        flag=1;
+                    }
+                    if(r.toTime>avl.fromTime && r.toTime<=avl.toTime){
+                        flag=1;
+                    }
+                    if(r.fromTime<=avl.fromTime && r.toTime>=avl.toTime){
+                        flag=1;
+                    }
+                })
+                console.log(flag)
+                if(flag!=1){
+                    setCheckedArr([...checkedArr,r]);
+                    handleTrainerSelect(e,r,row)
+                }
+                else{
+                    document.getElementById(`check${i}${j}`).checked=false;
+                    setcheckFlag(true);
+                }
+            }
+        }
+        else{
+            
+            console.log("row",r)
+            e.target.parentElement.nextSibling.innerHTML="";
+            setfinalList(finalList.filter((meet)=>{
+                console.log("meet",meet.availablityId)
+                return meet.availablityId!==r.availabilityId
+            }))
+            console.log("uncheck",finalList)
+            setCheckedArr(checkedArr.filter(avl=>avl!=r));
+        }
+    }
+
+    const handleTrainerSelect=(e,r,row)=>{
+        if(e.target.checked){
+            console.log("iam here")
+            console.log(r,row,topic)
+            console.log(defaultGroupList)
+            console.log(scheduleList)
+            const obj={
+                "meetingDesc":description,
+                "date":r.date,
+                "fromTime":r.fromTime,
+                "toTime":r.toTime,
+                "meetingLink":"link",
+                "feedbackLink":"link",
+                "assessmentLink":"link",
+                "topicId":topic,
+                "trainingId":train.trainingId,
+                "trainerId":row.trainerId,
+                "availablityId":r.availabilityId,
+                "batchList":null
+            }
+            setcurrentTrainerInstance(obj);
+            
+            const list=scheduleList.filter((temp)=>{
+                if(temp.date.localeCompare(r.date)===0 && ((r.toTime>=temp.fromTime) || (temp.toTime>=r.fromTime)))
+                    return true;
+                else return false;
+            })
+            console.log(list)
+            const arr=[];
+            list.forEach((tmp)=>{
+                tmp.batchList.forEach((b)=>{
+                    if(!arr.includes(b.batchId))
+                        arr.push(b.batchId);
+                })
+            })
+            console.log(arr)
+            const availGrps=defaultGroupList.filter((temp)=>!arr.includes(temp.batchId))
+            console.log(availGrps)
+            tempGroupList.length=0;
+            availGrps.forEach((x)=>tempGroupList.push(x));
+            settempGroupList(tempGroupList);
+            setIsOpenGroups(true);
+        }
+        else{
+            console.log("unchecked")
+        }
+    }
+
+    const handleScheduleEachTrainer=()=>{
+        currentTrainerInstance.batchList=defaultGroupIdList;
+        setcurrentTrainerInstance(currentTrainerInstance)
+        const avlGroups=defaultGroupList.filter((temp)=>defaultGroupIdList.includes(temp.batchId))
+        console.log(avlGroups);
+        setavailGroups(avlGroups);
+        console.log(instance.target.parentElement.nextSibling);
+        let str="Groups - ";
+        avlGroups.forEach((b,i)=>{
+            if(i===avlGroups.length-1)
+                str+=`<span>${b.batchName}</span>`
+            else
+                str+=`<span>${b.batchName}</span>,`
+        });
+        console.log(str);
+        instance.target.parentElement.nextSibling.innerHTML=str;
+        // const x=document.getElementById(`grps${currentTrainerInstance.availabilityId}`);
+        // console.log(x)
+        // x.style.display="block";
+        console.log(currentTrainerInstance,defaultGroupIdList)
+        finalList.push(currentTrainerInstance);
+        setfinalList(finalList);
+        setIsOpenGroups(false);
+        setcurrentTrainerInstance([]);
+        setdefaultGroupIdList([]);
+        // handleSetEmpty();
+    }
+
+    const handleEachAddList=(chk,id)=>{
+        if(chk.target.checked)
+        {
+            
+            defaultGroupIdList.push(id);
+            setdefaultGroupIdList(defaultGroupIdList);
+            console.log(defaultGroupIdList)
+        }
+        else{
+            if(defaultGroupIdList.includes(id))
+            {
+                defaultGroupIdList.splice(defaultGroupIdList.indexOf(id), 1);
+                setdefaultGroupIdList(defaultGroupIdList);
+                console.log(defaultGroupIdList)
+            }
+        }
     }
     
     const handleFromTimeChange = (e) => {
@@ -213,30 +389,37 @@ const Schedules = () => {
     
     
     const handleClick = () => {
-        console.log("HELLO")
+        console.log(finalList)
+        console.log("Finally")
         console.log(topic);
         console.log(trainer)
-        const data = {
-            "meetingDesc":description,
-            "date":date,
-            "fromTime":fromTime,
-            "toTime":toTime,
-            "meetingLink":meet,
-            "feedbackLink":feedback,
-            "assessmentLink":assessment,
-            "topicId":topic,
-            "trainingId":train.trainingId,
-            "trainerId":trainer,
-            "batchList":defaultGroupIdList
-        }
-        axios.post(`http://localhost:8090/meeting/createMeeting`,data)
-        .then((res)=>{
-            console.log(res);
-            setUseEffectReload(!useEffectReload)
-            handleSetEmpty();
-            handleCreateSch();
-            setPopUp(true);
+        setCheckedArr([]);
+        finalList.forEach((lst)=>{
+            const data = {
+                "meetingDesc":lst.meetingDesc,
+                "date":lst.date,
+                "fromTime":lst.fromTime,
+                "toTime":lst.toTime,
+                "meetingLink":lst.meetingLink,
+                "feedbackLink":lst.feedbackLink,
+                "assessmentLink":lst.assessmentLink,
+                "topicId":lst.topicId,
+                "trainingId":lst.trainingId,
+                "trainerId":lst.trainerId,
+                "batchList":lst.batchList
+            }
+            axios.post(`http://localhost:8090/meeting/createMeeting`,data)
+            .then((res)=>{
+                console.log(res);
+                setUseEffectReload(!useEffectReload)
+                // handleSetEmpty();
+                setCheckedArr([]);
+                handleCreateSch();
+                setPopUp(true);
+            })
         })
+        setfinalList([]);
+        setCheckedArr([]);
     };
 
     const handleView = (e, i) => {
@@ -467,7 +650,7 @@ const Schedules = () => {
                     </div> */}
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
-                    <div >
+                    <div>
                         <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
                 </div>
@@ -525,66 +708,54 @@ const Schedules = () => {
                 </div>
 
                 <div className="sch_input-group">
-                    <label> Date: </label>
-                    {/* <input type="date"  value={date} onChange={handleDateChange} /> */}
-                    <DatePicker placeholder='Select dates'
-                    onChange={(arr)=>setDateArr(arr.join(" "))}
+                    <label> Date </label>
+                    {isOpen &&
+                    <DatePicker id='datePicker' placeholder='Select dates'
+                            onChange={(arr)=>setDateArr(arr.join(" "))}
                             multiple={true}                         
-                     minDate={new Date()}
-                            />
+                            minDate={new Date()}
+                        />
+                    }
                 </div>
-
-                <div className="sch_input-group">
-                    <button onClick={()=>handleGetTrainersByDate()}>Select&nbsp;Trainers</button>                                                                                                                     
-                </div>
-
-                {
-                    selectTrainerCheck && (
-                        <>
-                        {avlList.map((list)=>
-                        <div>
-                            <h4>Date&nbsp;-&nbsp;{list.date}</h4>
-                            <div>
-                                {list.trainer.length!==0 ? list.trainer.map((row)=><div >
-                                    {
-                                        row.availabilityList.map((r)=><div className='avl_List'>
-                                            <input type='checkbox'/>
-                                            <p>{row.trainerName}</p>
-                                            <input value={r.fromTime} step="2" type="time"/>
-                                            <input value={r.toTime} step="2" type="time"/>
-                                        </div>)
-                                    }
-                                    
-                                </div>):(<div className='avl_List'>No Trainers Available</div>)}
-                            </div>
-                        </div>)}</>)
-                }
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
                     <textarea  onChange={handleDescription}  value={description} >{description}</textarea>                                                                                                                     
                 </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Select Groups</label>
-                    <div className='sch_internWrapperDiv'>
-                        {
-                            defaultGroupList.filter(batch=>batch.batchName!=defBatchName).map((e)=><div className='sch_ListInternWrapper'>
-                                <form>
-                                    <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
-                                </form>
-                                <p>{e.batchName} <span hidden={!grpAvlValueArr.includes(e.batchId)} style={{color:"red"}}>X</span></p>
-                            </div>)
-                        }
-                    </div>                                                           
-                </div>
+                <button className='selectBtn' onClick={()=>handleGetTrainersByDate()}>Select&nbsp;Trainers</button>                                                                                                                     
+
+                {
+                    selectTrainerCheck && (
+                        <>
+                        <div className='avlWrapper'>
+                        {avlList.map((list)=>
+                        <div className='avlContainer'>
+                            <h4>{list.date}</h4>
+                            <div>
+                                {list.trainer.length!==0 ? list.trainer.map((row,i)=>
+                                        row.availabilityList.map((r,j)=><div className='avl_tile'>
+                                            <div className='avl_List'>
+                                                <input onClick={(e)=>handleAvlCheckBox(r,e,i,j,row)} id={`check${i}${j}`} type='checkbox'/>
+                                                <p onClick={()=>console.log("hi")}>{row.trainerName}</p>
+                                                <input id={`time${i}${j}0`} onChange={(e)=>handleAvlCheck(r,e,i,j)} min={r.fromTime} max={r.toTime} defaultValue={r.fromTime} step="1" type="time"/>
+                                                <input id={`time${i}${j}1`} onChange={(e)=>handleAvlCheck(r,e,i,j)} min={r.fromTime} max={r.toTime} defaultValue={r.toTime} step="1" type="time"/>
+                                            </div>
+                                            <div className='selectedGroups' id={`grps${r.availabilityId}`}></div>
+                                        </div>
+                                        )
+                                ):(<div className='noTrainers'>-- No Trainers Available For This Date --</div>)}
+                            </div>
+                        </div>)}</div></>)
+                }
+
 
             </div>
             <div className='sch_buttonsContainer'>
                 <button type="submit" className="submit-btn" onClick={()=>{handleClick()}}>
-                    Submit
+                    Create
                 </button>
-                <button type="reset" className="cancel-btn" onClick={() =>{handleSetEmpty()}}>
+                <button type="reset" className="cancel-btn" onClick={() =>{handleCancelForAdd()}}>
                     Cancel
                 </button>
             </div>
@@ -778,6 +949,37 @@ const Schedules = () => {
         </div>
     </div>
 </div>}
+
+{isOpenGroups && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Select Groups</h2>
+        </div>
+
+        <div className='inputContainer'>
+            <div className='internWrapperDiv'>
+                {
+                    tempGroupList.map((e)=><div className='ListInternWrapper'>
+                        <form>
+                            <input  onClick={(x)=>handleEachAddList(x,e.batchId)} type="checkbox"/>
+                        </form>
+                        <p>{e.batchName}</p>
+                    </div>)
+                }
+            </div>
+        </div>
+
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => handleScheduleEachTrainer()}>
+                Submit
+            </button>
+            <button type="reset" className="cancel-btn" onClick={() => setIsOpenGroups(false)}>
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>}
+
 {popUp && <div className='popupContainer'>
     <div className='popup-boxd'>
         <div className='popupHeader'>
@@ -785,6 +987,19 @@ const Schedules = () => {
         </div>
         <div className='buttonsContainer'>
             <button type="submit" className="submit-btn" onClick={() => handlePopUpOk()}>
+                Ok
+            </button>
+        </div>
+    </div>
+</div>}
+
+{checkFlag && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Conflict With Selected Timings</h2>
+        </div>
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => setcheckFlag(false)}>
                 Ok
             </button>
         </div>
