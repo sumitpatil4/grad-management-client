@@ -217,4 +217,10 @@
     font-weight: 500;
 }
 
+.avl_List{
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
 /* end of popup styling */

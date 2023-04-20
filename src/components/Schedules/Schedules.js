@@ -7,6 +7,7 @@ import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
 import Select from "react-select";
+import DatePicker from "react-multi-date-picker";
 
 
 const Schedules = () => {
@@ -21,6 +22,7 @@ const Schedules = () => {
     const {train} = managerContext;
     const {userid} = authContext;
     const [scheduleList, setscheduleList] = useState([]);
+    const [avlList, setavlList] = useState([]);
     const [temp, setTemp] = useState({})
     const [arrId, setArrId] = useState()
     const [validMsg,setValidMsg] = useState("");
@@ -30,6 +32,7 @@ const Schedules = () => {
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [topic, setTopic] = useState();
     const [date, setDate] = useState('');
+    const [dateArr, setDateArr] = useState("");
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
     const [trainer, setTrainer] = useState();
@@ -48,11 +51,13 @@ const Schedules = () => {
     const [viewList, setViewList] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
     const [useEffectReload, setUseEffectReload] = useState(false);
+    const [useEffectReload1, setUseEffectReload1] = useState(false);
     const [topicList,setTopicList] = useState([]);
     const [trainerList,setTrainerList] = useState([]);
     const [meetingObj,setMeetingObj] = useState(null);
     const [popUp,setPopUp] = useState(false);
     const [grpAvlValueArr,setGrpAvlValueArr] = useState([]);
+    const [selectTrainerCheck,setselectTrainerCheck] = useState(false);
     const [defBatchName,setDefBatchName] = useState(train.trainingName+"_"+train.trainingId);
 
     const handleCreateSch=()=>{
@@ -87,23 +92,45 @@ const Schedules = () => {
 
     }
 
-    const handleDateChange = (e) => {
+
+
+    const handleGetTrainersByDate = () => {
         // setDate(date);
-        setDate(e.target.value);
-        console.log(userid);
-        console.log(topic)
-        console.log(date)
-        const data = {
-            "topicId":topic,
-            "date":e.target.value
-        }
-        console.log(data) 
-        axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,data)
-        .then((res)=>{
-            console.log(res)
-            setTrainerList(res.data.trainers)
-            // console.log(res.data.trainers)
-        })
+        const arr=dateArr.split(" ");
+        console.log(arr)
+        let newarr=[];
+        arr.forEach((d)=>newarr.push(d.replaceAll("/","-")))
+        console.log(newarr)
+        // arr.forEach((date,i)=>{
+        //     axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
+        //         "topicId":topic,
+        //         "date":new Date(date)
+        //     }).then((res)=>{
+        //         const newlist={
+        //             "date":date,
+        //             "trainers":res.data.trainers
+        //         }
+        //         // console.log(newlist)
+        //         if(i===0){
+        //             avlList.length=0;
+        //             setavlList([]);
+        //             console.log(avlList);
+        //         }
+        //         avlList.push(newlist);
+        //         setavlList(avlList);
+        //         if(i+1===arr.length)
+        //             setselectTrainerCheck(true)
+        //     })
+        // })
+        axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
+                "topicId":topic,
+                "dateList":newarr
+            }).then((res)=>{
+                setavlList(res.data);
+                console.log(res.data);
+                console.log(avlList);
+                setselectTrainerCheck(true)
+            })
     }
     
     const handleFromTimeChange = (e) => {
@@ -488,56 +515,50 @@ const Schedules = () => {
                 <div className="sch_input-group">
                     <label>Topic </label>
                     <select onClick={(e)=>setTopic(e.target.value)} required={true}>
+                    <option selected={true} hidden={true} disabled={true}>Select one Topic </option>
                         {topicList.filter(topic=>topic.completed==false).map((e,i)=>{
                             return(
-                            <option value={e.topicId} selected={i==0}>{e.topicName}</option>
+                            <option value={e.topicId}>{e.topicName}</option>
                             )
                         })}
-                        <option>---End of List---</option>
-                    </select>                                                            
+                        </select>                                                            
                 </div>
 
                 <div className="sch_input-group">
                     <label> Date: </label>
-                    <input type="date"  value={date} onChange={handleDateChange} />
+                    {/* <input type="date"  value={date} onChange={handleDateChange} /> */}
+                    <DatePicker placeholder='Select dates'
+                    onChange={(arr)=>setDateArr(arr.join(" "))}
+                            multiple={true}                         
+                     minDate={new Date()}
+                            />
                 </div>
 
                 <div className="sch_input-group">
-                    <label> Start Time: </label>
-                    <input step="2" type="time" value={fromTime} onChange={handleFromTimeChange} />                    
+                    <button onClick={()=>handleGetTrainersByDate()}>Select&nbsp;Trainers</button>                                                                                                                     
                 </div>
 
-                <div className="sch_input-group">
-                    <label> End Time:  </label>
-                    <input step="2" type="time"  value={toTime} onChange={handleToTimeChange} />                 
-                </div>
-
-                <div className="sch_input-group">
-                    <label>Trainer </label>
-                    <select onClick={(e)=>setTrainer(e.target.value)} required={true}>
-                    {trainerList.map((e,i)=>{
-                            return(
-                            <option value={e.trainerId} selected={i==0}>{e.trainerName}</option>
-                            )
-                        })}
-                        <option>---End of List---</option>
-                    </select>                                                            
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Meet Link</label>
-                    <input type="text" id="link" onChange={handleMeet} value={meet} />                                                             
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Assessment Link</label>
-                    <input type="text" id="link" onChange={handleAssessment} value={assessment} />                                                             
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Feedback Link</label>
-                    <input type="text" id="link" onChange={handleFeedback} value={feedback} />                                                             
-                </div>
+                {
+                    selectTrainerCheck && (
+                        <>
+                        {avlList.map((list)=>
+                        <div>
+                            <h4>Date&nbsp;-&nbsp;{list.date}</h4>
+                            <div>
+                                {list.trainer.length!==0 ? list.trainer.map((row)=><div >
+                                    {
+                                        row.availabilityList.map((r)=><div className='avl_List'>
+                                            <input type='checkbox'/>
+                                            <p>{row.trainerName}</p>
+                                            <input value={r.fromTime} step="2" type="time"/>
+                                            <input value={r.toTime} step="2" type="time"/>
+                                        </div>)
+                                    }
+                                    
+                                </div>):(<div className='avl_List'>No Trainers Available</div>)}
+                            </div>
+                        </div>)}</>)
+                }
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
@@ -590,7 +611,7 @@ const Schedules = () => {
 
                 <div className="sch_input-group">
                     <label> Date </label>
-                    <input type="date" value={date} onChange={handleDateChange} />
+                    {/* <input type="date" value={date} onChange={handleDateChange} /> */}
                 </div>
 
                 <div className="sch_input-group">
