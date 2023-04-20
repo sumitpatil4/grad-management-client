@@ -14,7 +14,7 @@ const Navbar = (props) => {
 
   const usecontext=useContext(AuthContext);
   const admincontext=useContext(AdminContext);
-  const {notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
+  const {userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
 
   const [profileflag,setProfileflag]=useState(false);
   const [managerflag,setManagerflag]=useState(false);
@@ -91,7 +91,7 @@ const Navbar = (props) => {
           }
 
             <div onClick={()=>{profileflag ? setProfileflag(false):setProfileflag(true)}} className="profile_div">
-                <img className="profile_logo" src={profile} alt="profile_logo"/>
+                <img className="profile_logo" src={userpicture} alt="profile_logo"/>
             </div>
         </div>
     </nav>
