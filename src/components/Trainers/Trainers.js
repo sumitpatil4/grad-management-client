@@ -5,6 +5,9 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from "axios";
+import * as MailComposer from 'expo-mail-composer';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const Trainers = () => {
   const managercontext=useContext(ManagerContext);
@@ -43,6 +46,54 @@ const Trainers = () => {
       updateTrainerList(res.data.trainers);
     });
   },[useeffectreload])
+
+  let dummyTrainersList = [];
+  const fileType = "xlsx";
+
+  const sendMail = () => {
+
+    dummyTrainersList = [];
+    for (let i = 0; i < trainerList.length; i++) {
+      let obj = {};
+      for (const key in trainerList[i]) {
+        if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
+          obj[key.toUpperCase()] = trainerList[i][key];
+        } else if (key === "availabilityList") {
+          let availabilities = [];
+          for (let j = 0; j < trainerList[i][key].length; j++) {
+            availabilities.push(
+              `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+            );
+          }
+          obj["AVAILABILITY LIST"] = availabilities.join("\n");
+        }
+      }
+      dummyTrainersList.push(obj);
+      console.log(dummyTrainersList);
+    }
+    const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    console.log(data);
+    FileSaver.saveAs(data, "TrainerDetails" + ".xlsx");
+    const formData = new FormData();
+    formData.append("file", data, "TrainerDetails.xlsx");
+    console.log(formData)
+
+    MailComposer.composeAsync({
+      subject: "List of Trainers",
+      body: "PFA",
+      recipients: [ "sumit.patil@accolitedigital.com", "ashish.tripathy@accolitedigital.com"],
+      ccrecipients: ["m.krupananda@accolitedigital.com"],
+      attachments: [ {
+        content: formData,
+        filename: "TrainerDetails.xlsx",
+        type: fileType,
+        disposition: "attachment",
+      },]
+    });
+  };
 
   const [trainers, setTrainers] = useState([
     {
@@ -312,6 +363,9 @@ const handleEditSubmitAvailability = () => {
       <div>
         <button className="add-button" onClick={handleAddPopup}>
           Add&nbsp;Trainer
+        </button>
+        <button className="add-button" onClick={sendMail}>
+          Share&nbsp;Trainer
         </button>
       </div>
       <div>
