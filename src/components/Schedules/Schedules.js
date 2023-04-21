@@ -106,6 +106,7 @@ const Schedules = () => {
         x.value="";
         x.selected="";
         console.log(x.value)
+        setCheckedArr([])
         setDateArr([])
         setselectTrainerCheck(false)
         handleSetEmpty();
@@ -291,6 +292,13 @@ const Schedules = () => {
         // handleSetEmpty();
     }
 
+    const handleCancelForEachAvlGrps=()=>{
+        console.log(currentTrainerInstance.availablityId)
+        setCheckedArr(checkedArr.filter(avl=>avl.availabilityId!=currentTrainerInstance.availablityId));
+        instance.target.checked=false;
+        setIsOpenGroups(false);
+    }
+
     const handleEachAddList=(chk,id)=>{
         if(chk.target.checked)
         {
@@ -418,6 +426,7 @@ const Schedules = () => {
                 setPopUp(true);
             })
         })
+        handleCancelForAdd();
         setfinalList([]);
         setCheckedArr([]);
     };
@@ -973,7 +982,7 @@ const Schedules = () => {
             <button type="submit" className="submit-btn" onClick={() => handleScheduleEachTrainer()}>
                 Submit
             </button>
-            <button type="reset" className="cancel-btn" onClick={() => setIsOpenGroups(false)}>
+            <button type="reset" className="cancel-btn" onClick={() => handleCancelForEachAvlGrps()}>
                 Cancel
             </button>
         </div>
