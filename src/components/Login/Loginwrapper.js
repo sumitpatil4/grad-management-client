@@ -35,7 +35,7 @@ const Loginwrapper = (props) => {
 
     function handleLoginApi(response){
         console.log(response);
-        // updateuserrole("ROLE_MANAGER");
+        // updateuserrole("ROLE_INTERN");
         // handleLogin();
         axios.post("http://localhost:8090/user/login",null,{
             headers:{
@@ -58,7 +58,6 @@ const Loginwrapper = (props) => {
 
     return (
         <div className='loginWrapper'>
-                <h2>WELCOME TO</h2>
                 <h2>GRAD MANAGEMENT SYSTEM</h2>
                 <div className="google_btn" onClick={handleLoginApi}>
                     <div id="LoginButton"></div>
