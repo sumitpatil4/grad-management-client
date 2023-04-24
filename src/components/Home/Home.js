@@ -10,6 +10,7 @@ import Users from '../Admin/Users';
 import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
 import {Manager} from "../Contextapi/Managercontext"
+import {Intern} from "../Contextapi/InternContext"
 import Training from '../Training/Training';
 import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
@@ -106,13 +107,13 @@ const Home = () => {
         <h1>Leader ship</h1>
         </div>}
 
-        {internFlag && <div>
+        {internFlag && <Intern><div>
           <Navbar role={userrole}/>
           <Routes>
             <Route path="/intern" element={<InternsView />}/>
             <Route path="/aboutus" element={<About />}/>
           </Routes>
-          </div>}
+          </div></Intern>}
 
         {superadminflag && <Admin><div>
         <Navbar role={userrole}/>

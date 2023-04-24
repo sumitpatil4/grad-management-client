@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
-import './InternsView'
+import './InternsView.css';
+import InternContext from '../Contextapi/InternContext';
 
 const InternsView = () => {
+
+    const interncontext=useContext(InternContext);
+    const {internSchedulesList}=interncontext;
+
+
     const [scheduleList, setscheduleList] = useState([
         {
         // meetId: 1,
@@ -231,7 +237,7 @@ const InternsView = () => {
     <div className='scheduleDetails'>
     
     {isOpenDef && <div className='defText'>
-        <h1>Hi userName!</h1>
+        <h1>Hi user!</h1>
         </div>}
 
     {isOpenDets && <div className="sch_popup-boxd">
