@@ -21,6 +21,7 @@ const Navbar = (props) => {
   const [leadershipflag,setLeadershipflag]=useState(false);
   const [superadminflag,setSuperadminflag]=useState(false);
   const [userflag,setUserflag]=useState(false);
+  const [internFlag, setInternFlag] = useState(false);
 
   useEffect(()=>{
     if(props.role!=="")
@@ -29,6 +30,7 @@ const Navbar = (props) => {
         setLeadershipflag(false);
         setSuperadminflag(false);
         setUserflag(false);
+        setInternFlag(false);
         switch(props.role)
         {
           case 'ROLE_MANAGER':
@@ -42,6 +44,9 @@ const Navbar = (props) => {
             break;
           case 'ROLE_USER':
             setUserflag(true);
+            break;
+          case 'ROLE_INTERN':
+            setInternFlag(true);
             break;
         }
     }
@@ -73,6 +78,11 @@ const Navbar = (props) => {
               </div>
             </>
           }
+
+          {internFlag && <>
+            <NavLink className="navlinks" to={"/intern"}>Intern</NavLink>
+            <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
+          </>}
 
           {userflag && <>
             <NavLink className="navlinks" to={"/user"}>User</NavLink>

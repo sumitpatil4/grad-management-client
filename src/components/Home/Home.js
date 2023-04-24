@@ -10,10 +10,12 @@ import Users from '../Admin/Users';
 import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
 import {Manager} from "../Contextapi/Managercontext"
+import {Intern} from "../Contextapi/InternContext"
 import Training from '../Training/Training';
 import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
 import Schedules from '../Schedules/Schedules';
+import InternsView from '../InternsView/InternsView';
 
 const Home = () => {
   const usecontext=useContext(AuthContext);
@@ -21,6 +23,7 @@ const Home = () => {
   const [managerflag,setManagerflag]=useState(false);
   const [leadershipflag,setLeadershipflag]=useState(false);
   const [superadminflag,setSuperadminflag]=useState(false);
+  const [internFlag, setInternFlag] = useState(false);
   const [userflag,setUserflag]=useState(false);
   const navigate = useNavigate();
   
@@ -31,6 +34,7 @@ const Home = () => {
         setLeadershipflag(false);
         setSuperadminflag(false);
         setUserflag(false);
+        setInternFlag(false);
         // console.log(userrole);
         switch(userrole)
         {
@@ -45,6 +49,9 @@ const Home = () => {
             break;
           case 'ROLE_USER':
             setUserflag(true);
+            break;
+          case 'ROLE_INTERN':
+            setInternFlag(true);
             break;
         }
     }
@@ -67,6 +74,9 @@ const Home = () => {
             break;
           case 'ROLE_USER':
             navigate("/user",true);
+            break;
+          case 'ROLE_INTERN':
+            navigate("/intern",true);
             break;
         }
     }
@@ -91,8 +101,19 @@ const Home = () => {
 
         {leadershipflag && <div>
         <Navbar role={userrole}/>
+        <Routes>
+        <Route path="/aboutus" element={<About />}/>
+        </Routes>
         <h1>Leader ship</h1>
         </div>}
+
+        {internFlag && <Intern><div>
+          <Navbar role={userrole}/>
+          <Routes>
+            <Route path="/intern" element={<InternsView />}/>
+            <Route path="/aboutus" element={<About />}/>
+          </Routes>
+          </div></Intern>}
 
         {superadminflag && <Admin><div>
         <Navbar role={userrole}/>
