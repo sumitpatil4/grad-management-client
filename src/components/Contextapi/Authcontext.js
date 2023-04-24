@@ -60,6 +60,8 @@ export const Auth=(props)=>{
         localStorage.removeItem('accessToken');
         localStorage.removeItem('IDToken');
         localStorage.removeItem('userId');
+        localStorage.removeItem('calendarToken');
+        localStorage.removeItem('calendarTokenInit');
     }
 
     return (
