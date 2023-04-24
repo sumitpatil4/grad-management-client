@@ -35,25 +35,25 @@ const Loginwrapper = (props) => {
 
     function handleLoginApi(response){
         console.log(response);
-        updateuserrole("ROLE_INTERN");
-        handleLogin();
-        // axios.post("http://localhost:8090/user/login",null,{
-        //     headers:{
-        //         "Authorization":response.credential
-        //     }
-        // }).then((res)=>{
-        //     updateuserid(res.data.user.userId);
-        //     updateusername(res.data.user.uname);
-        //     updateusermail(res.data.user.email);
-        //     updateuserpicture(res.data.user.picture);
-        //     updateuserrole(res.data.user.role);
-        //     updateaccessToken(res.data.accessToken);
-        //     updateidToken(response.credential);
-        //     localStorage.setItem('accessToken',res.data.accessToken);
-        //     localStorage.setItem('IDToken',response.credential);
-        //     localStorage.setItem('userId',res.data.user.userId);
-        //     handleLogin();
-        // })
+        // updateuserrole("ROLE_INTERN");
+        // handleLogin();
+        axios.post("http://localhost:8090/user/login",null,{
+            headers:{
+                "Authorization":response.credential
+            }
+        }).then((res)=>{
+            updateuserid(res.data.user.userId);
+            updateusername(res.data.user.uname);
+            updateusermail(res.data.user.email);
+            updateuserpicture(res.data.user.picture);
+            updateuserrole(res.data.user.role);
+            updateaccessToken(res.data.accessToken);
+            updateidToken(response.credential);
+            localStorage.setItem('accessToken',res.data.accessToken);
+            localStorage.setItem('IDToken',response.credential);
+            localStorage.setItem('userId',res.data.user.userId);
+            handleLogin();
+        })
     }
 
     return (
