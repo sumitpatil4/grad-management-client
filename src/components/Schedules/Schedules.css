@@ -21,6 +21,7 @@
     background-color: rgb(14, 20, 30);
     color: white;
     justify-content: space-between;
+    padding-right: 5px;
 }
 .SchbuttonsWrapper{
     display: flex;
@@ -121,7 +122,7 @@
     overflow-y: scroll;
 }
 
-.sch_popupHeader h2 {
+.sch_popupHeader>h2 {
     position: sticky;
     text-align: center;
     padding: 14px 0;
@@ -290,8 +291,8 @@
 }
 
 
-input:invalid{
-    /* border:2px solid red; */
+input[type="time"]:invalid{
+    border:2px solid red;
 }
 input[type="time"]{
     outline: none;
@@ -311,6 +312,25 @@ input[type="time"]{
     font-style: italic;
     padding: 0px 5px;
     color: rgb(97, 97, 97);
+}
+
+.sch_calendarAccess{
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.accessBtn{
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
 }
 
 

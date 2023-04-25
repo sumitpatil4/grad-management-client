@@ -5,3 +5,15 @@
     justify-content: center;
     align-items: center;
 }
+
+.grp{
+    display: inline;
+}
+
+.scheduleDetails{
+    background-color: whitesmoke;
+}
+
+#popUp{
+    padding: 12.4px 0;
+}

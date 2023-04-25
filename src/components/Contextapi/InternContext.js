@@ -14,7 +14,7 @@ export const Intern=(props)=>{
         <InternContext.Provider        
             value={{
                 internSchedulesList,
-                updateinternSchedulesList
+                updateinternSchedulesList,
             }}
         >
             {props.children}

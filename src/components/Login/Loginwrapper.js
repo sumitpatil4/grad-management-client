@@ -11,7 +11,7 @@ const Loginwrapper = (props) => {
     useEffect(()=>{
         /* global google */
         google.accounts.id.initialize({
-            client_id:"325496617382-4cf1o7rh21492bh5m4qjsvr3iciv6o8q.apps.googleusercontent.com",
+            client_id:"994239778897-qed7j3c4duls2vsten5eaqj5vsi13na0.apps.googleusercontent.com",
             callback:handleLoginApi
         })
         google.accounts.id.renderButton(
@@ -42,6 +42,7 @@ const Loginwrapper = (props) => {
                 "Authorization":response.credential
             }
         }).then((res)=>{
+            console.log(res);
             updateuserid(res.data.user.userId);
             updateusername(res.data.user.uname);
             updateusermail(res.data.user.email);
