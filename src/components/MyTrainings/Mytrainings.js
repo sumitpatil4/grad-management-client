@@ -155,10 +155,10 @@ const navigate = useNavigate();
               <div className='inputContainer'>
                 <div className="input-group">
                   <label htmlFor="name">Name </label>
-                  <div>
+                  {/* <div> */}
                     <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
-                    <p id="val">{validMsg}</p>
-                  </div>                                                              
+                    {/* <p id="val">{validMsg}</p> */}
+                  {/* </div>                                                               */}
                 </div>
               </div>
               <div className='buttonsContainer'>

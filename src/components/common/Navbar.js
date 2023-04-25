@@ -14,13 +14,14 @@ const Navbar = (props) => {
 
   const usecontext=useContext(AuthContext);
   const admincontext=useContext(AdminContext);
-  const {notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
+  const {userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
 
   const [profileflag,setProfileflag]=useState(false);
   const [managerflag,setManagerflag]=useState(false);
   const [leadershipflag,setLeadershipflag]=useState(false);
   const [superadminflag,setSuperadminflag]=useState(false);
   const [userflag,setUserflag]=useState(false);
+  const [internFlag, setInternFlag] = useState(false);
 
   useEffect(()=>{
     if(props.role!=="")
@@ -29,6 +30,7 @@ const Navbar = (props) => {
         setLeadershipflag(false);
         setSuperadminflag(false);
         setUserflag(false);
+        setInternFlag(false);
         switch(props.role)
         {
           case 'ROLE_MANAGER':
@@ -42,6 +44,9 @@ const Navbar = (props) => {
             break;
           case 'ROLE_USER':
             setUserflag(true);
+            break;
+          case 'ROLE_INTERN':
+            setInternFlag(true);
             break;
         }
     }
@@ -75,6 +80,11 @@ const Navbar = (props) => {
             </>
           }
 
+          {internFlag && <>
+            <NavLink className="navlinks" to={"/intern"}>Intern</NavLink>
+            <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
+          </>}
+
           {userflag && <>
             <NavLink className="navlinks" to={"/user"}>User</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
@@ -82,7 +92,7 @@ const Navbar = (props) => {
           }
 
             <div onClick={()=>{profileflag ? setProfileflag(false):setProfileflag(true)}} className="profile_div">
-                <img className="profile_logo" src={profile} alt="profile_logo"/>
+                <img className="profile_logo" src={userpicture} alt="profile_logo"/>
             </div>
         </div>
     </nav>

@@ -22,7 +22,7 @@ export const Auth=(props)=>{
 
 
     const [isAuthenticated,setIsAuthenticated]=useState(false);
-    const [userid,setUserid]=useState("1001");
+    const [userid,setUserid]=useState("");
     const [username,setUsername]=useState("");
     const [usermail,setUsermail]=useState("");
     const [userpicture,setUserpicture]=useState("");
@@ -60,6 +60,8 @@ export const Auth=(props)=>{
         localStorage.removeItem('accessToken');
         localStorage.removeItem('IDToken');
         localStorage.removeItem('userId');
+        localStorage.removeItem('calendarToken');
+        localStorage.removeItem('calendarTokenInit');
     }
 
     return (

@@ -10,14 +10,25 @@ const User = () => {
     const [tempdesc,setTempdesc]=useState("manager");
     const [popUp,setPopUp] = useState(false);
     const usecontext=useContext(AuthContext);
-    const {userid,username}=usecontext;
+    const {userid,username, usermail}=usecontext;
 
-    const handleClick=()=>{
+    const handleClick=(e)=>{
         const req={
             notificationDesc:tempdesc,
             timestamp:null,
             requestedRole:temprole
         }
+        // shoot email to admin
+        // e.preventDefault();
+        // const obj = {
+        //   uname: username,
+        //   uemail: usermail,
+        //   utext: tempdesc
+        // }
+        // emailjs.sendForm('service_h96k4mu', 'template_s4ip9yp', obj, '8Tf01pDuE5h2H79Ry')
+        // .then((res) => {
+        //   console.log(res);
+        // }).catch(err => console.log(err))
         //API
         axios.post(`http://localhost:8090/notification/create/${userid}`,req)
         .then((res)=>{
@@ -56,7 +67,7 @@ const User = () => {
 
                 <div className="input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea id="name" onChange={(e)=>setTempdesc(e.target.value)} 
+                    <textarea name='message' id="name" onChange={(e)=>setTempdesc(e.target.value)} 
                     placeholder='Write a request description' required={true}></textarea>                                                        
                 </div>
             </div>

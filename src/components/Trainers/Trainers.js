@@ -2,8 +2,12 @@ import "./trainers.css";
 import React, { useState ,useContext, useEffect} from "react";
 import { FaSearch, FaUserAlt } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { FiShare } from "react-icons/fi";
+import { RiFileExcel2Fill } from "react-icons/ri";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 import axios from "axios";
 
 const Trainers = () => {
@@ -12,6 +16,7 @@ const Trainers = () => {
   const authcontext=useContext(AuthContext);
   const {userid}=authcontext;
   const [searchQuery, setSearchQuery] = useState("");
+  const [userList, setuserList] = useState([]);
   const [trainerTemp, settrainerTemp] = useState({});
   const [availabilityTemp, setAvailabilityTemp] = useState({});
   const [isOpenProfile, setIsOpenProfile] = useState(false);
@@ -30,6 +35,8 @@ const Trainers = () => {
   const [fromTime, setFromTime] = useState("");
   const [toTime, setToTime] = useState("");
   const [validMsg,setValidMsg] = useState("");
+  const [defaultEmailList,setdefaultEmailList] = useState([]);
+  const [isOpenSelectMail,setisOpenSelectMail] = useState(false);
   const [useeffectreload, setUseeffectreload] = useState(false)
   const [userAvailability, setUserAvailability] = useState([]);
   const [avlId,setAvlId] =useState("");
@@ -42,106 +49,29 @@ const Trainers = () => {
       console.log(res);
       updateTrainerList(res.data.trainers);
     });
+    axios.get(`http://localhost:8090/user/getUsers`).then((res)=>{
+      console.log(res.data);
+      setuserList(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
+      // console.log(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
+    })
   },[useeffectreload])
 
-  const [trainers, setTrainers] = useState([
+  const handleAddList=(chk,id)=>{
+    if(chk.target.checked)
     {
-      trainersid: 1,
-      trainersname: "Ashish Tripathy",
-      skill: "Python",
-      phone: "8630132801",
-      email: "ashish@gmail.com",
-    },
-    {
-      trainersid: 2,
-      trainersname: "Sumit Vasant Patil",
-      skill: "Java",
-      phone: "1234543212",
-      email: "sumit@gmail.com",
-    },
-    {
-      trainersid: 3,
-      trainersname: "Sai Krupananda",
-      skill: "C++",
-      phone: "1234567890",
-      email: "sai@gmail.com",
-    },
-    {
-      trainersid: 4,
-      trainersname: "Akriti Singh",
-      skill: "JavaScript",
-      phone: "1234567890",
-      email: "akriti@gmail.com",
-    },
-    {
-      trainersid: 4,
-      trainersname: "Akriti Singh",
-      skill: "JavaScript",
-      phone: "1234567890",
-      email: "akriti@gmail.com",
-      Date: "2001-20-02",
-      from_time: "10:00AM",
-      to_time: "05:00PM"
-    },{
-      trainersid: 4,
-      trainersname: "Akriti Singh",
-      skill: "JavaScript",
-      phone: "1234567890",
-      email: "akriti@gmail.com",
-      Date: "2001-20-02",
-      from_time: "10:00AM",
-      to_time: "05:00PM"
-    },
-  ]);
-
-  const [availability, setAvailabilityList] = useState([
-    {
-      trainersid: 1,
-      date: "2023-04-13",
-      fromTime: "10:00AM",
-      toTime: "11:00AM",
-    },
-    {
-      trainersid: 1,
-      date: "2023-04-14",
-      fromTime: "02:00PM",
-      toTime: "04:00PM",
-    },
-    {
-      trainersid: 1,
-      date: "2023-04-13",
-      fromTime: "10:00AM",
-      toTime: "11:00AM",
-    },
-    {
-      trainersid: 1,
-      date: "2023-04-13",
-      fromTime: "10:00AM",
-      toTime: "11:00AM",
-    },
-    {
-      trainersid: 1,
-      date: "2023-04-13",
-      fromTime: "10:00AM",
-      toTime: "11:00AM",
-    },
-    {
-      trainersid: 2,
-      date: "2023-04-14",
-      fromTime: "02:00PM",
-      toTime: "04:00PM",
-    },
-    {
-      trainersid: 2,
-      date: "2023-04-14",
-      fromTime: "02:00PM",
-      toTime: "04:00PM",
-    },
-  ]);
-
-  const filteredAvailability = availability.filter(
-    (item) => item.trainersid === selectedTrainerId
-  );
+        defaultEmailList.push(id);
+        setdefaultEmailList(defaultEmailList);
+        console.log(defaultEmailList)
+    }
+    else{
+        if(defaultEmailList.includes(id))
+        {
+            defaultEmailList.splice(defaultEmailList.indexOf(id), 1);
+            setdefaultEmailList(defaultEmailList);
+            console.log(defaultEmailList)
+        }
+    }
+  }
   
   const handleClick = () => {
       axios.post(`http://localhost:8090/trainer/createTrainer/${userid}`,{
@@ -190,6 +120,7 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
       console.log(res.data.availability);
       setUserAvailability(res.data.availability);
+      setUseeffectreload(!useeffectreload);
       console.log(userAvailability)
     })
   })
@@ -229,6 +160,7 @@ const handleEditSubmitAvailability = () => {
         .then((res)=>{
           console.log(res);
           handleProfile(trainerTemp);
+          setUseeffectreload(!useeffectreload);
         })
     }
     setIsOpenCon(false);
@@ -248,6 +180,7 @@ const handleEditSubmitAvailability = () => {
       console.log(res.data.availability);
       setUserAvailability(res.data.availability);
       console.log(userAvailability)
+      setUseeffectreload(!useeffectreload)
     })
   };
 
@@ -268,6 +201,7 @@ const handleEditSubmitAvailability = () => {
   }).then((res)=>{
     console.log(res);
     handleProfile(trainerTemp);
+    setUseeffectreload(!useeffectreload)
   })
   setIsAvaliabilty(false);
   setDate('');
@@ -303,6 +237,83 @@ const handleEditSubmitAvailability = () => {
       trainer.skill.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleMailSender=()=>{
+    dummyTrainersList = [];
+    for (let i = 0; i < trainerList.length; i++) {
+      let obj = {};
+      for (const key in trainerList[i]) {
+        if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
+          obj[key.toUpperCase()] = trainerList[i][key];
+        } else if (key === "availabilityList") {
+          let availabilities = [];
+          for (let j = 0; j < trainerList[i][key].length; j++) {
+            availabilities.push(
+              `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+            );
+          }
+          obj["AVAILABILITY LIST"] = availabilities.join("\n");
+        }
+      }
+      dummyTrainersList.push(obj);
+      console.log(dummyTrainersList);
+    }
+    const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataBlob = new Blob([excelBuffer], { type: "xlsx" });
+    console.log(dataBlob);
+    const formData = new FormData();
+    formData.append('file', dataBlob, 'TrainerFile');
+    console.log(formData);
+    console.log(defaultEmailList);
+    let mailStr="";
+    defaultEmailList.forEach((str,i)=>{
+      if(i===defaultEmailList.length-1)
+        mailStr+=str;
+      else mailStr+=str+",";
+    });
+    console.log(mailStr)
+    axios.post(`http://localhost:8090/trainer/sendMails`,formData,{
+      params:{
+        str:mailStr,
+      }
+    }).then((res)=>{
+      console.log(res);
+      setdefaultEmailList([]);
+    });
+    setisOpenSelectMail(false);
+  }
+
+  let dummyTrainersList = [];
+  const fileType = "xlsx";
+  const handleFileDownload=()=>{
+      dummyTrainersList = [];
+      for (let i = 0; i < trainerList.length; i++) {
+        let obj = {};
+        for (const key in trainerList[i]) {
+          if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
+            obj[key.toUpperCase()] = trainerList[i][key];
+          } else if (key === "availabilityList") {
+            let availabilities = [];
+            for (let j = 0; j < trainerList[i][key].length; j++) {
+              availabilities.push(
+                `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+              );
+            }
+            obj["AVAILABILITY LIST"] = availabilities.join("\n");
+          }
+        }
+        dummyTrainersList.push(obj);
+        console.log(dummyTrainersList);
+      }
+      const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: "xlsx" });
+      console.log(data);
+      FileSaver.saveAs(data, "TrainersFile" + ".xlsx");
+  }
+
   return (
     <>
     <div className='trainersHeader' >
@@ -316,6 +327,8 @@ const handleEditSubmitAvailability = () => {
       </div>
       <div>
         <div className="buttonContainer2">
+            <FiShare title="Share Excel File To Mails" className="shareIcon" onClick={()=>setisOpenSelectMail(true)}/>
+            <RiFileExcel2Fill title="Download Excel File" className="ExcelIcon shareIcon" onClick={handleFileDownload}/>
             <div className="search-bar2">
               <input
                 type="text"
@@ -788,6 +801,35 @@ const handleEditSubmitAvailability = () => {
           </div>
         </form>
       )}
+
+      {isOpenSelectMail && <form><div className='popupContainer'>
+                <div className="popup-boxd">
+                <div className='popupHeader'>
+                    <h2>Share Trainer File</h2>
+                </div>
+                <div className='inputContainer'>
+                    <h2>Select Mails</h2>
+                    <div className='internWrapperDiv'>
+                        {
+                            userList.map((e)=><div className='ListInternWrapper'>
+                                <form>
+                                    <input onClick={(x)=>handleAddList(x,e.email)} type="checkbox"/>
+                                </form>
+                                <p>{e.email}</p>
+                            </div>)
+                        }
+                    </div>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="button" className="submit-btn" onClick={()=>handleMailSender()}>
+                        Submit
+                    </button>
+                    <button type="button" className="cancel-btn" onClick={()=>{setisOpenSelectMail(false);setdefaultEmailList([]);}}>
+                        Cancel
+                    </button>
+                </div>
+                </div>
+            </div></form>}
 
       {isOpenCon && (
         <div className="popupContainer">

@@ -4,7 +4,7 @@
 }
 
 .scheduleContainer{
-    border-radius: 10px;
+    border-radius: 5px;
     height: 80vh;
     display: grid;
     grid-template-columns: 55% 45%;
@@ -21,10 +21,12 @@
     background-color: rgb(14, 20, 30);
     color: white;
     justify-content: space-between;
+    padding-right: 5px;
 }
 .SchbuttonsWrapper{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 .SchbuttonsWrapper>p{
     font-size: 20px;
@@ -38,15 +40,13 @@
 
 .schsearchWrapper{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .topicAdd{
     font-weight: 500;
     background-color: rgb(46, 200, 102);
     font-size: 18px;
-    margin: 14px 0px;
-    margin-left: 20px;
     padding: 4px 15px;
     border-radius: 3px;
     cursor: pointer;
@@ -58,10 +58,10 @@
 
 .schedules{
     padding:0px 10px;
-    height: 68vh;
+    height: 70.8vh;
     overflow-y: scroll;
     background-color: whitesmoke;
-    border-right:1px solid grey;
+    border-right:1px solid rgba(172, 172, 172, 0.678);
     /* border:1px solid blue; */
 }
 
@@ -106,7 +106,7 @@
 
 
 .scheduleDetails{
-    background-color: whitesmoke;
+    background-color: rgb(255, 255, 255);
 }
 
 /* new styling for popup */
@@ -118,11 +118,11 @@
   }
 
 .sch_input_box{
-    height:68vh;
+    height: 70.8vh;
     overflow-y: scroll;
 }
 
-.sch_popupHeader h2 {
+.sch_popupHeader>h2 {
     position: sticky;
     text-align: center;
     padding: 14px 0;
@@ -157,6 +157,15 @@
   border: 1px solid lightgrey;
 }
 
+
+#datePicker {
+    width:90%;
+    padding:10px 15px;
+    font-size: 17px;
+    border: 1px solid lightgrey;
+  }
+  
+
 .sch_input-group>p {
     font-style: italic;
   padding:0px 30px;
@@ -176,10 +185,32 @@
   border: 1px solid lightgrey;
 }
 
+.selectBtn{
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 3px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.noTrainers{
+    text-align: center;
+    font-weight: 500;
+    padding: 5px 0px;
+}
+
+.selectBtn:hover{
+    background-color: #27ae5fdc;
+}
+
 .sch_buttonsContainer{
   display: grid;
   grid-template-columns: repeat(2,1fr);
   width: inherit;
+  margin-top: 20px;
 }
 
 .sch_buttonsContainer>button{
@@ -217,10 +248,90 @@
     font-weight: 500;
 }
 
+.avlWrapper{
+    padding: 20px 0px;
+}
+
+.avlContainer>h4{
+    color: rgb(88, 88, 88);
+    font-weight: 500;
+    padding-top: 15px;
+}
+
+.avl_tile{
+    background-color: white;
+    margin: 10px 0px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 5px;
+    cursor: pointer;
+}
+
+.avl_tile:hover{
+    transform: scale(1.01);
+}
+
+
 .avl_List{
     padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 10% 30% 30% 30%;
 }
+
+.avl_List>p{
+    font-weight: 400;
+    width: inherit;
+    word-break: break-all;
+    padding-top: 3px;
+}
+
+.avl_List>input[type="time"]{
+    margin:0px 3px;
+    margin-top: 4px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+
+input[type="time"]:invalid{
+    border:2px solid red;
+}
+input[type="time"]{
+    outline: none;
+}
+.avl_List>input{
+    padding: 7px;
+}
+
+.selectedGroups{
+    font-weight: 500;
+    padding: 0px 25px;
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+.selectedGroups>span{
+    font-style: italic;
+    padding: 0px 5px;
+    color: rgb(97, 97, 97);
+}
+
+.sch_calendarAccess{
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.accessBtn{
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
 
 /* end of popup styling */
