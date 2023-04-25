@@ -2,67 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
 import './InternsView.css';
 import InternContext from '../Contextapi/InternContext';
+import AuthContext from '../Contextapi/Authcontext';
+import axios from 'axios';
+
 
 const InternsView = () => {
 
     const interncontext=useContext(InternContext);
-    const {internSchedulesList}=interncontext;
-
-
-    const [scheduleList, setscheduleList] = useState([
-        {
-        // meetId: 1,
-        topicName: "Python",
-        date: "2020-02-20",
-        fromTime: "10:00",
-        toTime: "05:00PM",
-        trainerName: "Tanuja",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet1",
-            assessmentLink: "assessment2",
-            feedbackLink: "feedback3",
-            descriptionLink: "description4"
-        },
-        {
-        // meetId: 2,
-        topicName: "Java",
-        date: "2021-02-20",
-        fromTime: "10:00",
-        toTime: "05:00PM",
-        trainerName: "Nikita",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet2",
-            assessmentLink: "assessment1",
-            feedbackLink: "feedback2",
-            descriptionLink: "description2"
-        },
-        {
-        // meetId: 3,
-        topicName: "C++",
-        date: "2023-04-19",
-        fromTime: "10:00",
-        toTime: "05:00PM",
-        trainerName: "Devki",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet3",
-            assessmentLink: "assessment3",
-            feedbackLink: "feedback1",
-            descriptionLink: "description3"
-        },
-        {
-        // meetId: 4,
-        topicName: "JavaScript",
-        date: "2024-04-15",
-        fromTime: "10:00",
-        toTime: "05:00PM",
-        trainerName: "Jyothi",
-            // meetGroups: defaultGroupList,
-            meetLink: "meet4",
-            assessmentLink: "assessment4",
-            feedbackLink: "feedback4",
-            descriptionLink: "description1"
-        },
-    ]);
+    const {internSchedulesList,updateinternSchedulesList}=interncontext;
+    const authContext = useContext(AuthContext);
+    const {username,usermail,userid} = authContext;
+    const [scheduleList, setscheduleList] = useState([]);
     const [past, setPast] = useState([]);
     const [present, setPresent] = useState([]);
     const [future, setFuture] = useState([]);
@@ -97,15 +47,19 @@ const InternsView = () => {
     }
 
     useEffect(() => {
-        scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
-        const currDate = getCurrentDate(); //To get the Current Date
+        axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
+        .then((res)=>{
+            console.log(res);
+            updateinternSchedulesList(res.data.meeting);
+            scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
+            const currDate = getCurrentDate(); //To get the Current Date
 
-        setPresent(scheduleList.filter(obj => obj.date === currDate));
+            setPresent(res.data.meeting.filter(obj => obj.date === currDate));
 
-        setPast(scheduleList.filter(obj => compareDates(obj.date, currDate) === -1));
+            setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1));
 
-        setFuture(scheduleList.filter(obj => compareDates(obj.date, currDate) === 1));
-
+            setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1));
+        })
     }, [useEffectReload])
 
     const activeClass=(e)=>{
@@ -147,16 +101,28 @@ const InternsView = () => {
         handleDetsSch();
     }
 
+    const filteredList = (list)=>{
+        console.log(searchQuery)
+        console.log(list)
+        const filteredList = list.filter(
+            (meet) =>
+              meet.topic.topicName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              meet.trainer.trainerName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        console.log(filteredList)
+        return filteredList;
+    }
+
 
   return (<>
-    <h2 className='scheduleHeader'>Schedules</h2>
+    <h2 className='scheduleHeader'>Your&nbsp;Schedules</h2>
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">
             <div className='scheduleNavbar'>
                 <div className='SchbuttonsWrapper'>
                     <p className='headerText active' onClick={(e) => {handleClickToday(e)}}>Today</p>
-                    <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                     <p className='headerText' onClick={(e) => {handleClickUpcoming(e)}}>Upcoming</p>
+                    <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                 </div>
 
             <div className="schsearchWrapper">
@@ -178,17 +144,34 @@ const InternsView = () => {
         </div>
 
         <div className='schedules'>            
-            {pastCheck && past.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
-                    <h3>{e.topicName}</h3>
-                    <p>Trainer&nbsp;-&nbsp;{e.trainerName}</p>
-                    {/* {e.batchList.map((batch,i)=>{
+                <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    <p className='grp'>Groups&nbsp;-&nbsp;</p>
+                    {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
                             <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
-                    })} */}
-                    <p>Groups</p>
+                    })}
+                    <div>Date&nbsp;-&nbsp;{e.date}</div>
+                    <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
+                </div>
+            </div>
+            )}
+
+            {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+                <div className='schedulesText'>
+                    <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    <p className='grp'>Groups&nbsp;-&nbsp;</p>
+                    {e.batchList.map((batch,i)=>{
+                        return(
+                            // <span>{batch.batchName}&nbsp;</span>
+                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                        )
+                    })}
                     <div>Date&nbsp;-&nbsp;{e.date}</div>
                     <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
@@ -196,39 +179,20 @@ const InternsView = () => {
             </div>
             )}
 
-            {presentCheck && present.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {futureCheck && (searchQuery!==""?filteredList(future):future).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
-                    <h3>{e.topicName}</h3>
-                    <p>Trainer&nbsp;-&nbsp;{e.trainerName}</p>
-                    {/* {e.batchList.map((batch,i)=>{
+                <h3>{e.topic.topicName}</h3>
+                    <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
+                    <p className='grp'>Groups&nbsp;-&nbsp;</p>
+                    {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
                             <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
-                    })} */}
-                    <p>Groups</p>
+                    })}
                     <div>Date&nbsp;-&nbsp;{e.date}</div>
                     <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
-
-            </div>
-            )}
-
-            {futureCheck && future.map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
-                <div className='schedulesText'>
-                    <h3>{e.topicName}</h3>
-                    <p>Trainer&nbsp;-&nbsp;{e.trainerName}</p>
-                    {/* {e.batchList.map((batch,i)=>{
-                        return(
-                            // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
-                        )
-                    })} */}
-                    <p>Groups</p>
-                    <div>Date&nbsp;-&nbsp;{e.date}</div>
-                    <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
-                </div>
-
             </div>
             )}
             
@@ -237,75 +201,83 @@ const InternsView = () => {
     <div className='scheduleDetails'>
     
     {isOpenDef && <div className='defText'>
-        <h1>Hi user!</h1>
+        <h1>Hi {username}!</h1>
         </div>}
 
     {isOpenDets && <div className="sch_popup-boxd">
-            <div className='sch_popupHeader'>
-                <h2>Details Of schedule</h2>
+    <div className='sch_popupHeader'>
+                <h2 id="popUp">Details Of schedule</h2>
             </div>
             <div className="sch_input_box">
-                <div className='sch_inputContainer'>
-                    <div className="sch_input-group">
-                        <label>Topic </label>                                                            
-                        <p>{viewList.topicName}</p>                                                            
-                    </div>
+            <div className='sch_inputContainer'>
+                <div className="sch_input-group">
+                    <label>Topic </label>                                                            
+                    <p>{viewList.topic.topicName}</p>                                                            
+                </div>
 
-                    <div className="sch_input-group">
-                        <label> Date </label>                                                          
-                        <p>{viewList.date}</p> 
-                    </div>
+                <div className="sch_input-group">
+                    <label> Date </label>                                                          
+                    <p>{viewList.date}</p> 
+                </div>
 
-                    <div className="sch_input-group">
-                        <label> Start Time: </label>                                                           
-                        <p>{viewList.fromTime}</p>                     
-                    </div>
+                <div className="sch_input-group">
+                    <label> Start Time: </label>                                                           
+                    <p>{viewList.fromTime}</p>                     
+                </div>
 
-                    <div className="sch_input-group">
-                        <label> End Time: </label>                                                           
-                        <p>{viewList.toTime}</p>                     
-                    </div>
+                <div className="sch_input-group">
+                    <label> End Time: </label>                                                           
+                    <p>{viewList.toTime}</p>                     
+                </div>
 
-                    <div className="sch_input-group">
-                        <label>Trainer </label>                                                            
-                        <p>{viewList.trainerName}</p>                                                             
-                    </div>
+                <div className="sch_input-group">
+                    <label>Trainer </label>                                                            
+                    <p>{viewList.trainer.trainerName}</p>                                                             
+                </div>
 
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Meet Link</label>
-            
-                        <p>{viewList.meetingLink}</p>                                                              
-                    </div>
+                <div className="sch_input-group">
+                    <label htmlFor="name">Meet Link</label>
+        
+                    <p>{viewList.meetingLink}</p>                                                              
+                </div>
 
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Assessment Link</label>
-                        <p>{viewList.assessmentLink}</p>                                                              
-                    </div>
+                <div className="sch_input-group">
+                    <label htmlFor="name">Assessment Link</label>
+                    <p>{viewList.assessmentLink}</p>                                                              
+                </div>
 
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Feedback Link</label>
-                        {/* <p>{feedback}</p>                                                             */}
-                        <p>{viewList.feedbackLink}</p>                                                              
-                    </div>
+                <div className="sch_input-group">
+                    <label htmlFor="name">Feedback Link</label>
+                    {/* <p>{feedback}</p>                                                             */}
+                    <p>{viewList.feedbackLink}</p>                                                              
+                </div>
 
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Description</label>
-                        {/* <p>{description}</p>                                                             */}
-                        <p>{viewList.meetingDesc}</p>                                                             
-                    </div>
+                <div className="sch_input-group">
+                    <label htmlFor="name">Description</label>
+                    {/* <p>{description}</p>                                                             */}
+                    <p>{viewList.meetingDesc}</p>                                                             
+                </div>
 
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Selected Groups</label>
-                        {/* <div className='sch_internWrapperDiv'>
-                            {
-                                viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
-                                    <p>{e.batchName}</p>
-                                </div>)
-                            }
-                        </div>                                                            */}
-                    </div>
+                <div className="sch_input-group">
+                    <label htmlFor="name">Selected Groups</label>
+                    <div className='sch_internWrapperDiv'>
+                        {
+                            viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                                <p>{e.batchName}</p>
+                            </div>)
+                        }
+                    </div>                                                           
                 </div>
             </div>
+            {/* <div className='sch_buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {handleEditSch();}}>
+                    Edit
+                </button>
+                <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();}}>
+                    Close
+                </button>
+            </div> */}
+        </div>
         </div>
         }
     </div>

@@ -123,6 +123,8 @@ const Schedules = () => {
     const handleGetTrainersByDate = () => {
         // setDate(date);
         setavlList([]);
+        setCheckedArr([]);
+        setfinalList([]);
         const arr=dateArr.split(" ");
         console.log(arr)
         let newarr=[];
@@ -162,83 +164,80 @@ const Schedules = () => {
             })
     }
 
-    const handleAvlCheck=(r,e,i,j)=>{
-        console.log("finallist",finalList)
-        let inp1 = document.getElementById(`time${i}${j}0`);
-        let inp2 = document.getElementById(`time${i}${j}1`);
-        console.log(inp1.checkValidity())
-        console.log(inp2.checkValidity());
+    const handleAvlCheck=(r,e,i,j,k)=>{
+        let inp1 = document.getElementById(`time${i}${j}${k}0`);
+        let inp2 = document.getElementById(`time${i}${j}${k}1`);
         if(inp1.checkValidity() && inp2.checkValidity()){
-            document.getElementById(`check${i}${j}`).disabled=false;
+            document.getElementById(`check${i}${j}${k}`).disabled=false;
         }
         else{
-            console.log("removing",r)
             setfinalList(finalList.filter((meet)=>{
                 return meet.availablityId!==r.availabilityId
             }))
-            setCheckedArr(checkedArr.filter(avl=>avl!=r));
-            document.getElementById(`check${i}${j}`).checked=false;
-            document.getElementById(`check${i}${j}`).disabled=true;
+            setCheckedArr(checkedArr.filter(avl=>avl.availabilityId!=r.availabilityId));
+            document.getElementById(`check${i}${j}${k}`).checked=false;
+            document.getElementById(`check${i}${j}${k}`).disabled=true;
         }
     }
 
-    const handleAvlCheckBox=(r,e,i,j,row)=>{
-        console.log("H")
-        console.log(r)
+    const handleAvlCheckBox=(r,e,i,j,k,row)=>{
+        console.log("Adding",r)
+        console.log("Final List",finalList)
+        console.log("Checked",checkedArr)
         setInstance(e);
-        console.log(checkedArr)
+        let from = document.getElementById(`time${i}${j}${k}0`).value;
+        let to = document.getElementById(`time${i}${j}${k}1`).value;
+        const temp_r = {...r}
+        temp_r.fromTime=from;
+        temp_r.toTime=to;
+        console.log(temp_r,"--->",r)
         if(e.target.checked){
             if(checkedArr.length==0){
-                setCheckedArr([...checkedArr,r])
-                handleTrainerSelect(e,r,row)
+                setCheckedArr([...checkedArr,temp_r])
+                handleTrainerSelect(e,temp_r,row,i,j,k)
             }
             else{
                 const filteredArr = checkedArr.filter(avl=>avl.date==r.date);
                 let flag=0;
                 filteredArr.forEach(avl=>{
-                    if(r.fromTime>=avl.fromTime && r.fromTime<avl.toTime){
+                    if(temp_r.fromTime>=avl.fromTime && temp_r.fromTime<avl.toTime){
                         flag=1;
                     }
-                    if(r.toTime>avl.fromTime && r.toTime<=avl.toTime){
+                    if(temp_r.toTime>avl.fromTime && temp_r.toTime<=avl.toTime){
                         flag=1;
                     }
-                    if(r.fromTime<=avl.fromTime && r.toTime>=avl.toTime){
+                    if(temp_r.fromTime<=avl.fromTime && temp_r.toTime>=avl.toTime){
                         flag=1;
                     }
                 })
-                console.log(flag)
                 if(flag!=1){
-                    setCheckedArr([...checkedArr,r]);
-                    handleTrainerSelect(e,r,row)
+                    setCheckedArr([...checkedArr,temp_r]);
+                    handleTrainerSelect(e,temp_r,row,i,j,k)
                 }
                 else{
-                    document.getElementById(`check${i}${j}`).checked=false;
+                    document.getElementById(`check${i}${j}${k}`).checked=false;
                     setcheckFlag(true);
                 }
             }
         }
         else{
-            console.log("row",r);
             e.target.parentElement.nextSibling.innerHTML="";
             setfinalList(finalList.filter((meet)=>{
                 return meet.availablityId!==r.availabilityId;
             }))
-            console.log("uncheck",finalList)
-            setCheckedArr(checkedArr.filter(avl=>avl!=r));
+            setCheckedArr(checkedArr.filter(avl=>avl.availabilityId!=r.availabilityId));
         }
     }
 
-    const handleTrainerSelect=(e,r,row)=>{
+    const handleTrainerSelect=(e,r,row,i,j,k)=>{
         if(e.target.checked){
-            console.log("iam here")
-            console.log(r,row,topic)
-            console.log(defaultGroupList)
-            console.log(scheduleList)
+            let from = document.getElementById(`time${i}${j}${k}0`).value;
+            let to = document.getElementById(`time${i}${j}${k}1`).value;
             const obj={
                 "meetingDesc":description,
                 "date":r.date,
-                "fromTime":r.fromTime,
-                "toTime":r.toTime,
+                "fromTime":from,
+                "toTime":to,
                 "meetingLink":"link",
                 "feedbackLink":"link",
                 "assessmentLink":"link",
@@ -249,13 +248,27 @@ const Schedules = () => {
                 "batchList":null
             }
             setcurrentTrainerInstance(obj);
-            
+            console.log(obj)
             const list=scheduleList.filter((temp)=>{
-                if(temp.date.localeCompare(r.date)===0 && ((r.toTime>=temp.fromTime) || (temp.toTime>=r.fromTime)))
-                    return true;
+                // if(temp.date.localeCompare(r.date)===0 && ((r.toTime>=temp.fromTime) || (temp.toTime>=r.fromTime)))
+                //     return true;
+                // else return false;
+
+                if(temp.date.localeCompare(r.date)===0)
+                {
+                    if(from>=temp.fromTime && from<temp.toTime){
+                        return true;
+                    }
+                    if(to>temp.fromTime && to<=temp.toTime){
+                        return true;
+                    }
+                    if(from<=temp.fromTime && to>=temp.toTime){
+                        return true;
+                    }
+                    return false;
+                }
                 else return false;
             })
-            console.log(list)
             const arr=[];
             list.forEach((tmp)=>{
                 tmp.batchList.forEach((b)=>{
@@ -263,9 +276,7 @@ const Schedules = () => {
                         arr.push(b.batchId);
                 })
             })
-            console.log(arr)
             const availGrps=defaultGroupList.filter((temp)=>!arr.includes(temp.batchId) && (temp.batchName!=defBatchName))
-            console.log(availGrps)
             tempGroupList.length=0;
             availGrps.forEach((x)=>tempGroupList.push(x));
             settempGroupList(tempGroupList);
@@ -312,12 +323,13 @@ const Schedules = () => {
     }
 
     const handleEachAddList=(chk,id)=>{
-        console.log("Called")
         if(chk.target.checked)
         {
-            defaultGroupIdList.push(id);
-            setdefaultGroupIdList(defaultGroupIdList);
-            console.log(defaultGroupIdList);
+            if(!defaultGroupIdList.includes(id)){
+                defaultGroupIdList.push(id);
+                setdefaultGroupIdList(defaultGroupIdList);
+                console.log(defaultGroupIdList);
+            }
         }
         else{
             if(defaultGroupIdList.includes(id))
@@ -332,11 +344,11 @@ const Schedules = () => {
     
     const handleFromTimeChange = (e) => {
         // setFromTime(fromTime);
-        setFromTime(e.target.value);
+        setFromTime(e);
     }
     
     const handleToTimeChange = (e) => {
-        setToTime(e.target.value);
+        setToTime(e);
     }
 
     const handleAddList=(chk,id)=>{
@@ -513,7 +525,9 @@ const Schedules = () => {
     };
 
     const newhandleClick = () => {
-        setCheckedArr([]);
+        // setCheckedArr([]);
+        // console.log(finalList)
+        // return;
         finalList.forEach((lst,i)=>{
             console.log(lst)
             axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
@@ -622,7 +636,6 @@ const Schedules = () => {
 
     const handleSelectAll = (e)=>{
         const boxes = document.getElementsByName('group_checkbox');
-        console.log(boxes);
         boxes.forEach((box)=>{
             handleEachAddList(e,parseInt(box.id));
             box.checked = e.target.checked;
@@ -821,7 +834,6 @@ const Schedules = () => {
         )
         console.log(filteredList)
         return filteredList;
-
     }
 
     return (<>
@@ -995,17 +1007,17 @@ const Schedules = () => {
                     selectTrainerCheck && (
                         <>
                         <div className='avlWrapper'>
-                        {avlList.map((list)=>
+                        {avlList.map((list,k)=>
                         <div className='avlContainer'>
                             <h4>{list.date}</h4>
                             <div>
                                 {list.trainer.length!==0 ? list.trainer.map((row,i)=>
                                         row.availabilityList.map((r,j)=><div className='avl_tile'>
                                             <div className='avl_List'>
-                                                <input onClick={(e)=>handleAvlCheckBox(r,e,i,j,row)} id={`check${i}${j}`} type='checkbox'/>
+                                                <input onClick={(e)=>handleAvlCheckBox(r,e,i,j,k,row)} id={`check${i}${j}${k}`} type='checkbox'/>
                                                 <p onClick={()=>console.log("hi")}>{row.trainerName}</p>
-                                                <input id={`time${i}${j}0`} onChange={(e)=>handleAvlCheck(r,e,i,j)} min={r.fromTime} max={r.toTime} defaultValue={r.fromTime} step="1" type="time"/>
-                                                <input id={`time${i}${j}1`} onChange={(e)=>handleAvlCheck(r,e,i,j)} min={r.fromTime} max={r.toTime} defaultValue={r.toTime} step="1" type="time"/>
+                                                <input id={`time${i}${j}${k}0`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.fromTime} step="1" type="time"/>
+                                                <input id={`time${i}${j}${k}1`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.toTime} step="1" type="time"/>
                                             </div>
                                             <div className='selectedGroups' id={`grps${r.availabilityId}`}></div>
                                         </div>
@@ -1230,10 +1242,15 @@ const Schedules = () => {
 
         <div className='inputContainer'>
             <div className='internWrapperDiv'>
-            <div className='ListInternWrapper'>
-                <input id='group_checkbox' onChange={(e)=>handleSelectAll(e)} type="checkbox"/>
-                <p>{train.trainingName} - All</p>
-            </div>    
+            
+                {tempGroupList.length!=0?(
+                <div className='ListInternWrapper'>
+                    <input id='group_checkbox' onChange={(e)=>handleSelectAll(e)} type="checkbox"/>
+                    <p>{train.trainingName} - All</p> 
+                </div>)
+                :<div className='ListInternWrapper'>
+                    <p>No Groups Available</p> 
+                </div>}  
                 {
                     tempGroupList.map((e)=><div className='ListInternWrapper'>
                         <form>

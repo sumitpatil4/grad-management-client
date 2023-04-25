@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import "./user.css"
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
-import emailjs from '@emailjs/browser';
 
 
 const User = () => {
