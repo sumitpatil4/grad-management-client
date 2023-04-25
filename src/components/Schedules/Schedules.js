@@ -462,7 +462,7 @@ const Schedules = () => {
                         interArr.push({'email':intern.email});
                     })
                     console.log(interArr);
-                    // interArr.push({'email':meet.trainer.email})
+                    interArr.push({'email':meet.trainer.email})
                     interArr.push({'email':usermail})
                     const TEST_EVENT = {
                         'summary': meet.topic.topicName,
@@ -538,7 +538,7 @@ const Schedules = () => {
                 res.data.interns.forEach((intern)=>{
                     interArr.push({'email':intern.email});
                 })
-                // interArr.push({'email':lst.trainerId.email})
+                interArr.push({'email':lst.trainerId.email})
                 interArr.push({'email':usermail});
                 console.log(interArr);
                 const EVENT = {
