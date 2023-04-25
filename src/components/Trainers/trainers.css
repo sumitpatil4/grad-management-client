@@ -112,6 +112,23 @@
     transform : scale(1.2);
   }
 
+  .shareIcon{
+    font-size: 25px;
+    padding: 5px 0px;
+    margin: 0px 10px;
+    cursor: pointer;
+    color: rgb(70, 46, 255);
+  }
+
+  .ExcelIcon{
+    color: rgb(29, 111, 66);
+    margin-right: 20px;
+  }
+
+  .shareIcon:hover{
+    transform : scale(1.1);
+  }
+
 
   .trainerContainer
   {
@@ -137,7 +154,7 @@
   margin: 0px auto;
   width: 70vw;
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 15% 85%;
   margin-top: 20px;
 }
 
