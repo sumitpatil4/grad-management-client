@@ -118,6 +118,8 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
+      setUseeffectreload(!useeffectreload);
+      console.log(userAvailability)
     })
   })
   setIsEditAvailability(false);
@@ -156,6 +158,7 @@ const handleEditSubmitAvailability = () => {
         .then((res)=>{
 
           handleProfile(trainerTemp);
+          setUseeffectreload(!useeffectreload);
         })
     }
     setIsOpenCon(false);
@@ -174,6 +177,7 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
+      console.log(userAvailability)
     })
   };
 
@@ -193,6 +197,7 @@ const handleEditSubmitAvailability = () => {
       "toTime":toTime
   }).then((res)=>{
     handleProfile(trainerTemp);
+    setUseeffectreload(!useeffectreload)
   })
   setIsAvaliabilty(false);
   setDate('');
