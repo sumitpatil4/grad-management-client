@@ -34,7 +34,6 @@ const Loginwrapper = (props) => {
           updateuserrole}=usecontext;
 
     function handleLoginApi(response){
-        console.log(response);
         // updateuserrole("ROLE_INTERN");
         // handleLogin();
         axios.post("http://localhost:8090/user/login",null,{
@@ -42,7 +41,6 @@ const Loginwrapper = (props) => {
                 "Authorization":response.credential
             }
         }).then((res)=>{
-            console.log(res);
             updateuserid(res.data.user.userId);
             updateusername(res.data.user.uname);
             updateusermail(res.data.user.email);

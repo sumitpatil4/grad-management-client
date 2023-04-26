@@ -43,9 +43,7 @@ export const Auth=(props)=>{
     const updatenotificationBadge=(e)=>setNotificationBadge(e);
 
     const handleLogin=()=>{
-        // if(username!=="" && userid!=="" && usermail!=="" && userpicture!=="")
             setIsAuthenticated(true);
-        // else return;
     }
 
     const handleLogout=()=>{

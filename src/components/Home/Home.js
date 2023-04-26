@@ -35,7 +35,6 @@ const Home = () => {
         setSuperadminflag(false);
         setUserflag(false);
         setInternFlag(false);
-        // console.log(userrole);
         switch(userrole)
         {
           case 'ROLE_MANAGER':
@@ -55,7 +54,6 @@ const Home = () => {
             break;
         }
     }
-    // console.log(usecontext)
     if(!isAuthenticated)
     {
       navigate("/",true)

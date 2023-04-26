@@ -25,9 +25,7 @@ const Mytrainings = () => {
   useEffect(()=>{
     axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
     .then((res)=>{
-      console.log(res)
       updatetrainingsList(res.data.training);
-      console.log(trainingsList)
     })
   },[useeffectreload])
 
@@ -44,7 +42,6 @@ const Mytrainings = () => {
     }
     else{
       setIsOpen(false);
-      // setArr(current => [...current, temp]);
 
       axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
         "trainingName":temp
@@ -58,23 +55,17 @@ const Mytrainings = () => {
 
 // handle click event of the Remove button
 const handleRem =  (i) => {
-  // console.log(i);
   setArrId(i);
   setIsOpenCon(true);
 }
 
 const handleRemoveClick = (i) => {
-  // const list = [...arr];
-  // console.log(arrId);
-  // list.splice(index, 1);
-  // setArr(list);
   axios.delete(`http://localhost:8090/training/deleteTraining/${trainingsList[i].trainingId}`)
   .then((res)=>{
     console.log(res);
     setUseeffectreload(!useeffectreload);
   })
   setIsOpenCon(false);
-  // console.log(list);
 };
 
 
@@ -86,15 +77,10 @@ const handleEdit = (i) => {
 }
 
 const handleEditClick = (i) => {
-  // const list = [...arr];
-  // console.log(arrId);
-  // list[index] = temp;
-  // setArr(list);
   axios.put("http://localhost:8090/training/updateTraining",{
     "trainingId":trainingsList[i].trainingId,
     "trainingName":temp
   }).then((res)=>{
-    console.log(res);
     setUseeffectreload(!useeffectreload)
   })
 
@@ -103,7 +89,6 @@ const handleEditClick = (i) => {
 };
 const navigate = useNavigate();
   const navigatetotrainings=(e)=>{
-    console.log(e)
     updateTrain(e);
     navigate("/mytrainings/training",true);
   }
@@ -147,7 +132,7 @@ const navigate = useNavigate();
         </div>
         </div>
         }
-        {isOpen && <form><div className='popupContainer'>
+        {isOpen && <form onSubmit={handleClick}><div className='popupContainer'>
             <div className="popup-boxd">
               <div className='popupHeader'>
                 <h2>Add New Training</h2>
@@ -155,14 +140,11 @@ const navigate = useNavigate();
               <div className='inputContainer'>
                 <div className="input-group">
                   <label htmlFor="name">Name </label>
-                  {/* <div> */}
                     <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
-                    {/* <p id="val">{validMsg}</p> */}
-                  {/* </div>                                                               */}
                 </div>
               </div>
               <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={handleClick}>
+                <button type="submit" className="submit-btn" >
                  Submit
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
@@ -172,7 +154,8 @@ const navigate = useNavigate();
             </div>
         </div></form>}
 
-      {isOpenEdit && <form><div className='popupContainer'>
+      {isOpenEdit && <form onSubmit={() => handleEditClick(arrId)}>
+        <div className='popupContainer'>
         <div className="popup-boxd">
           <div className='popupHeader'>
             <h2>Enter New Training Name</h2>
@@ -182,14 +165,14 @@ const navigate = useNavigate();
           <div className="input-group">
             <label htmlFor="name">Name </label>
             <div>
-              <input type="text" id="name" onChange={handleChange} value={temp} />
+              <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
               <p id="val">{validMsg}</p>     
             </div>                                                         
           </div>
         </div>
 
         <div className='buttonsContainer'>
-          <button type="submit" className="submit-btn" onClick={() => handleEditClick(arrId)}>
+          <button type="submit" className="submit-btn" >
             Submit
           </button>
           <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false);setTemp('');}}>
