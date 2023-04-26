@@ -245,16 +245,21 @@ const handleEditSubmitAvailability = () => {
         if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
           obj[key.toUpperCase()] = trainerList[i][key];
         } else if (key === "availabilityList") {
-          let availabilities = [];
+          // let availabilities = [];
           for (let j = 0; j < trainerList[i][key].length; j++) {
-            availabilities.push(
-              `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-            );
+            // availabilities.push(
+            //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+            // );
+            obj["DATE"] = trainerList[i][key][j].date;
+            obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+            obj["TO TIME"] = trainerList[i][key][j].toTime;
+            dummyTrainersList.push(obj);
           }
-          obj["AVAILABILITY LIST"] = availabilities.join("\n");
+          
+          
         }
       }
-      dummyTrainersList.push(obj);
+      
       console.log(dummyTrainersList);
     }
     const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
@@ -294,16 +299,21 @@ const handleEditSubmitAvailability = () => {
           if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
             obj[key.toUpperCase()] = trainerList[i][key];
           } else if (key === "availabilityList") {
-            let availabilities = [];
+            // let availabilities = [];
             for (let j = 0; j < trainerList[i][key].length; j++) {
-              availabilities.push(
-                `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-              );
+              // availabilities.push(
+              //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+              // );
+              obj["DATE"] = trainerList[i][key][j].date ;
+              obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+              obj["TO TIME"] = trainerList[i][key][j].toTime;
+              dummyTrainersList.push(obj);
             }
-            obj["AVAILABILITY LIST"] = availabilities.join("\n");
+            
+            
           }
         }
-        dummyTrainersList.push(obj);
+        
         console.log(dummyTrainersList);
       }
       const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
