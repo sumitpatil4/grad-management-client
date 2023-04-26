@@ -21,16 +21,7 @@ const User = () => {
             requestedRole:temprole
         }
         // shoot email to admin
-        // e.preventDefault();
-        // const obj = {
-        //   uname: username,
-        //   uemail: usermail,
-        //   utext: tempdesc
-        // }
-        // emailjs.sendForm('service_h96k4mu', 'template_s4ip9yp', obj, '8Tf01pDuE5h2H79Ry')
-        // .then((res) => {
-        //   console.log(res);
-        // }).catch(err => console.log(err))
+
         //API
         axios.post(`http://localhost:8090/notification/create/${userid}`,req)
         .then((res)=>{
@@ -58,7 +49,7 @@ const User = () => {
                 <p onClick={()=>setIsOpen(true)}>Request&nbsp;Access</p>
             </div>
         </div>
-        {isOpen && <form><div className='popupContainer'>
+        {isOpen && <form onSubmit={handleClick}><div className='popupContainer'>
             <div className="popup-boxd">
             <div className='popupHeader'>
             <h2>Request Dialog</h2>
@@ -81,14 +72,14 @@ const User = () => {
                 </div>
             </div>
 
-            <div className='buttonsContainer'><button type="submit" className="submit-btn" onClick={handleClick}>
+            <div className='buttonsContainer'><button type="submit" className="submit-btn">
                 Submit
             </button>
             <button type="reset" className="cancel-btn" onClick={() => setIsOpen(false)}>
                 Cancel
             </button>
             </div>
-            </div>
+          </div>
         </div></form>}
 
         {popUp && (

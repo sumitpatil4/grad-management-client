@@ -178,11 +178,11 @@ const Users = () => {
     
 
     return (
-        <div className='employeeContainer'>
-      <div className="trainernavbar">
-        <div></div>
-        <div>
-          <div className="buttonContainer2">
+      <div className='employeeContainer'>
+        <div className="trainernavbar">
+          
+          <div>
+            <div className="buttonContainer2">
               <div className="search-bar2">
                 <input
                   type="text"
@@ -194,9 +194,9 @@ const Users = () => {
               <div type="submit" className="searchdiv" onClick={handleSearchInputChange}>
                 <FaSearch className="searchIcon"/>
               </div>
+            </div>
           </div>
         </div>
-      </div>
         <table>
             <thead>
                 <tr>
@@ -214,7 +214,6 @@ const Users = () => {
                         <td>{displayRole(e.role)}</td>
                         <td>
                             <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
-                            {/* <MdDelete onClick={()=>handleDeletePopup(e.userid)} className='del_icon'/> */}
                         </td>
                     </tr>)
                 }
@@ -235,7 +234,6 @@ const Users = () => {
                   <div className='notification_time'>{e.timestamp.substring(0,10)}&nbsp;&nbsp;{e.timestamp.substring(11,19)}</div>
                 </div> 
               </div>)}
-              {/* <h1>notification</h1> */}
           </div>
         }
 
@@ -244,19 +242,20 @@ const Users = () => {
             <div className='popupHeader'>
               <h2>Are you sure to delete this user?</h2>
             </div>
-              <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => handleDelete(userId)}>
-                  Yes
-                </button>
-                <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
-                  No
-                </button>
-              </div>
+            <div className='buttonsContainer'>
+              <button type="submit" className="submit-btn" onClick={() => handleDelete(userId)}>
+                Yes
+              </button>
+              <button type="reset" className="cancel-btn" onClick={() => setIsOpenCon(false)}>
+                No
+              </button>
+            </div>
           </div>
         </div>
         }
 
-        {isOpenEdit && <form><div className='popupContainer' onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
+        {isOpenEdit && <form onSubmit={() => handleEditClick(userTemp)}>
+          <div className='popupContainer' onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
           <div className="popup-boxd" onClick={(e)=>e.stopPropagation()}>
             <div className='popupHeader'>
               <h2>Edit Role For User</h2>
@@ -291,7 +290,7 @@ const Users = () => {
                     <option value={"ROLE_LEADER"}>Leadership</option>
                     <option value={"ROLE_USER"}>User</option>
                   </select>                                                            
-                </div> 
+                  </div> 
                 </>:<>
                 <div className="input-group">
                     <label>Name </label>
@@ -316,14 +315,14 @@ const Users = () => {
               </div>
 
             {!notificationEditCheck ? (<div className='buttonsContainer'>
-              <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
+              <button type="submit" className="submit-btn" >
                 Submit
               </button>
               <button type="reset" className="cancel-btn" onClick={() => {setIsOpenEdit(false); setNotificationEditCheck(false);}}>
                 Cancel
               </button>
             </div>):(<div className='buttonsContainer'>
-              <button type="submit" className="submit-btn" onClick={() => handleEditClick(userTemp)}>
+              <button type="submit" className="submit-btn" >
                 Approve
               </button>
               <button type="reset" id="reject-btn" className="cancel-btn" onClick={() => handleRejectClick(userTemp)}>

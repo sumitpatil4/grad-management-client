@@ -49,7 +49,6 @@ const InternsView = () => {
     useEffect(() => {
         axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
         .then((res)=>{
-            console.log(res);
             updateinternSchedulesList(res.data.meeting);
             scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
             const currDate = getCurrentDate(); //To get the Current Date
@@ -97,19 +96,15 @@ const InternsView = () => {
 
     const handleView = (e, i) => {
         setViewList(e);
-        console.log(e)
         handleDetsSch();
     }
 
     const filteredList = (list)=>{
-        console.log(searchQuery)
-        console.log(list)
         const filteredList = list.filter(
             (meet) =>
               meet.topic.topicName.toLowerCase().includes(searchQuery.toLowerCase()) ||
               meet.trainer.trainerName.toLowerCase().includes(searchQuery.toLowerCase())
         )
-        console.log(filteredList)
         return filteredList;
     }
 
@@ -198,86 +193,77 @@ const InternsView = () => {
             
         </div> 
     </div>
+
     <div className='scheduleDetails'>
     
-    {isOpenDef && <div className='defText'>
-        <h1>Hi {username}!</h1>
+        {isOpenDef && <div className='defText'>
+            <h1>Hi {username}!</h1>
         </div>}
 
-    {isOpenDets && <div className="sch_popup-boxd">
-    <div className='sch_popupHeader'>
+        {isOpenDets && <div className="sch_popup-boxd">
+            <div className='sch_popupHeader'>
                 <h2 id="popUp">Details Of schedule</h2>
             </div>
             <div className="sch_input_box">
-            <div className='sch_inputContainer'>
-                <div className="sch_input-group">
-                    <label>Topic </label>                                                            
-                    <p>{viewList.topic.topicName}</p>                                                            
-                </div>
+                <div className='sch_inputContainer'>
+                    <div className="sch_input-group">
+                        <label>Topic </label>                                                            
+                        <p>{viewList.topic.topicName}</p>                                                            
+                    </div>
 
-                <div className="sch_input-group">
-                    <label> Date </label>                                                          
-                    <p>{viewList.date}</p> 
-                </div>
+                    <div className="sch_input-group">
+                        <label> Date </label>                                                          
+                        <p>{viewList.date}</p> 
+                    </div>
 
-                <div className="sch_input-group">
-                    <label> Start Time: </label>                                                           
-                    <p>{viewList.fromTime}</p>                     
-                </div>
+                    <div className="sch_input-group">
+                        <label> Start Time: </label>                                                           
+                        <p>{viewList.fromTime}</p>                     
+                    </div>
 
-                <div className="sch_input-group">
-                    <label> End Time: </label>                                                           
-                    <p>{viewList.toTime}</p>                     
-                </div>
+                    <div className="sch_input-group">
+                        <label> End Time: </label>                                                           
+                        <p>{viewList.toTime}</p>                     
+                    </div>
 
-                <div className="sch_input-group">
-                    <label>Trainer </label>                                                            
-                    <p>{viewList.trainer.trainerName}</p>                                                             
-                </div>
+                    <div className="sch_input-group">
+                        <label>Trainer </label>                                                            
+                        <p>{viewList.trainer.trainerName}</p>                                                             
+                    </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Meet Link</label>
-        
-                    <p>{viewList.meetingLink}</p>                                                              
-                </div>
+                    <div className="sch_input-group">
+                        <label htmlFor="name">Meet Link</label>
+            
+                        <p>{viewList.meetingLink}</p>                                                              
+                    </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Assessment Link</label>
-                    <p>{viewList.assessmentLink}</p>                                                              
-                </div>
+                    <div className="sch_input-group">
+                        <label htmlFor="name">Assessment Link</label>
+                        <p>{viewList.assessmentLink}</p>                                                              
+                    </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Feedback Link</label>
-                    {/* <p>{feedback}</p>                                                             */}
-                    <p>{viewList.feedbackLink}</p>                                                              
-                </div>
+                    <div className="sch_input-group">
+                        <label htmlFor="name">Feedback Link</label>
+                        <p>{viewList.feedbackLink}</p>                                                              
+                    </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Description</label>
-                    {/* <p>{description}</p>                                                             */}
-                    <p>{viewList.meetingDesc}</p>                                                             
-                </div>
+                    <div className="sch_input-group">
+                        <label htmlFor="name">Description</label>
+                        <p>{viewList.meetingDesc}</p>                                                             
+                    </div>
 
-                <div className="sch_input-group">
-                    <label htmlFor="name">Selected Groups</label>
-                    <div className='sch_internWrapperDiv'>
-                        {
-                            viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
-                                <p>{e.batchName}</p>
-                            </div>)
-                        }
-                    </div>                                                           
+                    <div className="sch_input-group">
+                        <label htmlFor="name">Selected Groups</label>
+                        <div className='sch_internWrapperDiv'>
+                            {
+                                viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                                    <p>{e.batchName}</p>
+                                </div>)
+                            }
+                        </div>                                                           
+                    </div>
                 </div>
             </div>
-            {/* <div className='sch_buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => {handleEditSch();}}>
-                    Edit
-                </button>
-                <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();}}>
-                    Close
-                </button>
-            </div> */}
-        </div>
         </div>
         }
     </div>
