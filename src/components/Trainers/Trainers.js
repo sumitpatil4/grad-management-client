@@ -119,7 +119,6 @@ const handleEditSubmitAvailability = () => {
 
       setUserAvailability(res.data.availability);
       setUseeffectreload(!useeffectreload);
-      console.log(userAvailability)
     })
   })
   setIsEditAvailability(false);
@@ -177,7 +176,6 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
-      console.log(userAvailability)
     })
   };
 
