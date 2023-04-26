@@ -27,17 +27,9 @@ const Mytrainings = () => {
   useEffect(()=>{
     axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
     .then((res)=>{
-      if(res.status===200){
-        console.log(res)
-        updatetrainingsList(res.data.training);
-        console.log(trainingsList)
-      }
-      else{
-        setResMessage(res.data.message);
-        setResPopUp(true);
-      }
+      updatetrainingsList(res.data.training);
     }).catch((err)=>{
-        setResMessage(err.message);
+        setResMessage(err.response.data.message);
         setResPopUp(true);
     });
   },[useeffectreload])
@@ -59,15 +51,9 @@ const Mytrainings = () => {
       axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
         "trainingName":temp
        }).then((res)=>{
-        if(res.status===200){
-          setUseeffectreload(!useeffectreload)
-        }
-        else{
-          setResMessage(res.data.message);
-          setResPopUp(true);
-        }
+         setUseeffectreload(!useeffectreload)
       }).catch((err)=>{
-          setResMessage(err.message);
+          setResMessage(err.response.data.message);
           setResPopUp(true);
       });
       setTemp('');
@@ -83,10 +69,12 @@ const handleRem =  (i) => {
 const handleRemoveClick = (i) => {
   axios.delete(`http://localhost:8090/training/deleteTraining/${trainingsList[i].trainingId}`)
   .then((res)=>{
-    console.log(res);
     setUseeffectreload(!useeffectreload);
-  })
-  setIsOpenCon(false);
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+  });
+    setIsOpenCon(false);
 };
 
 
@@ -103,7 +91,10 @@ const handleEditClick = (i) => {
     "trainingName":temp
   }).then((res)=>{
     setUseeffectreload(!useeffectreload)
-  })
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+  });
 
   setIsOpenEdit(false);
   setTemp('');
@@ -119,7 +110,7 @@ const navigate = useNavigate();
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}}> 
+        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>

@@ -24,6 +24,8 @@ const InternsView = () => {
     const [isOpenDets, setIsOpenDets] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [useEffectReload, setUseEffectReload] = useState(false);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -52,13 +54,13 @@ const InternsView = () => {
             updateinternSchedulesList(res.data.meeting);
             scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
             const currDate = getCurrentDate(); //To get the Current Date
-
             setPresent(res.data.meeting.filter(obj => obj.date === currDate));
-
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1));
-
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1));
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }, [useEffectReload])
 
     const activeClass=(e)=>{
@@ -139,7 +141,7 @@ const InternsView = () => {
         </div>
 
         <div className='schedules'>            
-            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                 <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -147,7 +149,7 @@ const InternsView = () => {
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     <div>Date&nbsp;-&nbsp;{e.date}</div>
@@ -156,7 +158,7 @@ const InternsView = () => {
             </div>
             )}
 
-            {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -164,7 +166,7 @@ const InternsView = () => {
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     <div>Date&nbsp;-&nbsp;{e.date}</div>
@@ -174,7 +176,7 @@ const InternsView = () => {
             </div>
             )}
 
-            {futureCheck && (searchQuery!==""?filteredList(future):future).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {futureCheck && (searchQuery!==""?filteredList(future):future).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                 <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -182,7 +184,7 @@ const InternsView = () => {
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     <div>Date&nbsp;-&nbsp;{e.date}</div>
@@ -256,7 +258,7 @@ const InternsView = () => {
                         <label htmlFor="name">Selected Groups</label>
                         <div className='sch_internWrapperDiv'>
                             {
-                                viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                                viewList.batchList.map((e,i)=><div key={i} className='sch_ListInternWrapper'>
                                     <p>{e.batchName}</p>
                                 </div>)
                             }
@@ -268,6 +270,21 @@ const InternsView = () => {
         }
     </div>
     </div>
+    {resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
     </>
   )
 }

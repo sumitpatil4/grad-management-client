@@ -26,18 +26,20 @@ const Topic = () => {
     const [compTemp,setCompTemp] = useState(null);
     const [remainingPopup,setRemainingPopup] = useState(false);
     const [topicMeetings,setTopicMeetings] = useState([]);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
 
     useEffect(()=>{
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
-
           updateTopicsList(res.data.topicList);
-
           setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
           setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
-
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     },[useeffectreload])
     const activeClass=(e)=>{
         let btns = document.getElementsByClassName("topicBtns");
@@ -57,17 +59,21 @@ const Topic = () => {
 
     axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/0`)
     .then((res)=>{
-
       setUseeffectreload(!useeffectreload);
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
     setCompletePopup(false);
   };
   const handleTopicUncompletion = () => {
     axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/1`)
     .then((res)=>{
-
       setUseeffectreload(!useeffectreload);
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
     setRemainingPopup(false);
   };
   const handleAdd = () =>{
@@ -76,28 +82,34 @@ const Topic = () => {
         "topicName":topicName
     })
       .then((res)=>{
-
         setUseeffectreload(!useeffectreload);
-      })
+      }).catch((err)=>{
+          setResMessage(err.response.data.message);
+          setResPopUp(true);
+      });
       setAddPopup(false);
   }
   const handleEditSubmit = ()=>{
 
     axios.put(`http://localhost:8090/topic/updateTopic/${editTopic.topicId}`,{
       "topicName":editTopic.topicName
-  }).then((res)=>{
-
-    setUseeffectreload(!useeffectreload);
-    setShowEditForm(false);
-  })
+    }).then((res)=>{
+      setUseeffectreload(!useeffectreload);
+      setShowEditForm(false);
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
   }
   const handleDelete = () =>{
     axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`)
     .then((res)=>{
-
       setUseeffectreload(!useeffectreload);
       setDeletePopup(false);
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
   }
 
 
@@ -109,6 +121,7 @@ const Topic = () => {
   }
 
     return (
+      <>
       <div className="topicContainer">
         <div className="topicWrapper">
           <h2>Topics</h2>
@@ -151,8 +164,8 @@ const Topic = () => {
           <div className="topicsdiv">
 
             {completedCheck &&
-              (searchQuery !== "" ? compltedfilteredList : completedList).map((t) => (
-                  <div className="topicbar">
+              (searchQuery !== "" ? compltedfilteredList : completedList).map((t,i) => (
+                  <div className="topicbar" key={i}>
                     <form>
                       <input
                         type="checkbox"
@@ -181,8 +194,8 @@ const Topic = () => {
               )}
 
             {!completedCheck &&
-              (searchQuery !== "" ? unCompltedfilteredList : reamainingList).map((t) => (
-                <div className="topicbar">
+              (searchQuery !== "" ? unCompltedfilteredList : reamainingList).map((t,i) => (
+                <div className="topicbar" key={i}>
                   <form>
                     <input
                       type="checkbox"
@@ -404,6 +417,23 @@ const Topic = () => {
           </form>
         )}
       </div>
+
+      {resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
+      </>
     );
 }
 export default Topic;

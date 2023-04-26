@@ -40,20 +40,25 @@ const Trainers = () => {
   const [useeffectreload, setUseeffectreload] = useState(false)
   const [userAvailability, setUserAvailability] = useState([]);
   const [avlId,setAvlId] =useState("");
+  const [resPopUp,setResPopUp] = useState(false);
+  const [resMessage,setResMessage] = useState("");
 
 
   const [selectedTrainerId, setSelectedTrainerId] = useState(2);
   useEffect(()=>{
     axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
     .then((res)=>{
-
       updateTrainerList(res.data.trainers);
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
     });
     axios.get(`http://localhost:8090/user/getUsers`).then((res)=>{
-
       setuserList(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
-
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
   },[useeffectreload])
 
   const handleAddList=(chk,id)=>{
@@ -77,10 +82,12 @@ const Trainers = () => {
         "email":Email,
         "phoneNumber":Phone,
         "skill":Skill
-    }).then((res)=>{
-
+      }).then((res)=>{
         setUseeffectreload(!useeffectreload)
-      })
+      }).catch((err)=>{
+          setResMessage(err.response.data.message);
+          setResPopUp(true);
+      });
       setIsAdd(false);
       setName('');
       setSkill('');
@@ -95,10 +102,12 @@ const Trainers = () => {
       "email":Email,
       "phoneNumber":Phone,
       "skill":Skill
-  }).then((res)=>{
-
+    }).then((res)=>{
       setUseeffectreload(!useeffectreload)
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
     setIsEdit(false);
     setName('');
     setSkill('');
@@ -113,14 +122,18 @@ const handleEditSubmitAvailability = () => {
     "fromTime":fromTime,
     "toTime":toTime,
 }).then((res)=>{
-
     axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
     .then((res)=>{
-
       setUserAvailability(res.data.availability);
       setUseeffectreload(!useeffectreload);
-    })
-  })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+  });
   setIsEditAvailability(false);
   setDate('');
   setFromTime('');
@@ -148,17 +161,21 @@ const handleEditSubmitAvailability = () => {
     if(!isOpenProfile){
       axios.delete(`http://localhost:8090/trainer/deleteTrainer/${trainerId}`)
         .then((res)=>{
-
           setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }
     else{
       axios.delete(`http://localhost:8090/availability/deleteAvailability/${avlId}`)
         .then((res)=>{
-
           handleProfile(trainerTemp);
           setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }
     setIsOpenCon(false);
     setIsOpenAvlDel(false);
@@ -174,9 +191,11 @@ const handleEditSubmitAvailability = () => {
     settrainerTemp(trainer);
     axios.get(`http://localhost:8090/availability/getAvailability/${trainer.trainerId}`)
     .then((res)=>{
-
       setUserAvailability(res.data.availability);
-    })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
   };
 
   const handleAddPopup = () => {
@@ -196,7 +215,10 @@ const handleEditSubmitAvailability = () => {
   }).then((res)=>{
     handleProfile(trainerTemp);
     setUseeffectreload(!useeffectreload)
-  })
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+  });
   setIsAvaliabilty(false);
   setDate('');
   setFromTime('');
@@ -271,8 +293,10 @@ const handleEditSubmitAvailability = () => {
         str:mailStr,
       }
     }).then((res)=>{
-
       setdefaultEmailList([]);
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
     });
     setisOpenSelectMail(false);
   }
@@ -347,8 +371,8 @@ const handleEditSubmitAvailability = () => {
             </tr>
           </thead>
           <tbody>
-            {(searchQuery !== "" ? filteredTrainers : trainerList).map((trainer) => (
-                <tr>
+            {(searchQuery !== "" ? filteredTrainers : trainerList).map((trainer,i) => (
+                <tr key={i}>
                   <td>{trainer.trainerName}</td>
                   <td>{trainer.skill}</td>
                   <td>
@@ -599,7 +623,7 @@ const handleEditSubmitAvailability = () => {
                   <label>Name </label>
                   <input
                     type="text"
-                    Value={trainerTemp.trainerName}
+                    value={trainerTemp.trainerName}
                     onChange={(event) => {setName(event.target.value); }}
                     required={true}
                     />
@@ -703,8 +727,8 @@ const handleEditSubmitAvailability = () => {
                       </tr>
                     </thead>
                     <tbody className="popupbody">
-                      {userAvailability.map((item) => (
-                        <tr className="popuptr">
+                      {userAvailability.map((item,i) => (
+                        <tr className="popuptr" key={i}>
                           <td className="popuptd">{item.date}</td>
                           <td className="">{item.fromTime}</td>
                           <td className="popuptd">{item.toTime}</td>
@@ -748,7 +772,7 @@ const handleEditSubmitAvailability = () => {
                     <h2>Select Mails</h2>
                     <div className='internWrapperDiv'>
                         {
-                            userList.map((e)=><div className='ListInternWrapper'>
+                            userList.map((e,i)=><div className='ListInternWrapper' key={i}>
                                 <form>
                                     <input onClick={(x)=>handleAddList(x,e.email)} type="checkbox" required={true}/>
                                 </form>
@@ -793,6 +817,22 @@ const handleEditSubmitAvailability = () => {
           </div>
         </div>
       )}
+
+      {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </>
   );
 };

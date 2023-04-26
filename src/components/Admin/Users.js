@@ -41,28 +41,16 @@ const Users = () => {
             "userId":emp.user.userId
           })
           .then((res)=>{
-            if(res.status==200){
-              setUseeffectreload(!useeffectreload)
-            }
-            else{
-              setResMessage(res.data.message);
-              setResPopUp(true);
-            }
+            setUseeffectreload(!useeffectreload)
           }).catch((err)=>{
-              setResMessage(err.message);
+              setResMessage(err.response.data.message);
               setResPopUp(true);
           });
           axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
           .then((res)=>{
-            if(res.status===200){
-              setUseeffectreload(useeffectreload)
-            }
-            else{
-              setResMessage(res.data.message);
-              setResPopUp(true);
-            }
-        }).catch((err)=>{
-            setResMessage(err.message);
+            setUseeffectreload(useeffectreload)
+          }).catch((err)=>{
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         });
         }
@@ -71,15 +59,9 @@ const Users = () => {
             "userId":emp.userId
           })
           .then((res)=>{
-            if(res.status===200){
-              setUseeffectreload(!useeffectreload)
-            }
-            else{
-              setResMessage(res.data.message);
-              setResPopUp(true);
-            }
+            setUseeffectreload(!useeffectreload)
           }).catch((err)=>{
-              setResMessage(err.message);
+              setResMessage(err.response.data.message);
               setResPopUp(true);
           });
         }
@@ -90,15 +72,9 @@ const Users = () => {
     const handleRejectClick=(emp)=>{
       axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
           .then((res)=>{
-            if(res.status==200){
-              setUseeffectreload(!useeffectreload)
-            }
-            else{
-              setResMessage(res.data.message);
-              setResPopUp(true);
-            }
+            setUseeffectreload(!useeffectreload)
         }).catch((err)=>{
-            setResMessage(err.message);
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         });
         setIsOpenEdit(false);
@@ -109,35 +85,23 @@ const Users = () => {
       useEffect(()=>{
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
-          if(res.status===200){
-            updatenotificationList(res.data.notificationList);
-            if(res.data.notificationList.length > 0){
-              updatenotificationBadge(true);
-            }
-            else{
-              updatenotificationBadge(false);
-            }
+          updatenotificationList(res.data.notificationList);
+          if(res.data.notificationList.length > 0){
+            updatenotificationBadge(true);
           }
           else{
-            setResMessage(res.data.message);
-            setResPopUp(true);
+            updatenotificationBadge(false);
           }
         }).catch((err)=>{
-            setResMessage(err.message);
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         });
 
         axios.get("http://localhost:8090/user/getUsers")
         .then((res)=>{
-          if(res.status===200){
-            updateuserList(res.data.userList)
-          }
-          else{
-            setResMessage(res.data.message);
-            setResPopUp(true);
-          }
+          updateuserList(res.data.userList)
         }).catch((err)=>{
-            setResMessage(err.message);
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         });
       },[useeffectreload])
@@ -180,7 +144,7 @@ const Users = () => {
     return (
       <div className='employeeContainer'>
         <div className="trainernavbar">
-          
+          <div></div>
           <div>
             <div className="buttonContainer2">
               <div className="search-bar2">

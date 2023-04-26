@@ -25,15 +25,9 @@ const User = () => {
         //API
         axios.post(`http://localhost:8090/notification/create/${userid}`,req)
         .then((res)=>{
-            if(res.status===200){
-              setPopUp(true);
-            }
-            else{
-              setResMessage(res.data.message);
-              setResPopUp(true);
-            }
+            setPopUp(true);
         }).catch((err)=>{
-            setResMessage(err.message);
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         });
         setIsOpen(false);

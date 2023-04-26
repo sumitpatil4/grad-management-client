@@ -66,6 +66,8 @@ const Schedules = () => {
     const [defBatchName,setDefBatchName] = useState(train.trainingName+"_"+train.trainingId);
     const [calendarFlag,setCalendarFlag] = useState(true);
     const [calendarPopUp,setCalendarPopUp] = useState(false);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const handleCreateSch=()=>{
         setIsOpen(true);
@@ -135,7 +137,10 @@ const Schedules = () => {
                     return new Date(a.date)-new Date(b.date);
                 }));
                 setselectTrainerCheck(true)
-            })
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+            });
     }
 
     const handleAvlCheck=(r,e,i,j,k)=>{
@@ -334,7 +339,10 @@ const Schedules = () => {
                 }
                 defaultGroupIdList.push(id);
                 setdefaultGroupIdList(defaultGroupIdList);
-            })
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+            });
         }
         else{
             setGrpAvlValueArr(grpAvlValueArr.filter(val=>val!=id));
@@ -398,7 +406,6 @@ const Schedules = () => {
                     res.data.interns.forEach((intern)=>{
                         interArr.push({'email':intern.email});
                     })
-                    console.log(interArr);
                     interArr.push({'email':meet.trainer.email})
                     interArr.push({'email':usermail})
                     const TEST_EVENT = {
@@ -441,7 +448,10 @@ const Schedules = () => {
                         return data.json();
                     }).then((data) => {
                         alert('event created check google calendar')
-                    })
+                    }).catch((err)=>{
+                        setResMessage(err.response.data.message);
+                        setResPopUp(true);
+                    });
                     setUseEffectReload(!useEffectReload)
 
                     setCheckedArr([]);
@@ -532,9 +542,18 @@ const Schedules = () => {
                         if(i===finalList.length-1){
                             setPopUp(true);
                         }
-                    })
-                })
-            })  
+                    }).catch((err)=>{
+                        setResMessage(err.response.data.message);
+                        setResPopUp(true);
+                    });
+                }).catch((err)=>{
+                    setResMessage(err.response.data.message);
+                    setResPopUp(true);
+                });
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+            });  
         })
     };
 
@@ -602,8 +621,14 @@ const Schedules = () => {
                 setIsOpenCon(false);
                 setUseEffectReload(!useEffectReload);
                 handleCreateSch();
-            })
-        })
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+            });
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     };
 
     const getCurrentDate = () => {
@@ -636,19 +661,31 @@ const Schedules = () => {
             setPresent(res.data.meeting.filter(obj => obj.date == currDate));
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == -1));
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == 1));
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
             setTopicList(res.data.topicList)
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
         .then((res)=>{
             setTrainerList(res.data.trainers)
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
         .then((res)=>{
             setdefaultGroupList(res.data.batch);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }, [useEffectReload])
 
     useEffect(()=>{
@@ -775,14 +812,14 @@ const Schedules = () => {
         </div>
 
         <div className='schedules'>            
-            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -804,14 +841,14 @@ const Schedules = () => {
             )}
 
             {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => 
-            <div className='schedule' onClick={() => handleView(e, i)}>
+            <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -834,14 +871,14 @@ const Schedules = () => {
 
             {futureCheck && 
             
-            (searchQuery!==""?filteredList(future):future).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            (searchQuery!==""?filteredList(future):future).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -876,10 +913,10 @@ const Schedules = () => {
                         setTopic(e.target.value.substring(0,e.target.value.indexOf('_')));
                         setTopicName(e.target.value.substring(e.target.value.indexOf('_')+1))
                     }} required={true}>
-                    <option selected={true} hidden={true} disabled={true}>Select one Topic </option>
+                    <option selected={true} hidden={true} disabled={true} value="">Select one Topic</option>
                         {topicList.filter(topic=>topic.completed==false).map((e,i)=>{
                             return(
-                            <option value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
+                            <option key={i} value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
                             )
                         })}
                         </select>                                                            
@@ -908,14 +945,14 @@ const Schedules = () => {
                         <>
                         <div className='avlWrapper'>
                         {avlList.map((list,k)=>
-                        <div className='avlContainer'>
+                        <div className='avlContainer' key={k}>
                             <h4>{list.date}</h4>
                             <div>
                                 {list.trainer.length!==0 ? list.trainer.map((row,i)=>
-                                        row.availabilityList.map((r,j)=><div className='avl_tile'>
+                                        row.availabilityList.map((r,j)=><div className='avl_tile' key={j}>
                                             <div className='avl_List'>
                                                 <input onClick={(e)=>handleAvlCheckBox(r,e,i,j,k,row)} id={`check${i}${j}${k}`} type='checkbox'/>
-                                                <p onClick={()=>console.log("hi")}>{row.trainerName}</p>
+                                                <p>{row.trainerName}</p>
                                                 <input id={`time${i}${j}${k}0`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.fromTime} step="1" type="time"/>
                                                 <input id={`time${i}${j}${k}1`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.toTime} step="1" type="time"/>
                                             </div>
@@ -955,10 +992,10 @@ const Schedules = () => {
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic</label>
-                    <select onClick={(e)=>console.log(e.target.value)} value={topic} required={true}>
+                    <select value={topic} required={true}>
                     {topicList.map((e,i)=>{
                             return(
-                            <option value={e.topicName}>{e.topicName}</option>
+                            <option key={i} value={e.topicName}>{e.topicName}</option>
                             )
                         })}
                     </select>                                                         
@@ -984,7 +1021,7 @@ const Schedules = () => {
                     <select onClick={(e)=>setTrainer(e.target.value)} defaultValue={trainer} required={true}>
                     {trainerList.map((e,i)=>{
                             return(
-                            <option value={e.trainerName}>{e.trainerName}</option>
+                            <option key={i} value={e.trainerName}>{e.trainerName}</option>
                             )
                         })}
                     </select>                                                            
@@ -1014,7 +1051,7 @@ const Schedules = () => {
                     <label htmlFor="name">Select Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            defaultGroupList.map((e)=><div className='sch_ListInternWrapper'>
+                            defaultGroupList.map((e,i)=><div key={i} className='sch_ListInternWrapper'>
                                 <form>
                                     <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
                                 </form>
@@ -1095,7 +1132,7 @@ const Schedules = () => {
                     <label htmlFor="name">Selected Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                            viewList.batchList.map((e,i)=><div key={i} className='sch_ListInternWrapper'>
                                 <p>{e.batchName}</p>
                             </div>)
                         }
@@ -1152,7 +1189,7 @@ const Schedules = () => {
                     <p>No Groups Available</p> 
                 </div>}  
                 {
-                    tempGroupList.map((e)=><div className='ListInternWrapper'>
+                    tempGroupList.map((e,i)=><div key={i} className='ListInternWrapper'>
                         <form>
                             <input name='group_checkbox' id={e.batchId} onChange={(x)=>handleEachAddList(x,e.batchId)} type="checkbox"/>
                         </form>
@@ -1214,6 +1251,21 @@ const Schedules = () => {
         </div>
     </div>
 </div>}
+{resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
 </>     
     )
 }

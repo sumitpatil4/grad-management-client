@@ -37,6 +37,8 @@ const Interns = () => {
     const [useeffectreload2, setUseeffectreload2] = useState(false)
     const [useeffectreload3, setUseeffectreload3] = useState(false)
     const batchName = `${train.trainingName}_${train.trainingId}`;
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -77,7 +79,10 @@ const Interns = () => {
         .then((res)=>{
             updateinternsList(res.data.intern);
             setUseeffectreload2(!useeffectreload2);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     },[useeffectreload,defaultCheck,useeffectreload1])
 
     useEffect(()=>{
@@ -95,8 +100,10 @@ const Interns = () => {
             setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
             updategroupsList(newBatchList);
             setUseeffectreload3(!useeffectreload3);
-        })
-        
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     },[useeffectreload,defaultCheck,useeffectreload2])
 
     useEffect(()=>{
@@ -123,7 +130,10 @@ const Interns = () => {
         })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setisOpenNewGroup(false);
         setNewGroup("");
     }
@@ -139,7 +149,10 @@ const Interns = () => {
         })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         //call the update group name api using above data
         setisOpenEditGroup(false);
         setNewGroup("");
@@ -155,7 +168,10 @@ const Interns = () => {
         }).
         then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setGroupName(train.trainingName)
         setDefaultCheck(true);
         defactiveClass()
@@ -168,7 +184,10 @@ const Interns = () => {
         axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`)
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setisOpenDeleteForGroup(false)
     }
 
@@ -184,7 +203,10 @@ const Interns = () => {
             "phoneNumber":phoneno
         }).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         //call add api here with above data
         setisOpenDefaultAddIntern(false);
     }
@@ -210,7 +232,10 @@ const Interns = () => {
             "phoneNumber":phoneno
         }).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setisOpenEditIntern(false);
     }
 
@@ -223,7 +248,10 @@ const Interns = () => {
         //call delete api here with above data
         axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setisOpenDeleteIntern(false);
     }
 
@@ -256,7 +284,10 @@ const Interns = () => {
             setdefaultInternIdList([]);
             setUseeffectreload1(!useeffectreload1);
             setDefaultCheck(false);
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setisOpenGroupAddIntern(false);
     }
 
@@ -310,7 +341,7 @@ const Interns = () => {
                         </thead>
                         <tbody>
                             {defaultCheck ? 
-                                ((searchQuery !== "" ? filteredInterns : internsList).map((e)=><tr>
+                                ((searchQuery !== "" ? filteredInterns : internsList).map((e,i)=><tr key={i}>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
@@ -319,7 +350,7 @@ const Interns = () => {
                                         <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
                                     </td>
                                 </tr>)):(
-                                    (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e)=><tr>
+                                    (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e,j)=><tr key={j}>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>
@@ -334,7 +365,7 @@ const Interns = () => {
                 </div>
                 <div className='internsGroupsContainer'>
                     <div className='groupbtns active' id='defBatch' onClick={(x)=>{handleDefaultGroup();activeClass(x)}}>{train.trainingName}</div>
-                    {groupsList.map((e)=><div className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
+                    {groupsList.map((e,i)=><div key={i} className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
                 </div>
             </div>
         </div>
@@ -486,7 +517,7 @@ const Interns = () => {
                     <h2>Select Interns</h2>
                     <div className='internWrapperDiv'>
                         {
-                            defaultInternList.map((e)=><div className='ListInternWrapper'>
+                            defaultInternList.map((e,i)=><div key={i} className='ListInternWrapper'>
                                 <form>
                                     <input 
                                     onClick={(x)=>handleAddList(x,e.internId)} 
@@ -540,6 +571,21 @@ const Interns = () => {
                 </div>
                 </div>
             </div></form>}
+            {resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
 
     </>
     )

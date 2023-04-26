@@ -43,25 +43,19 @@ const Loginwrapper = (props) => {
                 "Authorization":response.credential
             }
         }).then((res)=>{
-            if(res.status===200){
-                updateuserid(res.data.user.userId);
-                updateusername(res.data.user.uname);
-                updateusermail(res.data.user.email);
-                updateuserpicture(res.data.user.picture);
-                updateuserrole(res.data.user.role);
-                updateaccessToken(res.data.accessToken);
-                updateidToken(response.credential);
-                localStorage.setItem('accessToken',res.data.accessToken);
-                localStorage.setItem('IDToken',response.credential);
-                localStorage.setItem('userId',res.data.user.userId);
-                handleLogin();
-            }
-            else{
-                setResMessage(res.data.message);
-                setResPopUp(true);
-              }
+            updateuserid(res.data.user.userId);
+            updateusername(res.data.user.uname);
+            updateusermail(res.data.user.email);
+            updateuserpicture(res.data.user.picture);
+            updateuserrole(res.data.user.role);
+            updateaccessToken(res.data.accessToken);
+            updateidToken(response.credential);
+            localStorage.setItem('accessToken',res.data.accessToken);
+            localStorage.setItem('IDToken',response.credential);
+            localStorage.setItem('userId',res.data.user.userId);
+            handleLogin();
         }).catch((err)=>{
-            setResMessage(err.message);
+            setResMessage(err.response.data.message);
             setResPopUp(true);
         })
     }
