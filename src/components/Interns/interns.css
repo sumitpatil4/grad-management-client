@@ -19,11 +19,9 @@
 .internsContainer{
     width: 85vw;
     height: 70vh;
-    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     display: grid;
     grid-template-columns: 80% 20%;
-    /* background-color: blue; */
 }
 
 .internsTableContainer{
@@ -68,9 +66,7 @@
     display: flex;
 }
 
-.searchWrapper{
-    /* display: flex; */
-}
+
 
 .addIntern{
     color: rgb(46, 200, 102);

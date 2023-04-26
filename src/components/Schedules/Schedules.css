@@ -13,8 +13,6 @@
     overflow-y: auto;
 }
 
-.scheduleWrapper{
-}
 
 .scheduleNavbar{
     display: flex;
@@ -62,7 +60,7 @@
     overflow-y: scroll;
     background-color: whitesmoke;
     border-right:1px solid rgba(172, 172, 172, 0.678);
-    /* border:1px solid blue; */
+
 }
 
 .schedule{
@@ -114,7 +112,7 @@
 .sch_popup-boxd {
     width: inherit;
     height: inherit;
-    /* overflow-y: scroll; */
+
   }
 
 .sch_input_box{
@@ -135,8 +133,7 @@
   width: 35vw;
   display: block;
   margin: 0px auto;
-  /* height: 63vh; */
-  /* overflow-y: scroll; */
+
 }
 
 .sch_input-group {
@@ -315,7 +312,7 @@ input[type="time"]{
 }
 
 .sch_calendarAccess{
-    /* background-color: red; */
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
