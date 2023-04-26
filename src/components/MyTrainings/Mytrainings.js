@@ -21,14 +21,25 @@ const Mytrainings = () => {
   const authcontext=useContext(AuthContext);
   const {updateTrain,updatetrainingsList,trainingsList}=managercontext;
   const {userid}=authcontext;
+  const [resPopUp,setResPopUp] = useState(false);
+  const [resMessage,setResMessage] = useState("");
 
   useEffect(()=>{
     axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
     .then((res)=>{
-      console.log(res)
-      updatetrainingsList(res.data.training);
-      console.log(trainingsList)
-    })
+      if(res.status===200){
+        console.log(res)
+        updatetrainingsList(res.data.training);
+        console.log(trainingsList)
+      }
+      else{
+        setResMessage(res.data.message);
+        setResPopUp(true);
+      }
+    }).catch((err)=>{
+        setResMessage(err.message);
+        setResPopUp(true);
+    });
   },[useeffectreload])
 
   const handleChange = event => {
@@ -49,9 +60,17 @@ const Mytrainings = () => {
       axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
         "trainingName":temp
        }).then((res)=>{
-        console.log(res);
-        setUseeffectreload(!useeffectreload)
-      })
+        if(res.status===200){
+          setUseeffectreload(!useeffectreload)
+        }
+        else{
+          setResMessage(res.data.message);
+          setResPopUp(true);
+        }
+      }).catch((err)=>{
+          setResMessage(err.message);
+          setResPopUp(true);
+      });
       setTemp('');
     }
   };
@@ -198,6 +217,22 @@ const navigate = useNavigate();
         </div>
       </div>
       </div></form>}
+
+      {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </div>
   )
 }

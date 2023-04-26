@@ -408,3 +408,12 @@ tr:nth-child(even)
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(199, 255, 219); 
 }
+
+.msgContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 20px;
+}

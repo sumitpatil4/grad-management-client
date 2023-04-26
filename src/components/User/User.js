@@ -11,6 +11,8 @@ const User = () => {
     const [popUp,setPopUp] = useState(false);
     const usecontext=useContext(AuthContext);
     const {userid,username, usermail}=usecontext;
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const handleClick=(e)=>{
         const req={
@@ -32,10 +34,17 @@ const User = () => {
         //API
         axios.post(`http://localhost:8090/notification/create/${userid}`,req)
         .then((res)=>{
-            console.log(res)
-            setPopUp(true);
+            if(res.status===200){
+              setPopUp(true);
+            }
+            else{
+              setResMessage(res.data.message);
+              setResPopUp(true);
+            }
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         });
-        console.log(req);
         setIsOpen(false);
     }
 
@@ -100,6 +109,21 @@ const User = () => {
           </div>
         </div>
       )}
+      {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
         </>
     )
 }

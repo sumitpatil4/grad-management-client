@@ -7,6 +7,8 @@ import "../common/Links";
 const Loginwrapper = (props) => {
 
     const usecontext=useContext(AuthContext);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     useEffect(()=>{
         /* global google */
@@ -34,7 +36,6 @@ const Loginwrapper = (props) => {
           updateuserrole}=usecontext;
 
     function handleLoginApi(response){
-        console.log(response);
         // updateuserrole("ROLE_INTERN");
         // handleLogin();
         axios.post("http://localhost:8090/user/login",null,{
@@ -42,28 +43,54 @@ const Loginwrapper = (props) => {
                 "Authorization":response.credential
             }
         }).then((res)=>{
-            console.log(res);
-            updateuserid(res.data.user.userId);
-            updateusername(res.data.user.uname);
-            updateusermail(res.data.user.email);
-            updateuserpicture(res.data.user.picture);
-            updateuserrole(res.data.user.role);
-            updateaccessToken(res.data.accessToken);
-            updateidToken(response.credential);
-            localStorage.setItem('accessToken',res.data.accessToken);
-            localStorage.setItem('IDToken',response.credential);
-            localStorage.setItem('userId',res.data.user.userId);
-            handleLogin();
+            if(res.status===200){
+                updateuserid(res.data.user.userId);
+                updateusername(res.data.user.uname);
+                updateusermail(res.data.user.email);
+                updateuserpicture(res.data.user.picture);
+                updateuserrole(res.data.user.role);
+                updateaccessToken(res.data.accessToken);
+                updateidToken(response.credential);
+                localStorage.setItem('accessToken',res.data.accessToken);
+                localStorage.setItem('IDToken',response.credential);
+                localStorage.setItem('userId',res.data.user.userId);
+                handleLogin();
+            }
+            else{
+                setResMessage(res.data.message);
+                setResPopUp(true);
+              }
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         })
     }
 
     return (
-        <div className='loginWrapper'>
+        <>
+            <div className='loginWrapper'>
                 <h2>GRAD MANAGEMENT SYSTEM</h2>
                 <div className="google_btn" onClick={handleLoginApi}>
                     <div id="LoginButton"></div>
                 </div>
             </div>
+
+            {resPopUp && <div className='popupContainer'>
+                <div className='popup-boxd'>
+                    <div className='popupHeader'>
+                    <h2>Opps Something went wrong!!</h2>
+                    </div>
+                    <div className='msgContainer'>
+                        <p>{resMessage}</p>
+                    </div>
+                    <div className='buttonsContainer'>
+                        <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                            Ok
+                        </button>
+                    </div>
+                </div>
+            </div>}
+        </>
     )
 }
 

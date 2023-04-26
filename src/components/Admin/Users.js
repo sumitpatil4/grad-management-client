@@ -21,6 +21,8 @@ const Users = () => {
     const [temprole,setTemprole]=useState("");
     const [isOpenCon, setIsOpenCon] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const handleSearchInputChange = (event) => {
       setSearchQuery(event.target.value);
@@ -31,27 +33,37 @@ const Users = () => {
         user.uname.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const [users, setUsers] = useState([
-        { userid: 1, username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
-        { userid: 2, username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
-        { userid: 3, username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
-        { userid: 4, username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},
-      ]);
+    const [users, setUsers] = useState([]);
 
       const handleEditClick=(emp)=>{
-        console.log(emp,temprole);
         if(notificationEditCheck){
           axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
             "userId":emp.user.userId
           })
           .then((res)=>{
-            console.log(res);
-            setUseeffectreload(!useeffectreload)
+            if(res.status==200){
+              setUseeffectreload(!useeffectreload)
+            }
+            else{
+              setResMessage(res.data.message);
+              setResPopUp(true);
+            }
+          }).catch((err)=>{
+              setResMessage(err.message);
+              setResPopUp(true);
           });
           axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
           .then((res)=>{
-            console.log(res);
-            setUseeffectreload(useeffectreload)
+            if(res.status===200){
+              setUseeffectreload(useeffectreload)
+            }
+            else{
+              setResMessage(res.data.message);
+              setResPopUp(true);
+            }
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         });
         }
         else{
@@ -59,8 +71,16 @@ const Users = () => {
             "userId":emp.userId
           })
           .then((res)=>{
-            console.log(res);
-            setUseeffectreload(!useeffectreload)
+            if(res.status===200){
+              setUseeffectreload(!useeffectreload)
+            }
+            else{
+              setResMessage(res.data.message);
+              setResPopUp(true);
+            }
+          }).catch((err)=>{
+              setResMessage(err.message);
+              setResPopUp(true);
           });
         }
         setIsOpenEdit(false);
@@ -70,8 +90,16 @@ const Users = () => {
     const handleRejectClick=(emp)=>{
       axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
           .then((res)=>{
-            console.log(res);
-            setUseeffectreload(!useeffectreload)
+            if(res.status==200){
+              setUseeffectreload(!useeffectreload)
+            }
+            else{
+              setResMessage(res.data.message);
+              setResPopUp(true);
+            }
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         });
         setIsOpenEdit(false);
         setNotificationEditCheck(false);
@@ -79,25 +107,38 @@ const Users = () => {
 
 
       useEffect(()=>{
-
         axios.get("http://localhost:8090/notification/getNotifications")
         .then((res)=>{
-          // console.log(res.data.notificationList);
-          updatenotificationList(res.data.notificationList);
-          if(res.data.notificationList.length > 0){
-            updatenotificationBadge(true);
+          if(res.status===200){
+            updatenotificationList(res.data.notificationList);
+            if(res.data.notificationList.length > 0){
+              updatenotificationBadge(true);
+            }
+            else{
+              updatenotificationBadge(false);
+            }
           }
           else{
-            updatenotificationBadge(false);
+            setResMessage(res.data.message);
+            setResPopUp(true);
           }
-          // console.log(notificationList)
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         });
 
         axios.get("http://localhost:8090/user/getUsers")
         .then((res)=>{
-          // console.log(res.data.userList);
-          updateuserList(res.data.userList)
-          // console.log(userList)
+          if(res.status===200){
+            updateuserList(res.data.userList)
+          }
+          else{
+            setResMessage(res.data.message);
+            setResPopUp(true);
+          }
+        }).catch((err)=>{
+            setResMessage(err.message);
+            setResPopUp(true);
         });
       },[useeffectreload])
 
@@ -167,7 +208,7 @@ const Users = () => {
             </thead>
             <tbody>
                 {
-                    (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
+                    (searchQuery !== "" ? filteredUsers : userList).map((e,i)=><tr key={i}>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
                         <td>{displayRole(e.role)}</td>
@@ -182,7 +223,7 @@ const Users = () => {
 
         {
           notificationCheck && <div className='notificationContainer'>
-            {notificationList.map((e)=><div onClick={()=>handleNotification(e)} className='notification'>
+            {notificationList.map((e,i)=><div onClick={()=>handleNotification(e)} className='notification' key={i}>
                 <div className='empprofile'>
                   <img className="profile_icon" src={e.user.picture} alt="profile_logo"/>
                 </div>
@@ -240,7 +281,7 @@ const Users = () => {
 
                   <div className="input-group">
                     <label>Description</label>
-                    <textarea readOnly={true}>{userTemp.notificationDesc}</textarea>                                                        
+                    <textarea value={userTemp.notificationDesc} readOnly={true}></textarea>                                                        
                   </div>
 
                   <div className="input-group">
@@ -291,6 +332,22 @@ const Users = () => {
             </div>)}
           </div>
         </div></form>}
+
+        {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </div>
     )
 }
