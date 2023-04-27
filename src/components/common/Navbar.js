@@ -6,14 +6,11 @@ import { NavLink } from 'react-router-dom';
 import profile from "../../images/profile.svg"
 import Profile from './Profile';
 import { IoNotifications } from 'react-icons/io5';
-// import AdminContext from '../Contextapi/Admincontext';
 import AuthContext from '../Contextapi/Authcontext';
-import AdminContext from '../Contextapi/Admincontext';
 
 const Navbar = (props) => {
 
   const usecontext=useContext(AuthContext);
-  const admincontext=useContext(AdminContext);
   const {userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
 
   const [profileflag,setProfileflag]=useState(false);
@@ -58,7 +55,7 @@ const Navbar = (props) => {
         <div className='website_logo_wrapper'><img className='website_logo' src={accolite_logo}/></div>
         <div className='navlinksContainer'>
           {managerflag && <>
-            <NavLink className="navlinks" to={"/mytrainings"} >MyTrainings</NavLink>
+            <NavLink className="navlinks" to={"/mytrainings"} >My Trainings</NavLink>
             <NavLink className="navlinks" to={"/trainers"}>Trainers</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
@@ -71,8 +68,7 @@ const Navbar = (props) => {
           }
 
           {superadminflag && <>
-              <NavLink className="navlinks" to={"/admin"}>Users</NavLink>
-              {/* <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink> */}
+              <NavLink className="navlinks" to={"/admin"}>Users</NavLink> 
               <div className='notificationBadgeContainer'>
               <IoNotifications onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
                 {notificationBadge && <p id="notificationBadge"></p>}
@@ -81,7 +77,7 @@ const Navbar = (props) => {
           }
 
           {internFlag && <>
-            <NavLink className="navlinks" to={"/intern"}>Intern</NavLink>
+            <NavLink className="navlinks" to={"/intern"}>My Trainings</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
           </>}
 

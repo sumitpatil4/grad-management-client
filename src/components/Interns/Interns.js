@@ -75,20 +75,17 @@ const Interns = () => {
     useEffect(()=>{
         axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
         .then((res)=>{
-            console.log(res);
             updateinternsList(res.data.intern);
             setUseeffectreload2(!useeffectreload2);
         })
     },[useeffectreload,defaultCheck,useeffectreload1])
 
     useEffect(()=>{
-        console.log(groupName)
         if(groupName.length===0)
             setGroupName(train.trainingName);
 
         axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
         .then((res)=>{
-            console.log(res);
             res.data.batch.forEach((e)=>{
                 e.internList=getInternsListUsingBatchId(e.batchId);
             })
@@ -96,9 +93,6 @@ const Interns = () => {
         }).then((data)=>{
             const newBatchList = data.filter(e=>e.batchName!==batchName);
             setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
-            console.log(defBatch)
-            console.log(defBatch)
-            console.log(newBatchList)
             updategroupsList(newBatchList);
             setUseeffectreload3(!useeffectreload3);
         })
@@ -123,13 +117,11 @@ const Interns = () => {
     }
 
     const handleAddGroup=()=>{
-        console.log(newGroup,train);
         //call the add group api using above data
         axios.post(`http://localhost:8090/batch/createBatch/${train.trainingId}`,{
             "batchName":newGroup
         })
         .then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         setisOpenNewGroup(false);
@@ -142,12 +134,10 @@ const Interns = () => {
     }
 
     const handleEditGroup=()=>{
-        console.log(newGroup,train,currentGroup);
         axios.put(`http://localhost:8090/batch/updateBatch/${currentGroup[0].batchId}`,{
             "batchName":newGroup
         })
         .then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         //call the update group name api using above data
@@ -156,17 +146,14 @@ const Interns = () => {
     }
 
     const handleDeleteGroup=()=>{
-        console.log(train,currentGroup,"call delete api");
         const internlist=getInternsListUsingBatchId(currentGroup[0].batchId);
         const arr=[];
         internlist.forEach((e)=>arr.push(e.internId))
-        console.log(arr);
         //call the delete group name api using above data
         axios.put(`http://localhost:8090/batch/updateInternBatch/${currentGroup[0].batchId}/${defBatch.batchId}`,{
             "internIdList":arr
         }).
         then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         setGroupName(train.trainingName)
@@ -177,11 +164,9 @@ const Interns = () => {
     }
 
     const handleDeleteForGroup=()=>{
-        console.log(internInstance,"default_id");
         //call the api with both of above
         axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`)
         .then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         setisOpenDeleteForGroup(false)
@@ -193,13 +178,11 @@ const Interns = () => {
             phoneNumber:phoneno,
             email:internemail
         }
-        console.log(intern,train,userid,"default batchid");
         axios.post(`http://localhost:8090/intern/createIntern/${userid}/${train.trainingId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
         }).then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         //call add api here with above data
@@ -220,14 +203,12 @@ const Interns = () => {
             phoneNumber:phoneno,
             email:internemail
         }
-        console.log(internInstance,intern,train,userid,"default batchid");
         //call edit api here with above data
         axios.put(`http://localhost:8090/intern/updateIntern/${internInstance.internId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
         }).then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         setisOpenEditIntern(false);
@@ -239,10 +220,8 @@ const Interns = () => {
     }
 
     const handleDeleteIntern=()=>{
-        console.log(internInstance,train,userid,"default batchid");
         //call delete api here with above data
         axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`).then((res)=>{
-            console.log(res);
             setUseeffectreload(!useeffectreload);
         })
         setisOpenDeleteIntern(false);
@@ -253,14 +232,12 @@ const Interns = () => {
         {
             defaultInternIdList.push(id);
             setdefaultInternIdList(defaultInternIdList);
-            console.log(defaultInternIdList)
         }
         else{
             if(defaultInternIdList.includes(id))
             {
                 defaultInternIdList.splice(defaultInternIdList.indexOf(id), 1);
                 setdefaultInternIdList(defaultInternIdList);
-                console.log(defaultInternIdList)
             }
         }
     }
@@ -271,13 +248,11 @@ const Interns = () => {
     }
 
     const handleGroupAddIntern=()=>{
-        console.log(defaultInternIdList,currentGroup);
         //call the add interns to group api
         axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
             "internIdList":defaultInternIdList
         }).
         then((res)=>{
-            console.log(res);
             setdefaultInternIdList([]);
             setUseeffectreload1(!useeffectreload1);
             setDefaultCheck(false);
@@ -363,7 +338,7 @@ const Interns = () => {
                 </div>
             </div>
         </div>
-        {isOpenNewGroup && <form><div className='popupContainer'>
+        {isOpenNewGroup && <form onSubmit={handleAddGroup}><div className='popupContainer'>
         <div className="popup-boxd">
           <div className='popupHeader'>
             <h2>Add New Group</h2>
@@ -377,7 +352,7 @@ const Interns = () => {
             </div>
           </div>
           <div className='buttonsContainer'>
-            <button type="button" className="submit-btn" onClick={()=>handleAddGroup()}>
+            <button type="submit" className="submit-btn" >
              Submit
             </button>
             <button type="button" className="cancel-btn" onClick={()=>setisOpenNewGroup(false)}>
@@ -387,7 +362,7 @@ const Interns = () => {
         </div>
     </div></form>}
 
-    {isOpenEditGroup && <form><div className='popupContainer'>
+    {isOpenEditGroup && <form onSubmit={handleEditGroup}><div className='popupContainer'>
         <div className="popup-boxd">
           <div className='popupHeader'>
             <h2>Enter New Group Name</h2>
@@ -397,13 +372,18 @@ const Interns = () => {
           <div className="input-group">
             <label htmlFor="name">Name </label>
             <div>
-              <input type="text" id="name" onChange={(e)=>setNewGroup(e.target.value)} value={newGroup}/>
+              <input 
+              type="text" 
+              id="name" 
+              onChange={(e)=>setNewGroup(e.target.value)} 
+              value={newGroup} 
+              required={true}/>
             </div>                                                         
           </div>
         </div>
 
         <div className='buttonsContainer'>
-            <button type="button" className="submit-btn" onClick={()=>handleEditGroup()}>
+            <button type="submit" className="submit-btn" >
              Submit
             </button>
             <button type="button" className="cancel-btn" onClick={()=>setisOpenEditGroup(false)}>
@@ -464,7 +444,8 @@ const Interns = () => {
         </div>
         }
 
-        {isOpenDefaultAddIntern && <form><div className='popupContainer'>
+        {isOpenDefaultAddIntern && <form onSubmit={handleDefaultAddIntern}>
+            <div className='popupContainer'>
                 <div className="popup-boxd">
                 <div className='popupHeader'>
                     <h2>Add New Intern</h2>
@@ -484,7 +465,7 @@ const Interns = () => {
                     </div>
                 </div>
                 <div className='buttonsContainer'>
-                    <button type="button" className="submit-btn" onClick={()=>handleDefaultAddIntern()}>
+                    <button type="submit" className="submit-btn" >
                         Submit
                     </button>
                     <button type="button" className="cancel-btn" onClick={()=>setisOpenDefaultAddIntern(false)}>
@@ -495,7 +476,8 @@ const Interns = () => {
             </div></form>}
 
 
-            {isOpenGroupAddIntern && <form><div className='popupContainer'>
+            {isOpenGroupAddIntern && <form onSubmit={handleGroupAddIntern}>
+                <div className='popupContainer'>
                 <div className="popup-boxd">
                 <div className='popupHeader'>
                     <h2>Add Interns To Group</h2>
@@ -506,7 +488,10 @@ const Interns = () => {
                         {
                             defaultInternList.map((e)=><div className='ListInternWrapper'>
                                 <form>
-                                    <input onClick={(x)=>handleAddList(x,e.internId)} type="checkbox"/>
+                                    <input 
+                                    onClick={(x)=>handleAddList(x,e.internId)} 
+                                    type="checkbox"
+                                    required={true}/>
                                 </form>
                                 <p>{e.internName}</p>
                             </div>)
@@ -514,7 +499,7 @@ const Interns = () => {
                     </div>
                 </div>
                 <div className='buttonsContainer'>
-                    <button type="button" className="submit-btn" onClick={()=>handleGroupAddIntern()}>
+                    <button type="submit" className="submit-btn" >
                         Submit
                     </button>
                     <button type="button" className="cancel-btn" onClick={()=>setisOpenGroupAddIntern(false)}>
@@ -525,7 +510,8 @@ const Interns = () => {
             </div></form>}
 
 
-            {isOpenEditIntern && <form><div className='popupContainer'>
+            {isOpenEditIntern && <form onSubmit={handleEditIntern}>
+                <div className='popupContainer'>
                 <div className="popup-boxd">
                 <div className='popupHeader'>
                     <h2>Add New Intern</h2>
@@ -545,7 +531,7 @@ const Interns = () => {
                     </div>
                 </div>
                 <div className='buttonsContainer'>
-                    <button type="button" className="submit-btn" onClick={()=>handleEditIntern()}>
+                    <button type="submit" className="submit-btn" >
                         Submit
                     </button>
                     <button type="button" className="cancel-btn" onClick={()=>setisOpenEditIntern(false)}>
