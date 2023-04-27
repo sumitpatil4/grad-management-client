@@ -443,10 +443,7 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
@@ -483,6 +480,7 @@ const handleEditSubmitAvailability = () => {
                   <label>Date:</label>
                   <input type="date" Value={availabilityTemp.date}
                       onChange={(event) => {setDate(event.target.value);}} 
+                      required={true}
                   />
                 </div>
                 <div className="input-group">
@@ -492,6 +490,7 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     Value={availabilityTemp.fromTime}
                     onChange={(event) => { setFromTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -502,14 +501,12 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     Value={availabilityTemp.toTime}
                     onChange={(event) => { setToTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
@@ -636,10 +633,7 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
