@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import './Schedules.css'
 import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
 import {BsFillInfoCircleFill} from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
+import { FiUpload } from 'react-icons/fi';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
-
+import { Link } from 'react-router-dom';
+import * as XLSX from "xlsx";
 
 const Schedules = () => {
     const [tokenClient,setTokenClient] = useState({});
@@ -66,6 +68,14 @@ const Schedules = () => {
     const [defBatchName,setDefBatchName] = useState(train.trainingName+"_"+train.trainingId);
     const [calendarFlag,setCalendarFlag] = useState(true);
     const [calendarPopUp,setCalendarPopUp] = useState(false);
+    const [uploadPopUp,setuploadPopUp] = useState(false);
+    const [internInstance,setinternInstance] = useState([]);
+    const fileInput = useRef(null);
+
+    const handleFileSubmit = (e) => {
+        e.preventDefault(); // prevent default form submission behavior
+        AttendanceExcel(fileInput.current.files[0]);
+      };
 
     const handleCreateSch=()=>{
         setIsOpen(true);
@@ -389,20 +399,6 @@ const Schedules = () => {
         }
     }
 
-    // const handleGroupAdd=()=>{
-    //     console.log(defaultGroupIdList);
-    //     //call the add interns to group api
-    //     axios.post(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
-    //         "internIdList":defaultInternIdList
-    //     }).
-    //     then((res)=>{
-    //         console.log(res);
-    //         setdefaultGroupIdList([]);
-    //         setUseeffectreload1(!useeffectreload1);
-    //         setDefaultCheck(false);
-    //     })
-    // }
-
     const handleMeet = event => {
         setMeet(event.target.value);  
     };
@@ -615,6 +611,7 @@ const Schedules = () => {
 
     const handleView = (e, i) => {
         setViewList(e);
+        setinternInstance([]);
         console.log(e)
         handleDetsSch();
     }
@@ -836,6 +833,62 @@ const Schedules = () => {
         return filteredList;
     }
 
+    const handleGetInternsByBatchId=(batchId,meetId)=>{
+        console.log(meetId)
+        axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
+            "batchList":[batchId],
+        })
+        .then((res)=>{
+            console.log(res);
+            res.data.interns.forEach((intern)=>{
+                console.log(intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId))
+                intern.attendanceList=intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId);
+            })
+            console.log(res.data.interns)
+            setinternInstance(res.data.interns)
+        })
+    }
+
+    const [meetIdAtt,setmeetIdAtt]=useState("");
+
+    const AttendanceExcel = (file) => {
+        setuploadPopUp(false);
+        console.log("hello");
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const data = event.target.result;
+          const workbook = XLSX.read(data, { type: "binary" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const attendanceData = XLSX.utils.sheet_to_json(worksheet);
+          console.log(attendanceData);
+          const idList=[],attendanceList=[];
+          axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
+            .then((res)=>{
+                console.log(res);
+                attendanceData.forEach((record)=>{
+                    const row=res.data.intern.filter((x)=>x.email===record.Email)
+                    if(row.length===1)
+                    {
+                        idList.push(row[0].internId);
+                        attendanceList.push(record.Attendance?true:false);
+                    }
+                    else{
+                        //stop everything and show invalid excel file
+                    }
+                })
+                console.log(idList,attendanceList);
+                axios.post(`http://localhost:8090/attendance/createAttendance/${meetIdAtt}`,{
+                    idList:idList,
+                    attendanceList:attendanceList,
+                }).then((resp)=>{
+                    console.log(resp);
+                    setmeetIdAtt("");
+                })
+            })
+        };
+        reader.readAsBinaryString(file);
+      };
+
     return (<>
     <h2 className='scheduleHeader'>Schedules</h2>
     <div className='scheduleContainer'>
@@ -892,6 +945,9 @@ const Schedules = () => {
                             <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
                         </div> */}
                         <div>
+                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                        </div>
+                        <div>
                             <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                         </div>
                         <div>
@@ -921,12 +977,17 @@ const Schedules = () => {
                     {/* <div className='infoSchedule'>
                         <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
                     </div> */}
+                    <div>
+                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                        </div>
+                    <div>
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
                     <div>
                         <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
                 </div>
+            </div>
             </div>
             )}
 
@@ -950,12 +1011,17 @@ const Schedules = () => {
                     {/* <div className='infoSchedule'>
                         <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
                     </div> */}
-                    <div className='edit_icon_wrapper' >
+                    <div className='edit_icon_wrapper'>
+                        <div>
+                            <FiUpload className='edit_icon' style={{color:"black"}} onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                        </div>
+                        <div>
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
                     <div >
                         <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
+                </div>
                 </div>
             </div>
             )}
@@ -1141,80 +1207,30 @@ const Schedules = () => {
             <div className='sch_popupHeader'>
                 <h2>Details Of schedule</h2>
             </div>
-            <div className="sch_input_box">
-            <div className='sch_inputContainer'>
-                <div className="sch_input-group">
-                    <label>Topic </label>                                                            
-                    <p>{viewList.topic.topicName}</p>                                                            
-                </div>
 
-                <div className="sch_input-group">
-                    <label> Date </label>                                                          
-                    <p>{viewList.date}</p> 
+            <div className='Detail_schedulesText'>
+                    <h3>{viewList.topic.topicName}</h3>
+                    <p>{viewList.meetingDesc}</p>
+                    <p>Trainer&nbsp;-&nbsp;{viewList.trainer.trainerName}</p>
+                    <div>Date&nbsp;-&nbsp;{viewList.date}</div>
+                    <div>Timing&nbsp;-&nbsp;{viewList.fromTime}&nbsp;to&nbsp;{viewList.toTime}</div>
+                    <p>Meet Link - <Link className='meetLink' target={"_blank"} to={viewList.meetingLink}>{viewList.meetingLink}</Link></p>
+            </div>
+            <h2 className='groupHead'>Groups</h2>
+            <div className='meetBatchContainer'>
+                
+                <div className='batchNavbar'>
+                    {viewList.batchList.map((batch)=><p onClick={()=>handleGetInternsByBatchId(batch.batchId,viewList.meetingId)}>{batch.batchName}</p>)}
                 </div>
-
-                <div className="sch_input-group">
-                    <label> Start Time: </label>                                                           
-                    <p>{viewList.fromTime}</p>                     
-                </div>
-
-                <div className="sch_input-group">
-                    <label> End Time: </label>                                                           
-                    <p>{viewList.toTime}</p>                     
-                </div>
-
-                <div className="sch_input-group">
-                    <label>Trainer </label>                                                            
-                    <p>{viewList.trainer.trainerName}</p>                                                             
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Meet Link</label>
-        
-                    <p>{viewList.meetingLink}</p>                                                              
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Assessment Link</label>
-                    <p>{viewList.assessmentLink}</p>                                                              
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Feedback Link</label>
-                    {/* <p>{feedback}</p>                                                             */}
-                    <p>{viewList.feedbackLink}</p>                                                              
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Description</label>
-                    {/* <p>{description}</p>                                                             */}
-                    <p>{viewList.meetingDesc}</p>                                                             
-                </div>
-
-                <div className="sch_input-group">
-                    <label htmlFor="name">Selected Groups</label>
-                    <div className='sch_internWrapperDiv'>
-                        {
-                            viewList.batchList.map((e)=><div className='sch_ListInternWrapper'>
-                                <p>{e.batchName}</p>
-                            </div>)
-                        }
-                    </div>                                                           
+                <div className='meetBatchContent'>
+                    {internInstance.map((intern)=><div className='attendanceContainer'>
+                        <p>{intern.internName}</p>
+                        <p style={{fontStyle:"italic"}}>{intern.attendanceList.length===1 ? <>{intern.attendanceList[0].present ? "Present":"Absent"}</> : <>NA</>}</p>
+                        </div>)}
                 </div>
             </div>
-            {/* <div className='sch_buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => {handleEditSch();}}>
-                    Edit
-                </button>
-                <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();}}>
-                    Close
-                </button>
-            </div> */}
-        </div>
         </div>
         }
-
-
     </div>
     </div>  
 
@@ -1296,6 +1312,35 @@ const Schedules = () => {
                 Ok
             </button>
         </div>
+    </div>
+</div>}
+
+{uploadPopUp && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Meet Attendance</h2>
+        </div>
+
+        <form className="attendance-form">
+            <div>
+                <label htmlFor="attendance"> Upload the Excel Sheet</label>
+                <input
+                  type="file"
+                  id="file"
+                  ref={fileInput}
+                  name="file"
+                />
+            </div>        
+
+        <div className='buttonsContainer'>
+        <button type="submit" className="submit-btn" onClick={(e)=>{handleFileSubmit(e)}}>
+            Upload
+        </button>
+        <button type="reset" className="cancel-btn" onClick={() =>{setmeetIdAtt("");setuploadPopUp(false);} }>
+            Cancel
+        </button>
+        </div>
+        </form>
     </div>
 </div>}
 

@@ -1,8 +1,8 @@
 import "./trainers.css";
 import React, { useState ,useContext, useEffect} from "react";
-import { FaSearch, FaUserAlt } from "react-icons/fa";
+import { FaSearch, FaUserAlt ,FaShareAlt } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
-import { FiShare } from "react-icons/fi";
+import { BsShareFill } from "react-icons/bs";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
@@ -120,7 +120,8 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
       console.log(res.data.availability);
       setUserAvailability(res.data.availability);
-      console.log(userAvailability)
+      console.log(userAvailability);
+      setUseeffectreload(!useeffectreload);
     })
   })
   setIsEditAvailability(false);
@@ -159,6 +160,7 @@ const handleEditSubmitAvailability = () => {
         .then((res)=>{
           console.log(res);
           handleProfile(trainerTemp);
+          setUseeffectreload(!useeffectreload)
         })
     }
     setIsOpenCon(false);
@@ -177,7 +179,8 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
       console.log(res.data.availability);
       setUserAvailability(res.data.availability);
-      console.log(userAvailability)
+      console.log(userAvailability);
+      setUseeffectreload(!useeffectreload)
     })
   };
 
@@ -198,6 +201,7 @@ const handleEditSubmitAvailability = () => {
   }).then((res)=>{
     console.log(res);
     handleProfile(trainerTemp);
+    setUseeffectreload(!useeffectreload)
   })
   setIsAvaliabilty(false);
   setDate('');
@@ -323,7 +327,7 @@ const handleEditSubmitAvailability = () => {
       </div>
       <div>
         <div className="buttonContainer2">
-            <FiShare title="Share Excel File To Mails" className="shareIcon" onClick={()=>setisOpenSelectMail(true)}/>
+            <BsShareFill title="Share Excel File To Mails" className="shareIcon" onClick={()=>setisOpenSelectMail(true)}/>
             <RiFileExcel2Fill title="Download Excel File" className="ExcelIcon shareIcon" onClick={handleFileDownload}/>
             <div className="search-bar2">
               <input
@@ -404,7 +408,7 @@ const handleEditSubmitAvailability = () => {
       )}
 
       {isAvailabilty && (
-        <form>
+        <form onSubmit={(e)=>{console.log(e);handleAddAvailability()}}>
           <div
             id="avlpop"
             className="popupContainer"
@@ -426,7 +430,7 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Date:</label>
-                  <input type="date" value={date} onChange={handleDateChange} />
+                  <input type="date" value={date} onChange={handleDateChange} required={true}/>
                 </div>
 
                 <div className="input-group">
@@ -436,6 +440,7 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     value={fromTime}
                     onChange={handleFromTimeChange}
+                    required={true}
                   />
                 </div>
 
@@ -446,14 +451,14 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     value={toTime}
                     onChange={handleToTimeChange}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
                   <button
-                    type="button"
+                    type="submit"
                     className="submit-btn"
-                    onClick={handleAddAvailability}
                   >
                     Submit
                   </button>
@@ -769,13 +774,13 @@ const handleEditSubmitAvailability = () => {
                           <td className="">{item.fromTime}</td>
                           <td className="popuptd">{item.toTime}</td>
                           <td className="popuptd">
+                          <MdEdit
+                              onClick={() => handleEditAvailablity(item)}
+                              className="edit-icon"
+                            />
                             <MdDelete
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
-                            />
-                              <MdEdit
-                              onClick={() => handleEditAvailablity(item)}
-                              className="edit_icon"
                             />
                           </td>
                         </tr>

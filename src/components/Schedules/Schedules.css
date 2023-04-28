@@ -335,3 +335,93 @@ input[type="time"]{
 
 
 /* end of popup styling */
+
+.Detail_schedulesText{
+    margin:20px;
+}
+
+.Detail_schedulesText>h3{
+    font-size: 22px;
+    padding-bottom: 3px;
+}
+
+.Detail_schedulesText>p{
+    font-size: 17px;
+    font-style: italic;
+}
+
+.Detail_schedulesText>div{
+    color: gray;
+    font-weight: 500;
+    padding: 2px 0px;
+}
+
+.meetLink{
+    color: darkblue;
+    text-decoration: underline;
+}
+
+.groupHead{
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.meetBatchContainer{
+    margin: 0px 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.meetBatchContent{
+    max-height: 25vh;
+    overflow-y: scroll;
+}
+
+.batchNavbar{
+    display: flex;
+    background-color: rgb(14, 20, 30);
+    color: white;
+}
+
+.batchNavbar>p{
+    padding: 10px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.batchNavbar>p:hover{
+    background-color: rgb(46, 200, 102);
+}
+
+
+.attendanceContainer{
+    width: 60%;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    padding:5px 10px;
+}
+
+.attendanceContainer>p{
+    padding:8px 10px;
+    font-weight: 500;
+}
+
+.attendance-form{
+    margin: 10px 0px;
+}
+
+.attendance-form>div>label{
+    display: block;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.attendance-form>div>input{
+    display: block;
+    padding-top: 20px;
+    padding-left: 70px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}

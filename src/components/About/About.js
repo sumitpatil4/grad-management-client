@@ -25,7 +25,7 @@ const About = () => {
                    {/* <div class="circleContainer"> 
                         <img src={avator}></img>
                     </div> */}
-                    Akriti Singh
+                    Aakriti Singh
                 </li>
                 <li>
                    {/* <div class="circleContainer"> 
@@ -37,7 +37,7 @@ const About = () => {
                    {/* <div class="circleContainer"> 
                         <img src={avator}></img>
                     </div> */}
-                    Sai Krupanada
+                    Sai Krupananda
                 </li>
             </ul>
             </div>

@@ -101,17 +101,26 @@ const Topic = () => {
     })
   }
 
+  const calcPercentage=(topicId)=>{
+    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
+    .then((res)=>{
+      console.log(res)
+      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
+      console.log(filteredRes)
+    })
+  }
 
 
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
     setTopicTemp(t);
-    // axios.get(`http://localhost:8090/meetings/getMeeting/${t.topicId}`)
-    // .then((res)=>{
-    //   console.log(res.data.availability);
-    //   setTopicMeetings(res.data.availability);
-    //   console.log(userAvailability)
-    // })
+    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
+    .then((res)=>{
+      console.log(res)
+      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===t.topicId)
+      setTopicMeetings(filteredRes);
+    })
+    calcPercentage(t.topicId)
   }
 
     return (
@@ -357,16 +366,16 @@ const Topic = () => {
                         <th className="popupth">Date</th>
                         <th className="popupth">From&nbsp;Time</th>
                         <th className="popupth">To&nbsp;Time</th>
-                        <th className="popupth">Desc</th>
                       </tr>
                     </thead>
                         <tbody className="popupbody">
-                          {/* <tr className="popuptr">
-                            <td className="popuptd">Date</td>
-                            <td className="">Time</td>
-                            <td className="popuptd">Time</td>
-                            <td className="popuptd">Desc</td>
-                          </tr> */}
+                          {topicMeetings.map((meet)=>
+                          <tr className="popuptr">
+                            <td className="popuptd">{meet.date}</td>
+                            <td className="popuptd">{meet.fromTime}</td>
+                            <td className="popuptd">{meet.toTime}</td>
+                          </tr>)
+                        }
                         </tbody>
                       </table>
                     </div>
