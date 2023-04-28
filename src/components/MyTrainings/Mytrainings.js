@@ -74,7 +74,7 @@ const handleRemoveClick = (i) => {
       setResMessage(err.response.data.message);
       setResPopUp(true);
   });
-    setIsOpenCon(false);
+  setIsOpenCon(false);
 };
 
 

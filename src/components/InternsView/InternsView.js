@@ -64,7 +64,10 @@ const InternsView = () => {
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1).sort((a, b) => a.date.localeCompare(b.Date)));
 
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1).sort((a, b) => a.date.localeCompare(b.Date)));
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }, [useEffectReload])
 
     const activeClass=(e)=>{

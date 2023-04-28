@@ -131,17 +131,17 @@ const Schedules = () => {
         arr.forEach((d)=>newarr.push(d.replaceAll("/","-")))
         
         axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
-                "topicId":topic,
-                "dateList":newarr
-            }).then((res)=>{
-                setavlList(res.data.sort((a,b)=>{
-                    return new Date(a.date)-new Date(b.date);
-                }));
-                setselectTrainerCheck(true)
-            }).catch((err)=>{
-                setResMessage(err.response.data.message);
-                setResPopUp(true);
-            });
+            "topicId":topic,
+            "dateList":newarr
+        }).then((res)=>{
+            setavlList(res.data.sort((a,b)=>{
+                return new Date(a.date)-new Date(b.date);
+            }));
+            setselectTrainerCheck(true)
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
     }
 
     const handleAvlCheck=(r,e,i,j,k)=>{
@@ -607,7 +607,10 @@ const Schedules = () => {
         axios.put(`http://localhost:8090/meeting/updateMeeting`,data)
         .then((res)=>{
             setUseEffectReload(!useEffectReload)
-        })
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+        });
         setEditPopUp(true);
         setIsOpenEdit(false);
         // setIsOpenDets(true);

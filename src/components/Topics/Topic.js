@@ -80,8 +80,7 @@ const Topic = () => {
 
       axios.post(`http://localhost:8090/topic/createTopic/${train.trainingId}`,{
         "topicName":topicName
-    })
-      .then((res)=>{
+      }).then((res)=>{
         setUseeffectreload(!useeffectreload);
       }).catch((err)=>{
           setResMessage(err.response.data.message);

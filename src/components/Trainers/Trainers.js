@@ -121,7 +121,7 @@ const handleEditSubmitAvailability = () => {
     "date":date,
     "fromTime":fromTime,
     "toTime":toTime,
-}).then((res)=>{
+  }).then((res)=>{
     axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
     .then((res)=>{
       setUserAvailability(res.data.availability);
@@ -160,22 +160,22 @@ const handleEditSubmitAvailability = () => {
   const handleDelete = (trainerId) => {
     if(!isOpenProfile){
       axios.delete(`http://localhost:8090/trainer/deleteTrainer/${trainerId}`)
-        .then((res)=>{
-          setUseeffectreload(!useeffectreload);
-        }).catch((err)=>{
-            setResMessage(err.response.data.message);
-            setResPopUp(true);
-        });
+      .then((res)=>{
+        setUseeffectreload(!useeffectreload);
+      }).catch((err)=>{
+          setResMessage(err.response.data.message);
+          setResPopUp(true);
+      });
     }
     else{
       axios.delete(`http://localhost:8090/availability/deleteAvailability/${avlId}`)
-        .then((res)=>{
-          handleProfile(trainerTemp);
-          setUseeffectreload(!useeffectreload);
-        }).catch((err)=>{
-            setResMessage(err.response.data.message);
-            setResPopUp(true);
-        });
+      .then((res)=>{
+        handleProfile(trainerTemp);
+        setUseeffectreload(!useeffectreload);
+      }).catch((err)=>{
+          setResMessage(err.response.data.message);
+          setResPopUp(true);
+      });
     }
     setIsOpenCon(false);
     setIsOpenAvlDel(false);
@@ -207,22 +207,21 @@ const handleEditSubmitAvailability = () => {
   };
 
   const handleAddAvailability = () =>{
-
     axios.post(`http://localhost:8090/availability/createAvailability/${trainerTemp.trainerId}`,{
       "date":date,
       "fromTime":fromTime,
       "toTime":toTime
-  }).then((res)=>{
-    handleProfile(trainerTemp);
-    setUseeffectreload(!useeffectreload)
-  }).catch((err)=>{
-      setResMessage(err.response.data.message);
-      setResPopUp(true);
-  });
-  setIsAvaliabilty(false);
-  setDate('');
-  setFromTime('');
-  setToTime('');
+    }).then((res)=>{
+      handleProfile(trainerTemp);
+      setUseeffectreload(!useeffectreload)
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+    });
+    setIsAvaliabilty(false);
+    setDate('');
+    setFromTime('');
+    setToTime('');
   }
 
   const handleEdit = (trainer) => {
@@ -271,8 +270,6 @@ const handleEditSubmitAvailability = () => {
             obj["TO TIME"] = trainerList[i][key][j].toTime;
             dummyTrainersList.push(obj);
           }
-          
-          
         }
       }
       
@@ -325,8 +322,6 @@ const handleEditSubmitAvailability = () => {
               obj["TO TIME"] = trainerList[i][key][j].toTime;
               dummyTrainersList.push(obj);
             }
-            
-            
           }
         }
         

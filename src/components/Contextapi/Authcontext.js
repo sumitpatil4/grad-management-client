@@ -5,7 +5,7 @@ const AuthContext=React.createContext();
 
 export const Auth=(props)=>{
     useEffect(()=>{
-      if(isAuthenticated===false && localStorage.getItem('accessToken')!=null){
+      if(isAuthenticated===false && localStorage.getItem('IDToken')!=null){
         axios.get(`http://localhost:8090/user/getUserById/${localStorage.getItem('userId')}`)
         .then((res)=>{
             updateuserid(res.data.user.userId);
@@ -16,7 +16,9 @@ export const Auth=(props)=>{
             updateaccessToken(res.data.accessToken);
             updateidToken(localStorage.getItem('IDToken'));
             handleLogin();
-        })
+        }).catch((err)=>{
+          console.log(err.message)
+      });
       }
     })
 
