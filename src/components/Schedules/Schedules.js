@@ -558,8 +558,7 @@ const Schedules = () => {
         setViewList(e);
         setinternInstance([]);
         console.log(e)
-
-        handleDetsSch();//why is this here
+        handleDetsSch();
     }
 
     // handle click event of the Edit button
