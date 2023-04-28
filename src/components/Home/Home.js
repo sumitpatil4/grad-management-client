@@ -15,6 +15,8 @@ import Training from '../Training/Training';
 import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
 import Schedules from '../Schedules/Schedules';
+import Leadership from '../Leadership/Leadership';
+import Result from '../Result/result';
 import InternsView from '../InternsView/InternsView';
 
 const Home = () => {
@@ -65,7 +67,7 @@ const Home = () => {
             navigate("/mytrainings",true);
             break;
           case 'ROLE_LEADER':
-            navigate("/mytrainings",true);
+            navigate("/leadership",true);
             break;
           case 'ROLE_ADMIN':
             navigate("/admin",true);
@@ -100,9 +102,9 @@ const Home = () => {
         {leadershipflag && <div>
         <Navbar role={userrole}/>
         <Routes>
-        <Route path="/aboutus" element={<About />}/>
+            <Route path="/leadership" element={<Leadership />}/>
+            <Route path="/leadership/result" element={<Result />}/>
         </Routes>
-        <h1>Leader ship</h1>
         </div>}
 
         {internFlag && <Intern><div>

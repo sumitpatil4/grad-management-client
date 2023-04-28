@@ -4,6 +4,9 @@ import './InternsView.css';
 import InternContext from '../Contextapi/InternContext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
+import { RiFileExcel2Fill } from "react-icons/ri";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 
 const InternsView = () => {
@@ -52,15 +55,16 @@ const InternsView = () => {
         axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
         .then((res)=>{
             updateinternSchedulesList(res.data.meeting);
-            scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
+            console.log(internSchedulesList);
+            // scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
             const currDate = getCurrentDate(); //To get the Current Date
-            setPresent(res.data.meeting.filter(obj => obj.date === currDate));
-            setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1));
-            setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1));
-        }).catch((err)=>{
-            setResMessage(err.response.data.message);
-            setResPopUp(true);
-        });
+
+            setPresent(res.data.meeting.filter(obj => obj.date === currDate).sort((a, b) => a.date.localeCompare(b.Date)));
+
+            setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1).sort((a, b) => a.date.localeCompare(b.Date)));
+
+            setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1).sort((a, b) => a.date.localeCompare(b.Date)));
+        })
     }, [useEffectReload])
 
     const activeClass=(e)=>{
@@ -110,6 +114,38 @@ const InternsView = () => {
         return filteredList;
     }
 
+  let dummyMeetingList = [];
+  const fileType = "xlsx";
+  const handleFileDownload=()=>{
+      dummyMeetingList = [];
+      for (let i = 0; i < internSchedulesList.length; i++) {
+        let obj = {};
+        for (const key in internSchedulesList[i]) {
+          if (key == "date" || key == "fromTime" || key == "toTime"|| key == "meetingDesc" || key == "meetingLink") {
+            obj[key.toUpperCase()] = internSchedulesList[i][key];
+          } else if (key === "batchList") {
+            for (let j = 0; j < internSchedulesList[i][key].length; j++) {
+              obj["BATCH"] = internSchedulesList[i][key][j].batchName ;
+            } 
+          }else if (key === "topic") {
+            obj["TOPIC"] = internSchedulesList[i][key].topicName;
+          }
+          else if (key === "trainer") {
+            obj["TRAINER"] = internSchedulesList[i][key].trainerName;
+            dummyMeetingList.push(obj);
+          }
+        }
+        
+        console.log(dummyMeetingList);
+      }
+      const ws = XLSX.utils.json_to_sheet(dummyMeetingList);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: "xlsx" });
+      console.log(data);
+      FileSaver.saveAs(data, "MeetingsFile" + ".xlsx");
+  }
+
 
   return (<>
     <h2 className='scheduleHeader'>Your&nbsp;Schedules</h2>
@@ -121,8 +157,13 @@ const InternsView = () => {
                     <p className='headerText' onClick={(e) => {handleClickUpcoming(e)}}>Upcoming</p>
                     <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                 </div>
+                <div className="excel">
+                <RiFileExcel2Fill title="Download Excel File" className="Excel-Icon shareIcon" onClick={handleFileDownload}/>
 
-            <div className="schsearchWrapper">
+                </div>
+
+
+            <div className="schsearchWrapper">               
               <div className="buttonContainer3">
                 <div className="search-bar2">
                   <input

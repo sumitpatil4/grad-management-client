@@ -59,6 +59,7 @@ const Schedules = () => {
     const [trainerList,setTrainerList] = useState([]);
     const [meetingObj,setMeetingObj] = useState(null);
     const [popUp,setPopUp] = useState(false);
+    const [editPopUp,setEditPopUp] = useState(false);
     const [checkFlag,setcheckFlag] = useState(false);
     const [checkedArr,setCheckedArr] = useState([]);
     const [grpAvlValueArr,setGrpAvlValueArr] = useState([]);
@@ -306,6 +307,11 @@ const Schedules = () => {
             }
             document.getElementById('group_checkbox').checked=false;
         }
+    }
+
+    const handleDateChange = (e) => {
+        // setDate(date);
+        setDate(e.target.value);
     }
     
     const handleFromTimeChange = (e) => {
@@ -567,6 +573,7 @@ const Schedules = () => {
     const handleEdit = (e,i) => {
         setMeetingObj(e)
         handleEditSch();
+        console.log(meetingObj)
     }
 
     const handleSelectAll = (e)=>{
@@ -577,25 +584,35 @@ const Schedules = () => {
         })
     }
 
-    const handleEditClick = (index) => {
-        const list = [...scheduleList];
-
-        const x={
-            meetTopic: topic,
-            Date: date,
-            from_time: fromTime,
-            meetTrainer: trainer,
-            // meetGroups: defaultGroupList,
-            meetLink: meet,
-            assessmentLink: assessment,
-            feedbackLink: feedback,
-            descriptionLink: description
+    const handleEditClick = () => {
+        const arr=[]
+        meetingObj.batchList.forEach((batch)=>arr.push(batch.batchId));
+        const data={
+            "meetingId": meetingObj.meetingId,
+            "meetingDesc":description,
+            "date":meetingObj.date,
+            "fromTime":meetingObj.fromTime,
+            "toTime":meetingObj.toTime,
+            "meetingLink":meetingObj.meetingLink,
+            "feedbackLink":meetingObj.feedbackLink,
+            "assessmentLink":meetingObj.assessmentLink,
+            "topicId":meetingObj.topic.topicId,
+            "trainingId":meetingObj.training.trainingId,
+            "trainerId":meetingObj.trainer.trainerId,
+            "batchList":arr,
+            "eventId":meetingObj.eventId,
+            "availabilityUsed":meetingObj.availabilityUsed
         }
-        list[index] = x;
-        setscheduleList(list);
-        handleEditSch();
+        console.log(data);
+        axios.put(`http://localhost:8090/meeting/updateMeeting`,data)
+        .then((res)=>{
+            setUseEffectReload(!useEffectReload)
+        })
+        setEditPopUp(true);
+        setIsOpenEdit(false);
+        // setIsOpenDets(true);
         handleSetEmpty();
-        setUseEffectReload(!useEffectReload)
+        // setUseEffectReload(!useEffectReload)
     };
 
     // handle click event of the Remove button
@@ -766,6 +783,11 @@ const Schedules = () => {
         setUseEffectReload(!useEffectReload);
     }
 
+    const handleEditPopUpOk = ()=>{
+        setEditPopUp(false);
+        setUseEffectReload(!useEffectReload);
+    }
+
     const filteredList = (list)=>{
 
         const filteredList = list.filter(
@@ -919,7 +941,7 @@ const Schedules = () => {
                             <option key={i} value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
                             )
                         })}
-                        </select>                                                            
+                    </select>                                                            
                 </div>
 
                 <div className="sch_input-group">
@@ -929,7 +951,7 @@ const Schedules = () => {
                             onChange={(arr)=>setDateArr(arr.join(" "))}
                             multiple={true}                         
                             minDate={new Date()}
-                        />
+                    />
                     }
                 </div>
 
@@ -974,7 +996,7 @@ const Schedules = () => {
             </div>
             <div className='sch_buttonsContainer'>
                 <button type="submit" className="submit-btn" disabled={calendarFlag} onClick={()=>{newhandleClick()}}>
-                    Create
+                    Create Schedule
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() =>{handleCancelForAdd()}}>
                     Cancel
@@ -984,7 +1006,8 @@ const Schedules = () => {
         </div>}
 
 
-        {isOpenEdit && <div className="sch_popup-boxd" onClick={(e) => e.stopPropagation()}>
+        {isOpenEdit && <form onSubmit={(e)=>{e.preventDefault();handleEditClick()}}>
+        <div className="sch_popup-boxd" onClick={(e) => e.stopPropagation()}>
             <div className='sch_popupHeader'>
                 <h2>Edit meeting details</h2>
             </div>
@@ -992,59 +1015,59 @@ const Schedules = () => {
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic</label>
-                    <select value={topic} required={true}>
-                    {topicList.map((e,i)=>{
+                    <input onClick={(e)=>console.log(e.target.value)} value={meetingObj.topic.topicName} required={true} readOnly={true}>
+                    {/* {topicList.map((e,i)=>{
                             return(
                             <option key={i} value={e.topicName}>{e.topicName}</option>
                             )
-                        })}
-                    </select>                                                         
+                        })} */}
+                    </input>                                                         
                 </div>
 
                 <div className="sch_input-group">
                     <label> Date </label>
-                    {/* <input type="date" value={date} onChange={handleDateChange} /> */}
+                    <input type="date" value={meetingObj.date} onChange={handleDateChange} readOnly={true}/>
                 </div>
 
                 <div className="sch_input-group">
                     <label> Start Time </label>
-                    <input step="2" value={fromTime} type="time" onChange={handleFromTimeChange}/>                    
+                    <input step="2" value={meetingObj.fromTime} type="time" onChange={handleFromTimeChange} readOnly={true}/>                    
                 </div>
 
                 <div className="sch_input-group">
                     <label> End Time </label>
-                    <input  type="time" value={toTime} onChange={handleToTimeChange} />                 
+                    <input step="2" value={meetingObj.toTime} type="time" onChange={handleToTimeChange} readOnly={true}/>                 
                 </div>
 
                 <div className="sch_input-group">
                     <label>Trainer </label>
-                    <select onClick={(e)=>setTrainer(e.target.value)} defaultValue={trainer} required={true}>
-                    {trainerList.map((e,i)=>{
+                    <input onClick={(e)=>setTrainer(e.target.value)} defaultValue={meetingObj.trainer.trainerName} required={true} readOnly={true}>
+                    {/* {trainerList.map((e,i)=>{
                             return(
                             <option key={i} value={e.trainerName}>{e.trainerName}</option>
                             )
-                        })}
-                    </select>                                                            
+                        })} */}
+                    </input>                                                            
                 </div>
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Meet Link</label>
-                    <input type="text" id="link" onChange={handleMeet} value={meet}/>                                                             
-                </div>
+                    <input type="text" id="link" onChange={handleMeet} value={meet} readOnly={true}/>                                                             
+                </div> */}
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Assessment Link</label>
                     <input type="text" id="link" onChange={handleAssessment} value={assessment}/>                                                             
-                </div>
+                </div> */}
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Feedback Link</label>
                     <input type="text" id="link" onChange={handleFeedback} value={feedback}/>                                                             
-                </div>
+                </div> */}
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription} value={description}>{description}</textarea>                                                             
+                    <textarea  onChange={handleDescription} defaultValue={meetingObj.meetingDesc}>{description}</textarea>                                                             
                 </div>
 
                 <div className="sch_input-group">
@@ -1063,7 +1086,7 @@ const Schedules = () => {
             </div>
 
             <div className='sch_buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => handleEditClick(arrId)}>
+                <button type="submit" className="submit-btn" >
                     Submit
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();setTemp('');}}>
@@ -1071,7 +1094,8 @@ const Schedules = () => {
                 </button>
             </div>
             </div>
-        </div>}
+        </div>
+        </form>}
 
 
         {isOpenDets && <div className="sch_popup-boxd">
@@ -1217,6 +1241,19 @@ const Schedules = () => {
         </div>
         <div className='buttonsContainer'>
             <button type="submit" className="submit-btn" onClick={() => handlePopUpOk()}>
+                Ok
+            </button>
+        </div>
+    </div>
+</div>}
+
+{editPopUp && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Schedule Edited</h2>
+        </div>
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => handleEditPopUpOk()}>
                 Ok
             </button>
         </div>

@@ -55,13 +55,14 @@ const Navbar = (props) => {
         <div className='website_logo_wrapper'><img className='website_logo' src={accolite_logo}/></div>
         <div className='navlinksContainer'>
           {managerflag && <>
-            <NavLink className="navlinks" to={"/mytrainings"} >MyTrainings</NavLink>
+            <NavLink className="navlinks" to={"/mytrainings"} >My Trainings</NavLink>
             <NavLink className="navlinks" to={"/trainers"}>Trainers</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
           }
 
           {leadershipflag && <>
+            <NavLink className="navlinks" to={"/leadership"}>Leadership</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
           }
@@ -76,7 +77,7 @@ const Navbar = (props) => {
           }
 
           {internFlag && <>
-            <NavLink className="navlinks" to={"/intern"}>Intern</NavLink>
+            <NavLink className="navlinks" to={"/intern"}>My Trainings</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
           </>}
 

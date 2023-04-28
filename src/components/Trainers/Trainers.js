@@ -261,18 +261,22 @@ const handleEditSubmitAvailability = () => {
         if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
           obj[key.toUpperCase()] = trainerList[i][key];
         } else if (key === "availabilityList") {
-          let availabilities = [];
+          // let availabilities = [];
           for (let j = 0; j < trainerList[i][key].length; j++) {
-            availabilities.push(
-              `Date:${trainerList[i][key][j].date}    
-              FromTime:${trainerList[i][key][j].fromTime}     
-              ToTime:${trainerList[i][key][j].toTime}`
-            );
+            // availabilities.push(
+            //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+            // );
+            obj["DATE"] = trainerList[i][key][j].date;
+            obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+            obj["TO TIME"] = trainerList[i][key][j].toTime;
+            dummyTrainersList.push(obj);
           }
-          obj["AVAILABILITY LIST"] = availabilities.join("\n");
+          
+          
         }
       }
-      dummyTrainersList.push(obj);
+      
+      console.log(dummyTrainersList);
     }
     const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -311,18 +315,22 @@ const handleEditSubmitAvailability = () => {
           if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
             obj[key.toUpperCase()] = trainerList[i][key];
           } else if (key === "availabilityList") {
-            let availabilities = [];
+            // let availabilities = [];
             for (let j = 0; j < trainerList[i][key].length; j++) {
-              availabilities.push(
-                `Date:${trainerList[i][key][j].date}    
-                FromTime:${trainerList[i][key][j].fromTime}     
-                ToTime:${trainerList[i][key][j].toTime}`
-              );
+              // availabilities.push(
+              //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+              // );
+              obj["DATE"] = trainerList[i][key][j].date ;
+              obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+              obj["TO TIME"] = trainerList[i][key][j].toTime;
+              dummyTrainersList.push(obj);
             }
-            obj["AVAILABILITY LIST"] = availabilities.join("\n");
+            
+            
           }
         }
-        dummyTrainersList.push(obj);
+        
+        console.log(dummyTrainersList);
       }
       const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -467,10 +475,7 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
@@ -507,6 +512,7 @@ const handleEditSubmitAvailability = () => {
                   <label>Date:</label>
                   <input type="date" Value={availabilityTemp.date}
                       onChange={(event) => {setDate(event.target.value);}} 
+                      required={true}
                   />
                 </div>
                 <div className="input-group">
@@ -516,6 +522,7 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     Value={availabilityTemp.fromTime}
                     onChange={(event) => { setFromTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -526,14 +533,12 @@ const handleEditSubmitAvailability = () => {
                     step="2"
                     Value={availabilityTemp.toTime}
                     onChange={(event) => { setToTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
@@ -660,10 +665,7 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button

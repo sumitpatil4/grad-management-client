@@ -1,0 +1,10 @@
+.LeadershipChart {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .chart-container {
+    max-width: 650px;
+    max-height: 400px;
+    margin: 0 auto;
+  }
