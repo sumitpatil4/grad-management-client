@@ -46,13 +46,13 @@ const Trainers = () => {
   useEffect(()=>{
     axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
     .then((res)=>{
-      console.log(res);
+
       updateTrainerList(res.data.trainers);
     });
     axios.get(`http://localhost:8090/user/getUsers`).then((res)=>{
-      console.log(res.data);
+
       setuserList(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
-      // console.log(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
+
     })
   },[useeffectreload])
 
@@ -61,14 +61,12 @@ const Trainers = () => {
     {
         defaultEmailList.push(id);
         setdefaultEmailList(defaultEmailList);
-        console.log(defaultEmailList)
     }
     else{
         if(defaultEmailList.includes(id))
         {
             defaultEmailList.splice(defaultEmailList.indexOf(id), 1);
             setdefaultEmailList(defaultEmailList);
-            console.log(defaultEmailList)
         }
     }
   }
@@ -80,7 +78,7 @@ const Trainers = () => {
         "phoneNumber":Phone,
         "skill":Skill
     }).then((res)=>{
-        console.log(res);
+
         setUseeffectreload(!useeffectreload)
       })
       setIsAdd(false);
@@ -98,7 +96,7 @@ const Trainers = () => {
       "phoneNumber":Phone,
       "skill":Skill
   }).then((res)=>{
-      console.log(res);
+
       setUseeffectreload(!useeffectreload)
     })
     setIsEdit(false);
@@ -109,18 +107,21 @@ const Trainers = () => {
 };
 
 const handleEditSubmitAvailability = () => {
-  console.log(date,toTime,fromTime);
+
   axios.put(`http://localhost:8090/availability/updateAvailability/${availabilityTemp.availabilityId}`,{
     "date":date,
     "fromTime":fromTime,
     "toTime":toTime,
 }).then((res)=>{
-    console.log(res);
+
     axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
     .then((res)=>{
-      console.log(res.data.availability);
+
       setUserAvailability(res.data.availability);
+<<<<<<< HEAD
       console.log(userAvailability);
+=======
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
       setUseeffectreload(!useeffectreload);
     })
   })
@@ -151,16 +152,20 @@ const handleEditSubmitAvailability = () => {
     if(!isOpenProfile){
       axios.delete(`http://localhost:8090/trainer/deleteTrainer/${trainerId}`)
         .then((res)=>{
-          console.log(res);
+
           setUseeffectreload(!useeffectreload);
         })
     }
     else{
       axios.delete(`http://localhost:8090/availability/deleteAvailability/${avlId}`)
         .then((res)=>{
-          console.log(res);
+
           handleProfile(trainerTemp);
+<<<<<<< HEAD
           setUseeffectreload(!useeffectreload)
+=======
+          setUseeffectreload(!useeffectreload);
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
         })
     }
     setIsOpenCon(false);
@@ -177,10 +182,13 @@ const handleEditSubmitAvailability = () => {
     settrainerTemp(trainer);
     axios.get(`http://localhost:8090/availability/getAvailability/${trainer.trainerId}`)
     .then((res)=>{
-      console.log(res.data.availability);
+
       setUserAvailability(res.data.availability);
+<<<<<<< HEAD
       console.log(userAvailability);
       setUseeffectreload(!useeffectreload)
+=======
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
     })
   };
 
@@ -193,13 +201,12 @@ const handleEditSubmitAvailability = () => {
   };
 
   const handleAddAvailability = () =>{
-    console.log(date,fromTime,toTime)
+
     axios.post(`http://localhost:8090/availability/createAvailability/${trainerTemp.trainerId}`,{
       "date":date,
       "fromTime":fromTime,
       "toTime":toTime
   }).then((res)=>{
-    console.log(res);
     handleProfile(trainerTemp);
     setUseeffectreload(!useeffectreload)
   })
@@ -219,7 +226,7 @@ const handleEditSubmitAvailability = () => {
   };
 
   const handleEditAvailablity = (item) => {
-    console.log(item);
+
     setIsEditAvailability(true);
     setAvailabilityTemp(item);
     setDate(item.date);
@@ -245,40 +252,43 @@ const handleEditSubmitAvailability = () => {
         if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
           obj[key.toUpperCase()] = trainerList[i][key];
         } else if (key === "availabilityList") {
-          let availabilities = [];
+          // let availabilities = [];
           for (let j = 0; j < trainerList[i][key].length; j++) {
-            availabilities.push(
-              `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-            );
+            // availabilities.push(
+            //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+            // );
+            obj["DATE"] = trainerList[i][key][j].date;
+            obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+            obj["TO TIME"] = trainerList[i][key][j].toTime;
+            dummyTrainersList.push(obj);
           }
-          obj["AVAILABILITY LIST"] = availabilities.join("\n");
+          
+          
         }
       }
-      dummyTrainersList.push(obj);
+      
       console.log(dummyTrainersList);
     }
     const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const dataBlob = new Blob([excelBuffer], { type: "xlsx" });
-    console.log(dataBlob);
+
     const formData = new FormData();
     formData.append('file', dataBlob, 'TrainerFile');
-    console.log(formData);
-    console.log(defaultEmailList);
+
     let mailStr="";
     defaultEmailList.forEach((str,i)=>{
       if(i===defaultEmailList.length-1)
         mailStr+=str;
       else mailStr+=str+",";
     });
-    console.log(mailStr)
     axios.post(`http://localhost:8090/trainer/sendMails`,formData,{
       params:{
         str:mailStr,
       }
     }).then((res)=>{
-      console.log(res);
+
       setdefaultEmailList([]);
     });
     setisOpenSelectMail(false);
@@ -294,23 +304,28 @@ const handleEditSubmitAvailability = () => {
           if (key !== "availabilityList" && key !== "trainerId" && key !=="active") {
             obj[key.toUpperCase()] = trainerList[i][key];
           } else if (key === "availabilityList") {
-            let availabilities = [];
+            // let availabilities = [];
             for (let j = 0; j < trainerList[i][key].length; j++) {
-              availabilities.push(
-                `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-              );
+              // availabilities.push(
+              //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+              // );
+              obj["DATE"] = trainerList[i][key][j].date ;
+              obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+              obj["TO TIME"] = trainerList[i][key][j].toTime;
+              dummyTrainersList.push(obj);
             }
-            obj["AVAILABILITY LIST"] = availabilities.join("\n");
+            
+            
           }
         }
-        dummyTrainersList.push(obj);
+        
         console.log(dummyTrainersList);
       }
       const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: "xlsx" });
-      console.log(data);
+
       FileSaver.saveAs(data, "TrainersFile" + ".xlsx");
   }
 
@@ -353,8 +368,7 @@ const handleEditSubmitAvailability = () => {
             </tr>
           </thead>
           <tbody>
-            {(searchQuery !== "" ? filteredTrainers : trainerList).map(
-              (trainer) => (
+            {(searchQuery !== "" ? filteredTrainers : trainerList).map((trainer) => (
                 <tr>
                   <td>{trainer.trainerName}</td>
                   <td>{trainer.skill}</td>
@@ -408,16 +422,14 @@ const handleEditSubmitAvailability = () => {
       )}
 
       {isAvailabilty && (
+<<<<<<< HEAD
         <form onSubmit={(e)=>{console.log(e);handleAddAvailability()}}>
+=======
+        <form onSubmit={handleAddAvailability}>
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
           <div
             id="avlpop"
             className="popupContainer"
-            onClick={() => {
-              setIsAvaliabilty(false);
-              setDate('');
-              setFromTime('');
-              setToTime('');
-            }}
           >
             <div
               id="avlpop"
@@ -430,7 +442,11 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Date:</label>
+<<<<<<< HEAD
                   <input type="date" value={date} onChange={handleDateChange} required={true}/>
+=======
+                  <input type="date" value={date} onChange={handleDateChange} required={true} />
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                 </div>
 
                 <div className="input-group">
@@ -456,21 +472,20 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
+<<<<<<< HEAD
                   <button
                     type="submit"
                     className="submit-btn"
                   >
+=======
+                  <button type="submit" className="submit-btn" >
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                     Submit
                   </button>
                   <button
                     type="button"
                     className="cancel-btn"
-                    onClick={() => {
-                      setIsAvaliabilty(false);
-                      setDate('');
-                      setFromTime('');
-                      setToTime('');
-                    }}
+                    onClick={() => {setIsAvaliabilty(false); setDate(''); setFromTime(''); setToTime(''); }}
                   >
                     Cancel
                   </button>
@@ -483,16 +498,10 @@ const handleEditSubmitAvailability = () => {
 
 
 {isEditAvailability && (
-        <form>
+        <form onSubmit={handleEditSubmitAvailability}>
           <div
             id="avlpop"
             className="popupContainer"
-            onClick={() => {
-              setIsEditAvailability(false);
-              setDate('');
-              setFromTime('');
-              setToTime('');
-            }}
           >
             <div
               id="avlpop"
@@ -506,9 +515,9 @@ const handleEditSubmitAvailability = () => {
                 <div className="input-group">
                   <label>Date:</label>
                   <input type="date" Value={availabilityTemp.date}
-                      onChange={(event) => {
-                      setDate(event.target.value);
-                    }} />
+                      onChange={(event) => {setDate(event.target.value);}} 
+                      required={true}
+                  />
                 </div>
                 <div className="input-group">
                   <label>From Time:</label>
@@ -516,9 +525,8 @@ const handleEditSubmitAvailability = () => {
                     type="time"
                     step="2"
                     Value={availabilityTemp.fromTime}
-                    onChange={(event) => {
-                      setFromTime(event.target.value);
-                    }}
+                    onChange={(event) => { setFromTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -528,29 +536,19 @@ const handleEditSubmitAvailability = () => {
                     type="time"
                     step="2"
                     Value={availabilityTemp.toTime}
-                    onChange={(event) => {
-                      setToTime(event.target.value);
-                    }}
+                    onChange={(event) => { setToTime(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="button"
-                    className="submit-btn"
-                    onClick={handleEditSubmitAvailability}
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
                     type="button"
                     className="cancel-btn"
-                    onClick={() => {
-                      setIsEditAvailability(false);
-                      setDate('');
-                      setFromTime('');
-                      setToTime('');
-                    }}
+                    onClick={() => { setIsEditAvailability(false); setDate(''); setFromTime(''); setToTime(''); }}
                   >
                     Cancel
                   </button>
@@ -563,13 +561,8 @@ const handleEditSubmitAvailability = () => {
 
 
       {isAdd && (
-        <form>
-          <div
-            className="popupContainer"
-            onClick={() => {
-              setIsAdd(false);
-            }}
-          >
+        <form onSubmit={handleClick}>
+          <div className="popupContainer" >
             <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
               <div className="popupHeader">
                 <h2>Add New Trainer</h2>
@@ -579,9 +572,8 @@ const handleEditSubmitAvailability = () => {
                   <label>Name </label>
                     <input
                       type="text"
-                      onChange={(event) => {
-                        setName(event.target.value);
-                      }}
+                      onChange={(event) => { setName(event.target.value); }}
+                      required={true}
                     />
                     {/* <p id="val">{validMsg}</p> */}
                 </div>
@@ -590,9 +582,8 @@ const handleEditSubmitAvailability = () => {
                   <label>Skill </label>
                   <input
                     type="text"
-                    onChange={(event) => {
-                      setSkill(event.target.value);
-                    }}
+                    onChange={(event) => { setSkill(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -600,9 +591,8 @@ const handleEditSubmitAvailability = () => {
                   <label>Email </label>
                   <input
                     type="text"
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                    }}
+                    onChange={(event) => { setEmail(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -610,26 +600,16 @@ const handleEditSubmitAvailability = () => {
                   <label>Phone </label>
                   <input
                     type="text"
-                    onChange={(event) => {
-                      setPhone(event.target.value);
-                    }}
+                    onChange={(event) => { setPhone(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    onClick={handleClick}
-                    className="submit-btn"
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
-                  <button
-                    type="button"
-                    className="cancel-btn"
-                    onClick={() => {
-                      setIsAdd(false);
-                    }}
+                  <button type="button" className="cancel-btn" onClick={() => { setIsAdd(false);}}
                   >
                     Cancel
                   </button>
@@ -641,13 +621,8 @@ const handleEditSubmitAvailability = () => {
       )}
 
       {isEdit && (
-        <form>
-          <div
-            className="popupContainer"
-            onClick={() => {
-              setIsEdit(false);
-            }}
-          >
+        <form onSubmit={handleEditSubmitClick}>
+          <div className="popupContainer" onClick={() => { setIsEdit(false); }} >
             <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
               <div className="popupHeader">
                 <h2>Edit Trainer</h2>
@@ -658,10 +633,9 @@ const handleEditSubmitAvailability = () => {
                   <input
                     type="text"
                     Value={trainerTemp.trainerName}
-                    onChange={(event) => {
-                      setName(event.target.value);
-                    }}
-                  />
+                    onChange={(event) => {setName(event.target.value); }}
+                    required={true}
+                    />
                 </div>
 
                 <div className="input-group">
@@ -669,9 +643,8 @@ const handleEditSubmitAvailability = () => {
                   <input
                     type="text"
                     defaultValue={trainerTemp.skill}
-                    onChange={(event) => {
-                      setSkill(event.target.value);
-                    }}
+                    onChange={(event) => { setSkill(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -680,9 +653,8 @@ const handleEditSubmitAvailability = () => {
                   <input
                     type="text"
                     defaultValue={trainerTemp.email}
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                    }}
+                    onChange={(event) => { setEmail(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
@@ -691,26 +663,19 @@ const handleEditSubmitAvailability = () => {
                   <input
                     type="text"
                     defaultValue={trainerTemp.phoneNumber}
-                    onChange={(event) => {
-                      setPhone(event.target.value);
-                    }}
+                    onChange={(event) => { setPhone(event.target.value); }}
+                    required={true}
                   />
                 </div>
 
                 <div className="buttonsContainer">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                    onClick={handleEditSubmitClick}
-                  >
+                  <button type="submit" className="submit-btn" >
                     Submit
                   </button>
                   <button
                     type="button"
                     className="cancel-btn"
-                    onClick={() => {
-                      setIsEdit(false);
-                    }}
+                    onClick={() => { setIsEdit(false);}}
                   >
                     Cancel
                   </button>
@@ -782,6 +747,10 @@ const handleEditSubmitAvailability = () => {
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
                             />
+<<<<<<< HEAD
+=======
+                              
+>>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                           </td>
                         </tr>
                       ))}
@@ -803,7 +772,7 @@ const handleEditSubmitAvailability = () => {
         </form>
       )}
 
-      {isOpenSelectMail && <form><div className='popupContainer'>
+      {isOpenSelectMail && <form onSubmit={handleMailSender}><div className='popupContainer'>
                 <div className="popup-boxd">
                 <div className='popupHeader'>
                     <h2>Share Trainer File</h2>
@@ -814,7 +783,7 @@ const handleEditSubmitAvailability = () => {
                         {
                             userList.map((e)=><div className='ListInternWrapper'>
                                 <form>
-                                    <input onClick={(x)=>handleAddList(x,e.email)} type="checkbox"/>
+                                    <input onClick={(x)=>handleAddList(x,e.email)} type="checkbox" required={true}/>
                                 </form>
                                 <p>{e.email}</p>
                             </div>)
@@ -822,7 +791,7 @@ const handleEditSubmitAvailability = () => {
                     </div>
                 </div>
                 <div className='buttonsContainer'>
-                    <button type="button" className="submit-btn" onClick={()=>handleMailSender()}>
+                    <button type="submit" className="submit-btn" >
                         Submit
                     </button>
                     <button type="button" className="cancel-btn" onClick={()=>{setisOpenSelectMail(false);setdefaultEmailList([]);}}>

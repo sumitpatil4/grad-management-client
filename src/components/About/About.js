@@ -1,79 +1,43 @@
 import React from 'react'
 import "./aboutUs.css"
-import avator from "../../images/avator.png"
 
 const About = () => {
   return (
     <div >
       <div className='aboutUs'>
-          <div className='aboutUsContent'>
-          {/* <img src={gradmanagement}></img> */}
-            <p>The Grad Management System is an application for managing the trainings of the grads who are hired by the organisation.</p>
-            <p>It makes it easy to maintain the records of interns, trainers, topics and their trainings.</p>
+        <div className='aboutUsContent'>
+        
+          <p>The Grad Management System is an application for managing the trainings of the grads who are hired by the organisation.</p>
+          <p>It makes it easy to maintain the records of interns, trainers, topics and their trainings.</p>
 
-            <div className='about'>
+          <div className='about'>
             <div>
-            <h6>Designed by</h6>
-            <ul>
-               <li>
-                   {/* <div class="circleContainer"> 
-                        <img src={avator}></img>
-                    </div> */}
-                    Sumit Vasant Patil
-                </li>
-                <li>
-                   {/* <div class="circleContainer"> 
-                        <img src={avator}></img>
-                    </div> */}
-                    Aakriti Singh
-                </li>
-                <li>
-                   {/* <div class="circleContainer"> 
-                        <img src={avator}></img>
-                    </div> */}
-                    Ashish Tripathy
-                </li>
-                <li>
-                   {/* <div class="circleContainer"> 
-                        <img src={avator}></img>
-                    </div> */}
-                    Sai Krupananda
-                </li>
-            </ul>
+              <h6>Designed by</h6>
+              <ul>
+                <li>Sumit Vasant Patil</li>
+                <li>Akriti Singh</li>
+                <li>Ashish Tripathy</li>
+                <li>Sai Krupananda</li>
+              </ul>
             </div>
             <div>
-            <h6>Manager</h6>
-            <ul>
-              <li> 
-                 {/* <div class="circleContainer"> 
-                    <img src={avator}></img>
-                  </div> */}
-                  Sumit Agarwal
-                </li>
-            </ul>
+              <h6>Manager</h6>
+              <ul>
+                <li>Sumit Agarwal</li>
+              </ul>
             </div>
             <div>
-            <h6>Mentors</h6>
-            <ul>
-              <li> 
-                 {/* <div class="circleContainer"> 
-                    <img src={avator}></img>
-                  </div> */}
-                  Gajendra Solanki 
-                </li>
-                <li> 
-                 {/* <div class="circleContainer"> 
-                    <img src={avator}></img>
-                  </div> */}
-                  Deepak Sahu
-                </li>
+              <h6>Mentors</h6>
+              <ul>
+                <li>Gajendra Solanki</li>
+                <li>Deepak Sahu</li>
                 <li>Ayush Gupta</li>
-            </ul>
+              </ul>
             </div>           
           </div>
-         </div>
+        </div>
       </div>
-      </div>    
+    </div>    
     
   )
 }

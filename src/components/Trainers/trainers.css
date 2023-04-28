@@ -80,7 +80,6 @@
   }
   
   .popup-close {
-    /* margin-top: 10px; */
     width: 150px;
     border: 1px solid #27ae60;
     border-radius: 3px;
@@ -140,7 +139,6 @@
     }
 
 .availability {
-  /* border: 1px solid #ccc; */
   border-radius: 5px;
   padding: 10px;
 }

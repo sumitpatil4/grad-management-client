@@ -31,13 +31,12 @@ const Topic = () => {
     useEffect(()=>{
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
-          console.log(res);
+
           updateTopicsList(res.data.topicList);
-          console.log(topicsList);
+
           setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
           setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
-          console.log(completedList);
-          console.log(reamainingList);
+
         })
     },[useeffectreload])
     const activeClass=(e)=>{
@@ -55,10 +54,10 @@ const Topic = () => {
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
     );
   const handleTopicCompletion = () => {
-    console.log(compTemp);
+
     axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/0`)
     .then((res)=>{
-      console.log(res);
+
       setUseeffectreload(!useeffectreload);
     })
     setCompletePopup(false);
@@ -66,28 +65,28 @@ const Topic = () => {
   const handleTopicUncompletion = () => {
     axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/1`)
     .then((res)=>{
-      console.log(res);
+
       setUseeffectreload(!useeffectreload);
     })
     setRemainingPopup(false);
   };
   const handleAdd = () =>{
-      console.log(topicName);
+
       axios.post(`http://localhost:8090/topic/createTopic/${train.trainingId}`,{
         "topicName":topicName
     })
       .then((res)=>{
-        console.log(res);
+
         setUseeffectreload(!useeffectreload);
       })
       setAddPopup(false);
   }
   const handleEditSubmit = ()=>{
-    console.log(editTopic);
+
     axios.put(`http://localhost:8090/topic/updateTopic/${editTopic.topicId}`,{
       "topicName":editTopic.topicName
   }).then((res)=>{
-    console.log(res);
+
     setUseeffectreload(!useeffectreload);
     setShowEditForm(false);
   })
@@ -95,7 +94,7 @@ const Topic = () => {
   const handleDelete = () =>{
     axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`)
     .then((res)=>{
-      console.log(res);
+
       setUseeffectreload(!useeffectreload);
       setDeletePopup(false);
     })
@@ -130,19 +129,13 @@ const Topic = () => {
           <div className="topicNavbar">
             <div className="buttonsWrapper">
               <p
-                onClick={(e) => {
-                  setcompletedCheck(false);
-                  activeClass(e);
-                }}
+                onClick={(e) => { setcompletedCheck(false); activeClass(e); }}
                 className="topicBtns active"
               >
                 Remaining
               </p>
               <p
-                onClick={(e) => {
-                  setcompletedCheck(true);
-                  activeClass(e);
-                }}
+                onClick={(e) => {setcompletedCheck(true); activeClass(e); }}
                 className="topicBtns"
               >
                 Completed
@@ -163,12 +156,7 @@ const Topic = () => {
                 </div>
               </div>
               <div>
-                <p
-                  className="topicAdd"
-                  onClick={(e) => {
-                    setAddPopup(true);
-                  }}
-                >
+                <p className="topicAdd" onClick={(e) => {setAddPopup(true); }} >
                   Add&nbsp;Topic
                 </p>
               </div>
@@ -177,42 +165,29 @@ const Topic = () => {
           <div className="topicsdiv">
 
             {completedCheck &&
-              (searchQuery !== "" ? compltedfilteredList : completedList).map(
-                (t) => (
+              (searchQuery !== "" ? compltedfilteredList : completedList).map((t) => (
                   <div className="topicbar">
                     <form>
                       <input
                         type="checkbox"
                         checked={t.completed}
-                        onChange={() => {
-                          setCompletePopup(true);
-                          setCompTemp(t);
-                        }}
+                        onChange={() => { setCompletePopup(true); setCompTemp(t); }}
                       />
                     </form>
                     <p>{t.topicName}</p>
                     <div>
-                      <BsFillInfoCircleFill
-                        onClick={() => handleInfoPopup(t)}
-                        className="info-icon"
-                      />
+                      <BsFillInfoCircleFill onClick={() => handleInfoPopup(t)} className="info-icon" />
                     </div>
                     <div>
                       <MdEdit
                         className="edit-icon"
-                        onClick={() => {
-                          setEditTopic(t);
-                          setShowEditForm(true);
-                        }}
+                        onClick={() => {setEditTopic(t);setShowEditForm(true);}}
                       />
                     </div>
                     <div>
                       <MdDelete
                         className="del_icon"
-                        onClick={() => {
-                          setDeletePopup(true);
-                          setDeleteId(t.topicId);
-                        }}
+                        onClick={() => {setDeletePopup(true);setDeleteId(t.topicId);}}
                       />
                     </div>
                   </div>
@@ -220,19 +195,13 @@ const Topic = () => {
               )}
 
             {!completedCheck &&
-              (searchQuery !== ""
-                ? unCompltedfilteredList
-                : reamainingList
-              ).map((t) => (
+              (searchQuery !== "" ? unCompltedfilteredList : reamainingList).map((t) => (
                 <div className="topicbar">
                   <form>
                     <input
                       type="checkbox"
                       checked={t.completed}
-                      onChange={() => {
-                        setRemainingPopup(true);
-                        setCompTemp(t);
-                      }}
+                      onChange={() => {setRemainingPopup(true);setCompTemp(t);}}
                     />
                   </form>
                   <p>{t.topicName}</p>
@@ -240,19 +209,13 @@ const Topic = () => {
                   <div>
                     <MdEdit
                       className="edit-icon"
-                      onClick={() => {
-                        setEditTopic(t);
-                        setShowEditForm(true);
-                      }}
+                      onClick={() => {setEditTopic(t);setShowEditForm(true);}}
                     />
                   </div>
                   <div>
                     <MdDelete
                       className="del_icon"
-                      onClick={() => {
-                        setDeletePopup(true);
-                        setDeleteId(t.topicId);
-                      }}
+                      onClick={() => {setDeletePopup(true);setDeleteId(t.topicId);}}
                     />
                   </div>
                 </div>
@@ -277,9 +240,7 @@ const Topic = () => {
                 <button
                   type="button"
                   className="cancel-btn"
-                  onClick={() => {
-                    setCompletePopup(false);
-                  }}
+                  onClick={() => {setCompletePopup(false);}}
                 >
                   No
                 </button>
@@ -305,10 +266,7 @@ const Topic = () => {
                 <button
                   type="button"
                   className="cancel-btn"
-                  onClick={() => {
-                    setRemainingPopup(false);
-                  }}
-                >
+                  onClick={() => {setRemainingPopup(false); }}>
                   No
                 </button>
               </div>
@@ -334,9 +292,7 @@ const Topic = () => {
                 <button
                   type="button"
                   className="cancel-btn"
-                  onClick={() => {
-                    setDeletePopup(false);
-                  }}
+                  onClick={() => {setDeletePopup(false);}}
                 >
                   No
                 </button>
@@ -347,12 +303,7 @@ const Topic = () => {
 
         {showinfo && (
           <form>
-            <div
-              className="popupContainer"
-              onClick={() => {
-                setShowInfo(false);
-              }}
-            >
+            <div className="popupContainer" onClick={() => {setShowInfo(false);}} >
               <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
                 <div className="popupHeader">
                   <h2>Scheduled Date & Time</h2>
@@ -391,7 +342,7 @@ const Topic = () => {
         )}
 
         {showEditForm && (
-          <form>
+          <form onSubmit={(e)=>{e.preventDefault();handleEditSubmit()}}>
 
             <div className="popupContainer">
               <div className="popup-boxd">
@@ -406,30 +357,25 @@ const Topic = () => {
                         type="text"
                         id="topic-name"
                         value={editTopic.topicName}
-                        onChange={(e) => {
-                          setEditTopic({
-                            ...editTopic,
-                            topicName: e.target.value,
-                          });
-                        }}
-                        />
+                        onChange={(e) => {setEditTopic({ ...editTopic, topicName: e.target.value,});}}
+                        required={true}
+                      />
                       {/* <p id="val">{validMsg}</p> */}
                     </div>
                   </div>
                 </div>
                 <div className="buttonsContainer">
                   <button
-                    type="button"
+                    type="submit"
                     className="submit-btn"
-                    onClick={handleEditSubmit}
-                    >
+                  >
                     Submit
                   </button>
                   <button
                     type="reset"
                     className="cancel-btn"
                     onClick={() => setShowEditForm(false)}
-                    >
+                  >
                     Cancel
                   </button>
                 </div>
@@ -439,13 +385,8 @@ const Topic = () => {
         )}
 
         {AddPopup && (
-          <form>
-            {/* <div
-              className="popupContainer"
-              onClick={() => {
-                setAddPopup(false);
-              }}
-            > */}
+          <form onSubmit={(e) => {handleAdd(e); }}>
+
               <div className="popupContainer">
                 <div className="popup-boxd">
                   <div className="popupHeader">
@@ -459,6 +400,7 @@ const Topic = () => {
                           type="text"
                           id="topic-name"
                           onChange={(e) => setTopicName(e.target.value)}
+                          required={true}
                         />
                         {/* <p id="val">{validMsg}</p> */}
                       </div>
@@ -466,25 +408,21 @@ const Topic = () => {
                   </div>
                   <div className="buttonsContainer">
                     <button
-                      type="button"
+                      type="submit"
                       className="submit-btn"
-                      onClick={(e) => {
-                        handleAdd(e);
-                      }}
                     >
                       Submit
                     </button>
                     <button
                       type="reset"
                       className="cancel-btn"
-                      onClick={() => setAddPopup(false)}
-                    >
+                      onClick={() => setAddPopup(false)} >
                       Cancel
                     </button>
                   </div>
                 </div>
               </div>
-            {/* </div> */}
+
           </form>
         )}
       </div>

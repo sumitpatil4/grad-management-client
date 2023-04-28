@@ -8,11 +8,6 @@ const Training = () => {
     const managercontext=useContext(ManagerContext);
     const {train}=managercontext;
 
-    console.log(train)
-
-    
-
-
     return (
         <div className='trainingsContainer'>
             <h1>{train.trainingName}</h1>

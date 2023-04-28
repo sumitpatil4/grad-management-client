@@ -61,6 +61,7 @@ const Schedules = () => {
     const [trainerList,setTrainerList] = useState([]);
     const [meetingObj,setMeetingObj] = useState(null);
     const [popUp,setPopUp] = useState(false);
+    const [editPopUp,setEditPopUp] = useState(false);
     const [checkFlag,setcheckFlag] = useState(false);
     const [checkedArr,setCheckedArr] = useState([]);
     const [grpAvlValueArr,setGrpAvlValueArr] = useState([]);
@@ -118,10 +119,8 @@ const Schedules = () => {
 
     const handleCancelForAdd=()=>{
         const x=document.getElementById("datePicker");
-        console.log(x)
         x.value="";
         x.selected="";
-        console.log(x.value)
         setCheckedArr([])
         setDateArr([])
         setselectTrainerCheck(false)
@@ -131,36 +130,14 @@ const Schedules = () => {
 
 
     const handleGetTrainersByDate = () => {
-        // setDate(date);
         setavlList([]);
         setCheckedArr([]);
         setfinalList([]);
         const arr=dateArr.split(" ");
-        console.log(arr)
+
         let newarr=[];
         arr.forEach((d)=>newarr.push(d.replaceAll("/","-")))
-        console.log(newarr)
-        // arr.forEach((date,i)=>{
-        //     axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
-        //         "topicId":topic,
-        //         "date":new Date(date)
-        //     }).then((res)=>{
-        //         const newlist={
-        //             "date":date,
-        //             "trainers":res.data.trainers
-        //         }
-        //         // console.log(newlist)
-        //         if(i===0){
-        //             avlList.length=0;
-        //             setavlList([]);
-        //             console.log(avlList);
-        //         }
-        //         avlList.push(newlist);
-        //         setavlList(avlList);
-        //         if(i+1===arr.length)
-        //             setselectTrainerCheck(true)
-        //     })
-        // })
+        
         axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
                 "topicId":topic,
                 "dateList":newarr
@@ -168,8 +145,6 @@ const Schedules = () => {
                 setavlList(res.data.sort((a,b)=>{
                     return new Date(a.date)-new Date(b.date);
                 }));
-                console.log(res.data);
-                console.log(avlList);
                 setselectTrainerCheck(true)
             })
     }
@@ -191,16 +166,14 @@ const Schedules = () => {
     }
 
     const handleAvlCheckBox=(r,e,i,j,k,row)=>{
-        console.log("Adding",r)
-        console.log("Final List",finalList)
-        console.log("Checked",checkedArr)
+
         setInstance(e);
         let from = document.getElementById(`time${i}${j}${k}0`).value;
         let to = document.getElementById(`time${i}${j}${k}1`).value;
         const temp_r = {...r}
         temp_r.fromTime=from;
         temp_r.toTime=to;
-        console.log(temp_r,"--->",r)
+
         if(e.target.checked){
             if(checkedArr.length==0){
                 setCheckedArr([...checkedArr,temp_r])
@@ -258,11 +231,8 @@ const Schedules = () => {
                 "batchList":null
             }
             setcurrentTrainerInstance(obj);
-            console.log(obj)
+
             const list=scheduleList.filter((temp)=>{
-                // if(temp.date.localeCompare(r.date)===0 && ((r.toTime>=temp.fromTime) || (temp.toTime>=r.fromTime)))
-                //     return true;
-                // else return false;
 
                 if(temp.date.localeCompare(r.date)===0)
                 {
@@ -292,18 +262,15 @@ const Schedules = () => {
             settempGroupList(tempGroupList);
             setIsOpenGroups(true);
         }
-        else{
-            console.log("unchecked")
-        }
     }
 
     const handleScheduleEachTrainer=()=>{
         currentTrainerInstance.batchList=defaultGroupIdList;
         setcurrentTrainerInstance(currentTrainerInstance)
         const avlGroups=defaultGroupList.filter((temp)=>defaultGroupIdList.includes(temp.batchId))
-        console.log(avlGroups);
+
         setavailGroups(avlGroups);
-        console.log(instance.target.parentElement.nextSibling);
+
         let str="Groups - ";
         avlGroups.forEach((b,i)=>{
             if(i===avlGroups.length-1)
@@ -311,22 +278,19 @@ const Schedules = () => {
             else
                 str+=`<span>${b.batchName}</span>,`
         });
-        console.log(str);
+
         instance.target.parentElement.nextSibling.innerHTML=str;
-        // const x=document.getElementById(`grps${currentTrainerInstance.availabilityId}`);
-        // console.log(x)
-        // x.style.display="block";
-        console.log(currentTrainerInstance,defaultGroupIdList)
+
         finalList.push(currentTrainerInstance);
         setfinalList(finalList);
         setIsOpenGroups(false);
         setcurrentTrainerInstance([]);
         setdefaultGroupIdList([]);
-        // handleSetEmpty();
+
     }
 
     const handleCancelForEachAvlGrps=()=>{
-        console.log(currentTrainerInstance.availablityId)
+
         setCheckedArr(checkedArr.filter(avl=>avl.availabilityId!=currentTrainerInstance.availablityId));
         instance.target.checked=false;
         setIsOpenGroups(false);
@@ -338,7 +302,6 @@ const Schedules = () => {
             if(!defaultGroupIdList.includes(id)){
                 defaultGroupIdList.push(id);
                 setdefaultGroupIdList(defaultGroupIdList);
-                console.log(defaultGroupIdList);
             }
         }
         else{
@@ -346,14 +309,17 @@ const Schedules = () => {
             {
                 defaultGroupIdList.splice(defaultGroupIdList.indexOf(id), 1);
                 setdefaultGroupIdList(defaultGroupIdList);
-                console.log(defaultGroupIdList);
             }
             document.getElementById('group_checkbox').checked=false;
         }
     }
+
+    const handleDateChange = (e) => {
+        // setDate(date);
+        setDate(e.target.value);
+    }
     
     const handleFromTimeChange = (e) => {
-        // setFromTime(fromTime);
         setFromTime(e);
     }
     
@@ -379,13 +345,11 @@ const Schedules = () => {
             }
             axios.post(`http://localhost:8090/batch/checkBatchAvailability/${id}`,data)
             .then((res)=>{
-                console.log(res);
                 if(res.data.result==1){
                     setGrpAvlValueArr([...grpAvlValueArr,id]);
                 }
                 defaultGroupIdList.push(id);
                 setdefaultGroupIdList(defaultGroupIdList);
-                console.log(defaultGroupIdList)
             })
         }
         else{
@@ -394,7 +358,6 @@ const Schedules = () => {
             {
                 defaultGroupIdList.splice(defaultGroupIdList.indexOf(id), 1);
                 setdefaultGroupIdList(defaultGroupIdList);
-                console.log(defaultGroupIdList)
             }
         }
     }
@@ -422,10 +385,6 @@ const Schedules = () => {
     
     
     const handleClick = () => {
-        console.log(finalList)
-        console.log("Finally")
-        console.log(topic);
-        console.log(trainer)
         setCheckedArr([]);
         finalList.forEach((lst,i)=>{
             const data = {
@@ -443,7 +402,6 @@ const Schedules = () => {
             }
             axios.post(`http://localhost:8090/meeting/createMeeting`,data)
             .then((res)=>{
-                console.log(res);
                 const meet = res.data.meeting;
                 const batchArr = [];
                 meet.batchList.forEach((batch)=>{
@@ -452,13 +410,12 @@ const Schedules = () => {
                 axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
                     "batchList":batchArr
                 }).then((res)=>{
-                    console.log(res)
                     const interArr=[];
                     res.data.interns.forEach((intern)=>{
                         interArr.push({'email':intern.email});
                     })
                     console.log(interArr);
-                    // interArr.push({'email':meet.trainer.email})
+                    interArr.push({'email':meet.trainer.email})
                     interArr.push({'email':usermail})
                     const TEST_EVENT = {
                         'summary': meet.topic.topicName,
@@ -490,9 +447,6 @@ const Schedules = () => {
                           ]
                         }
                       };
-                    console.log(TEST_EVENT)
-                    console.log("Creating Schedule");
-                    console.log(accessToken)
                     fetch ('https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=all',{
                         method: 'POST',
                         headers: {
@@ -502,11 +456,10 @@ const Schedules = () => {
                     }).then((data) => {
                         return data.json();
                     }).then((data) => {
-                        console.log(data);
                         alert('event created check google calendar')
                     })
                     setUseEffectReload(!useEffectReload)
-                    // handleSetEmpty();
+
                     setCheckedArr([]);
                     handleCreateSch();
                     if(i===finalList.length-1){
@@ -521,22 +474,17 @@ const Schedules = () => {
     };
 
     const newhandleClick = () => {
-        // setCheckedArr([]);
-        // console.log(finalList)
-        // return;
         finalList.forEach((lst,i)=>{
-            console.log(lst)
             axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
                 "batchList":lst.batchList
             }).then((res)=>{
-                console.log(res)
                 const interArr=[];
                 res.data.interns.forEach((intern)=>{
                     interArr.push({'email':intern.email});
                 })
-                // interArr.push({'email':lst.trainerId.email})
+                interArr.push({'email':lst.trainerId.email})
                 interArr.push({'email':usermail});
-                console.log(interArr);
+
                 const EVENT = {
                     'summary': topicName,
                     'description': lst.meetingDesc,
@@ -567,7 +515,6 @@ const Schedules = () => {
                       ]
                     }
                 };
-                console.log(EVENT)
                 fetch ('https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=all',{
                     method: 'POST',
                     headers: {
@@ -577,7 +524,6 @@ const Schedules = () => {
                 }).then((data) => {
                     return data.json();
                 }).then((data) => {
-                    console.log(data);
                     const obj = {
                         "meetingDesc":lst.meetingDesc,
                         "date":lst.date,
@@ -595,7 +541,6 @@ const Schedules = () => {
                     }
                     axios.post(`http://localhost:8090/meeting/createMeeting`,obj)
                     .then((res)=>{
-                        console.log(res);
                         handleCancelForAdd();
                         setfinalList([]);
                         setCheckedArr([]);
@@ -613,22 +558,15 @@ const Schedules = () => {
         setViewList(e);
         setinternInstance([]);
         console.log(e)
-        handleDetsSch();
+
+        handleDetsSch();//why is this here
     }
 
     // handle click event of the Edit button
     const handleEdit = (e,i) => {
-        // setTopic(e.meetTopic);
-        // setDate(e.Date);
-        // setFromTime(e.from_time);
-        console.log(e)
         setMeetingObj(e)
         handleEditSch();
-        // handleSetEmpty();
-        // setUseEffectReload(!useEffectReload)
-        // setViewList(e);
-        // setArrId(i);
-        // setViewList('');
+        console.log(meetingObj)
     }
 
     const handleSelectAll = (e)=>{
@@ -639,31 +577,39 @@ const Schedules = () => {
         })
     }
 
-    const handleEditClick = (index) => {
-        const list = [...scheduleList];
-        console.log(arrId);
-        const x={
-            meetTopic: topic,
-            Date: date,
-            from_time: fromTime,
-            meetTrainer: trainer,
-            // meetGroups: defaultGroupList,
-            meetLink: meet,
-            assessmentLink: assessment,
-            feedbackLink: feedback,
-            descriptionLink: description
+    const handleEditClick = () => {
+        const arr=[]
+        meetingObj.batchList.forEach((batch)=>arr.push(batch.batchId));
+        const data={
+            "meetingId": meetingObj.meetingId,
+            "meetingDesc":description,
+            "date":meetingObj.date,
+            "fromTime":meetingObj.fromTime,
+            "toTime":meetingObj.toTime,
+            "meetingLink":meetingObj.meetingLink,
+            "feedbackLink":meetingObj.feedbackLink,
+            "assessmentLink":meetingObj.assessmentLink,
+            "topicId":meetingObj.topic.topicId,
+            "trainingId":meetingObj.training.trainingId,
+            "trainerId":meetingObj.trainer.trainerId,
+            "batchList":arr,
+            "eventId":meetingObj.eventId,
+            "availabilityUsed":meetingObj.availabilityUsed
         }
-        list[index] = x;
-        setscheduleList(list);
-        handleEditSch();
+        console.log(data);
+        axios.put(`http://localhost:8090/meeting/updateMeeting`,data)
+        .then((res)=>{
+            setUseEffectReload(!useEffectReload)
+        })
+        setEditPopUp(true);
+        setIsOpenEdit(false);
+        // setIsOpenDets(true);
         handleSetEmpty();
-        setUseEffectReload(!useEffectReload)
-        console.log(list);
+        // setUseEffectReload(!useEffectReload)
     };
 
     // handle click event of the Remove button
     const handleRem =  (e,i) => {
-        console.log(e);
         setMeetingObj(e);
         if(localStorage.getItem('calendarToken')!=null){
             setIsOpenCon(true);
@@ -682,7 +628,6 @@ const Schedules = () => {
         }).then((res)=>{
             axios.delete(`http://localhost:8090/meeting/deleteMeeting/${meetingObj.meetingId}`)
             .then((res)=>{
-                console.log(res)
                 setIsOpenCon(false);
                 setUseEffectReload(!useEffectReload);
                 handleCreateSch();
@@ -704,20 +649,16 @@ const Schedules = () => {
         const d1DateOnly = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
         const d2DateOnly = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
         if (d1DateOnly.getTime() < d2DateOnly.getTime()) {
-            // console.log("-1")
             return -1;
         }
         if (d1DateOnly.getTime() > d2DateOnly.getTime()) {
-            // console.log("1")
             return 1;
         }
     }
 
     useEffect(() => {
-        console.log(train.trainingId)
         axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
         .then((res)=>{
-            console.log(res);
             setscheduleList(res.data.meeting);
             const currDate = getCurrentDate(); //To get the Current Date
             scheduleList.sort((a, b) => a.date.localeCompare(b.date));
@@ -727,19 +668,15 @@ const Schedules = () => {
         })
         axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
         .then((res)=>{
-            console.log(res);
             setTopicList(res.data.topicList)
         })
         axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
         .then((res)=>{
-            console.log(res);
             setTrainerList(res.data.trainers)
         })
         axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
         .then((res)=>{
-            console.log(res);
             setdefaultGroupList(res.data.batch);
-            console.log("GROUPS ",res.data.batch)
         })
     }, [useEffectReload])
 
@@ -752,7 +689,7 @@ const Schedules = () => {
               access_type:"offline",
               scope:"openid email profile https://www.googleapis.com/auth/calendar",
               callback:(tokenResponse)=>{
-                console.log(tokenResponse);
+
                 setAccessToken(tokenResponse.access_token);
                 localStorage.setItem('calendarToken',tokenResponse.access_token);
                 localStorage.setItem('calendarTokenInit',new Date());
@@ -769,7 +706,7 @@ const Schedules = () => {
             let t2 = new Date().getTime();
             let diff = t2-t1;
             let res = Math.round(diff / 60000);
-            console.log(res);
+
             if(res > 30){
                 localStorage.removeItem('calendarToken');
                 localStorage.removeItem('calendarTokenInit');
@@ -821,15 +758,18 @@ const Schedules = () => {
         setUseEffectReload(!useEffectReload);
     }
 
+    const handleEditPopUpOk = ()=>{
+        setEditPopUp(false);
+        setUseEffectReload(!useEffectReload);
+    }
+
     const filteredList = (list)=>{
-        console.log(searchQuery)
-        console.log(list)
+
         const filteredList = list.filter(
             (meet) =>
               meet.topic.topicName.toLowerCase().includes(searchQuery.toLowerCase()) ||
               meet.trainer.trainerName.toLowerCase().includes(searchQuery.toLowerCase())
         )
-        console.log(filteredList)
         return filteredList;
     }
 
@@ -941,9 +881,7 @@ const Schedules = () => {
                 </div>
                 <div className='iconContainer'>
                     <div className='edit_icon_wrapper' >
-                        {/* <div className='infoSchedule'>
-                            <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                        </div> */}
+
                         <div>
                             <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
                         </div>
@@ -958,7 +896,8 @@ const Schedules = () => {
             </div>
             )}
 
-            {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => 
+            <div className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -1042,13 +981,13 @@ const Schedules = () => {
                         setTopic(e.target.value.substring(0,e.target.value.indexOf('_')));
                         setTopicName(e.target.value.substring(e.target.value.indexOf('_')+1))
                     }} required={true}>
-                    <option selected={true} hidden={true} disabled={true}>Select one Topic </option>
+                        <option selected={true} hidden={true} disabled={true}>Select one Topic </option>
                         {topicList.filter(topic=>topic.completed==false).map((e,i)=>{
                             return(
                             <option value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
                             )
                         })}
-                        </select>                                                            
+                    </select>                                                            
                 </div>
 
                 <div className="sch_input-group">
@@ -1058,7 +997,7 @@ const Schedules = () => {
                             onChange={(arr)=>setDateArr(arr.join(" "))}
                             multiple={true}                         
                             minDate={new Date()}
-                        />
+                    />
                     }
                 </div>
 
@@ -1103,7 +1042,7 @@ const Schedules = () => {
             </div>
             <div className='sch_buttonsContainer'>
                 <button type="submit" className="submit-btn" disabled={calendarFlag} onClick={()=>{newhandleClick()}}>
-                    Create
+                    Create Schedule
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() =>{handleCancelForAdd()}}>
                     Cancel
@@ -1113,7 +1052,8 @@ const Schedules = () => {
         </div>}
 
 
-        {isOpenEdit && <div className="sch_popup-boxd" onClick={(e) => e.stopPropagation()}>
+        {isOpenEdit && <form onSubmit={(e)=>{e.preventDefault();handleEditClick()}}>
+        <div className="sch_popup-boxd" onClick={(e) => e.stopPropagation()}>
             <div className='sch_popupHeader'>
                 <h2>Edit meeting details</h2>
             </div>
@@ -1121,69 +1061,69 @@ const Schedules = () => {
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic</label>
-                    <select onClick={(e)=>console.log(e.target.value)} value={topic} required={true}>
-                    {topicList.map((e,i)=>{
+                    <input onClick={(e)=>console.log(e.target.value)} value={meetingObj.topic.topicName} required={true} readOnly={true}>
+                    {/* {topicList.map((e,i)=>{
                             return(
                             <option value={e.topicName}>{e.topicName}</option>
                             )
-                        })}
-                    </select>                                                         
+                        })} */}
+                    </input>                                                         
                 </div>
 
                 <div className="sch_input-group">
                     <label> Date </label>
-                    {/* <input type="date" value={date} onChange={handleDateChange} /> */}
+                    <input type="date" value={meetingObj.date} onChange={handleDateChange} readOnly={true}/>
                 </div>
 
                 <div className="sch_input-group">
                     <label> Start Time </label>
-                    <input step="2" value={fromTime} type="time" onChange={handleFromTimeChange}/>                    
+                    <input step="2" value={meetingObj.fromTime} type="time" onChange={handleFromTimeChange} readOnly={true}/>                    
                 </div>
 
                 <div className="sch_input-group">
                     <label> End Time </label>
-                    <input  type="time" value={toTime} onChange={handleToTimeChange} />                 
+                    <input step="2" value={meetingObj.toTime} type="time" onChange={handleToTimeChange} readOnly={true}/>                 
                 </div>
 
                 <div className="sch_input-group">
                     <label>Trainer </label>
-                    <select onClick={(e)=>setTrainer(e.target.value)} defaultValue={trainer} required={true}>
-                    {trainerList.map((e,i)=>{
+                    <input onClick={(e)=>setTrainer(e.target.value)} defaultValue={meetingObj.trainer.trainerName} required={true} readOnly={true}>
+                    {/* {trainerList.map((e,i)=>{
                             return(
                             <option value={e.trainerName}>{e.trainerName}</option>
                             )
-                        })}
-                    </select>                                                            
+                        })} */}
+                    </input>                                                            
                 </div>
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Meet Link</label>
-                    <input type="text" id="link" onChange={handleMeet} value={meet}/>                                                             
-                </div>
+                    <input type="text" id="link" onChange={handleMeet} value={meet} readOnly={true}/>                                                             
+                </div> */}
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Assessment Link</label>
                     <input type="text" id="link" onChange={handleAssessment} value={assessment}/>                                                             
-                </div>
+                </div> */}
 
-                <div className="sch_input-group">
+                {/* <div className="sch_input-group">
                     <label htmlFor="name">Feedback Link</label>
                     <input type="text" id="link" onChange={handleFeedback} value={feedback}/>                                                             
-                </div>
+                </div> */}
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription} value={description}>{description}</textarea>                                                             
+                    <textarea  onChange={handleDescription} defaultValue={meetingObj.meetingDesc}>{description}</textarea>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Select Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            defaultGroupList.map((e)=><div className='sch_ListInternWrapper'>
-                                <form>
+                            meetingObj.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                                {/* <form>
                                     <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
-                                </form>
+                                </form> */}
                                 <p>{e.batchName}</p>
                             </div>)
                         }
@@ -1192,7 +1132,7 @@ const Schedules = () => {
             </div>
 
             <div className='sch_buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => handleEditClick(arrId)}>
+                <button type="submit" className="submit-btn" >
                     Submit
                 </button>
                 <button type="reset" className="cancel-btn" onClick={() => {handleCreateSch();handleSetEmpty();setTemp('');}}>
@@ -1200,7 +1140,8 @@ const Schedules = () => {
                 </button>
             </div>
             </div>
-        </div>}
+        </div>
+        </form>}
 
 
         {isOpenDets && <div className="sch_popup-boxd">
@@ -1296,6 +1237,19 @@ const Schedules = () => {
         </div>
         <div className='buttonsContainer'>
             <button type="submit" className="submit-btn" onClick={() => handlePopUpOk()}>
+                Ok
+            </button>
+        </div>
+    </div>
+</div>}
+
+{editPopUp && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>Schedule Edited</h2>
+        </div>
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => handleEditPopUpOk()}>
                 Ok
             </button>
         </div>
