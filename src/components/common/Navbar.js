@@ -62,6 +62,7 @@ const Navbar = (props) => {
           }
 
           {leadershipflag && <>
+            <NavLink className="navlinks" to={"/leadership"}>Leadership</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
           }
