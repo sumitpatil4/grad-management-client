@@ -112,7 +112,7 @@
   }
 
   .shareIcon{
-    font-size: 25px;
+    font-size: 23px;
     padding: 5px 0px;
     margin: 0px 10px;
     cursor: pointer;
@@ -120,6 +120,7 @@
   }
 
   .ExcelIcon{
+    font-size: 25px;
     color: rgb(29, 111, 66);
     margin-right: 20px;
   }
