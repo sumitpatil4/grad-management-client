@@ -118,10 +118,7 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
-<<<<<<< HEAD
       console.log(userAvailability);
-=======
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
       setUseeffectreload(!useeffectreload);
     })
   })
@@ -161,11 +158,7 @@ const handleEditSubmitAvailability = () => {
         .then((res)=>{
 
           handleProfile(trainerTemp);
-<<<<<<< HEAD
           setUseeffectreload(!useeffectreload)
-=======
-          setUseeffectreload(!useeffectreload);
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
         })
     }
     setIsOpenCon(false);
@@ -184,11 +177,8 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
-<<<<<<< HEAD
       console.log(userAvailability);
       setUseeffectreload(!useeffectreload)
-=======
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
     })
   };
 
@@ -422,11 +412,7 @@ const handleEditSubmitAvailability = () => {
       )}
 
       {isAvailabilty && (
-<<<<<<< HEAD
-        <form onSubmit={(e)=>{console.log(e);handleAddAvailability()}}>
-=======
         <form onSubmit={handleAddAvailability}>
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
           <div
             id="avlpop"
             className="popupContainer"
@@ -442,11 +428,7 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Date:</label>
-<<<<<<< HEAD
-                  <input type="date" value={date} onChange={handleDateChange} required={true}/>
-=======
                   <input type="date" value={date} onChange={handleDateChange} required={true} />
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                 </div>
 
                 <div className="input-group">
@@ -472,14 +454,7 @@ const handleEditSubmitAvailability = () => {
                 </div>
 
                 <div className="buttonsContainer">
-<<<<<<< HEAD
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                  >
-=======
                   <button type="submit" className="submit-btn" >
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                     Submit
                   </button>
                   <button
@@ -747,10 +722,7 @@ const handleEditSubmitAvailability = () => {
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
                               className="del_icon"
                             />
-<<<<<<< HEAD
-=======
                               
->>>>>>> 2a8170b484d3967276899c1e0c2f1e292e28ad24
                           </td>
                         </tr>
                       ))}
