@@ -502,7 +502,7 @@ const Interns = () => {
                     <button type="submit" className="submit-btn" >
                         Submit
                     </button>
-                    <button type="button" className="cancel-btn" onClick={()=>setisOpenGroupAddIntern(false)}>
+                    <button type="button" className="cancel-btn" onClick={()=>{setisOpenGroupAddIntern(false);setdefaultInternIdList([]);}}>
                         Cancel
                     </button>
                 </div>

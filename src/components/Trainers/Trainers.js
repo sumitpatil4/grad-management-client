@@ -1,8 +1,8 @@
 import "./trainers.css";
 import React, { useState ,useContext, useEffect} from "react";
-import { FaSearch, FaUserAlt } from "react-icons/fa";
+import { FaSearch, FaUserAlt ,FaShareAlt } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
-import { FiShare } from "react-icons/fi";
+import { BsShareFill } from "react-icons/bs";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
@@ -118,6 +118,7 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
+      console.log(userAvailability);
       setUseeffectreload(!useeffectreload);
     })
   })
@@ -157,7 +158,7 @@ const handleEditSubmitAvailability = () => {
         .then((res)=>{
 
           handleProfile(trainerTemp);
-          setUseeffectreload(!useeffectreload);
+          setUseeffectreload(!useeffectreload)
         })
     }
     setIsOpenCon(false);
@@ -176,6 +177,8 @@ const handleEditSubmitAvailability = () => {
     .then((res)=>{
 
       setUserAvailability(res.data.availability);
+      console.log(userAvailability);
+      setUseeffectreload(!useeffectreload)
     })
   };
 
@@ -329,7 +332,7 @@ const handleEditSubmitAvailability = () => {
       </div>
       <div>
         <div className="buttonContainer2">
-            <FiShare title="Share Excel File To Mails" className="shareIcon" onClick={()=>setisOpenSelectMail(true)}/>
+            <BsShareFill title="Share Excel File To Mails" className="shareIcon" onClick={()=>setisOpenSelectMail(true)}/>
             <RiFileExcel2Fill title="Download Excel File" className="ExcelIcon shareIcon" onClick={handleFileDownload}/>
             <div className="search-bar2">
               <input
