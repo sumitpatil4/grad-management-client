@@ -88,7 +88,7 @@ const Navbar = (props) => {
           }
 
             <div onClick={()=>{profileflag ? setProfileflag(false):setProfileflag(true)}} className="profile_div">
-                <img className="profile_logo" src={userpicture} alt="profile_logo"/>
+                <img className="profile_logo" src={userpicture} />
             </div>
         </div>
     </nav>
