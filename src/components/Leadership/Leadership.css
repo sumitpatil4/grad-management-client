@@ -1,10 +1,139 @@
 .LeadershipChart {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 10px;
   }
   
   .chart-container {
-    max-width: 650px;
-    max-height: 400px;
+    max-width: 250px;
+    max-height: 300px;
     margin: 0 auto;
   }
+
+  .managerText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .managerContainer{
+    border-radius: 5px;
+    height: 80.3vh;
+    display: grid;
+    grid-template-columns: 17% 43% 40%;
+    margin: 0px 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: auto;
+  }
+
+  .trainContainer{
+    background-color: rgb(14, 20, 30);
+    color: white;
+  }
+
+
+.trainContainer>h3{
+    font-size: 20px;
+    padding: 16.5px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.trainContainer>div{
+  height: 71.1vh;
+  overflow-y: scroll;
+}
+
+.ldr_topicContainer{
+  height: 62.7vh;
+  overflow-y: scroll;
+}
+
+.trainContainer>div>div{
+  font-size: 20px;
+  padding: 15px 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.trainContainer>div>div:hover{
+  background-color: rgb(46, 200, 102);
+}
+
+.SchbuttonsWrapper>div{
+  font-size: 20px;
+  padding: 16.5px 20px;
+  font-weight: 500;
+}
+
+.leaderTopics{
+  text-align: center;
+  font-size: 24px;
+  padding: 10px;
+  margin: 0px 15px;
+  border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
+.managerTopicheads{
+  margin: 0px 20px;
+  margin-top: 10px;
+  color: gray;
+  font-size: 18px;
+}
+
+.barchartContainer{
+  height: 71.1vh;
+  overflow-y: scroll;
+}
+
+.topicbar_ldr{
+    display: grid;
+    grid-template-columns: 79% 7% 7% 7%;
+    width: inherit;
+    box-shadow: rgba(0, 0, 0, 0.123) 0px 10px 20px;
+    margin: 15px 20px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.topicbar_ldr:hover{
+  transform: scale(1.01);
+}
+
+.topicbar_ldr>p{
+  padding: 2px;
+  padding-left: 10px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.topicbar_ldr>div{
+  float: right;
+  justify-content: right;
+}
+
+
+
+.report-icon,
+.attd_icon
+{
+    padding: 0px 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.report-icon
+{
+    color: rgb(94, 132, 255);
+}
+
+.attd_icon
+{
+    color: rgb(50, 32, 68);
+}
+
+.report-icon:hover,
+.attd_icon:hover
+{
+    transform: scale(1.1);
+}

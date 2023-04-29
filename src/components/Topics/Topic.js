@@ -100,15 +100,6 @@ const Topic = () => {
     })
   }
 
-  const calcPercentage=(topicId)=>{
-    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
-    .then((res)=>{
-      console.log(res)
-      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
-      console.log(filteredRes)
-    })
-  }
-
 
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
@@ -119,7 +110,6 @@ const Topic = () => {
       const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===t.topicId)
       setTopicMeetings(filteredRes);
     })
-    calcPercentage(t.topicId)
   }
 
     return (
