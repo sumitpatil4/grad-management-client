@@ -152,23 +152,6 @@ const Topic = () => {
     });
   }
 
-  const calcPercentage=(topicId)=>{
-    setIsLoading(true);
-    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`,{
-      headers:{
-        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
-      }
-    })
-    .then((res)=>{
-      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
-      setIsLoading(false);
-    }).catch((err)=>{
-      setResMessage(err.response.data.message);
-      setResPopUp(true);
-      setIsLoading(false);
-  });
-  }
-
 
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
@@ -182,13 +165,7 @@ const Topic = () => {
     .then((res)=>{
       const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===t.topicId)
       setTopicMeetings(filteredRes);
-      setIsLoading(false);
-    }).catch((err)=>{
-      setResMessage(err.response.data.message);
-      setResPopUp(true);
-      setIsLoading(false);
-  });
-    calcPercentage(t.topicId)
+    })
   }
 
     return (

@@ -11,12 +11,13 @@ import User from '../User/User';
 import {Admin} from '../Contextapi/Admincontext';
 import {Manager} from "../Contextapi/Managercontext"
 import {Intern} from "../Contextapi/InternContext"
+import { Leader } from '../Contextapi/Leadercontext';
 import Training from '../Training/Training';
 import Interns from '../Interns/Interns';
 import Topic from '../Topics/Topic';
 import Schedules from '../Schedules/Schedules';
 import Leadership from '../Leadership/Leadership';
-import Result from '../Result/result';
+import Result from '../Leadership/result';
 import InternsView from '../InternsView/InternsView';
 
 const Home = () => {
@@ -99,13 +100,14 @@ const Home = () => {
             </Routes>
         </div></Manager>}
 
-        {leadershipflag && <div>
+        {leadershipflag && <Leader><div>
         <Navbar role={userrole}/>
         <Routes>
             <Route path="/leadership" element={<Leadership />}/>
             <Route path="/leadership/result" element={<Result />}/>
+            <Route path="/aboutus" element={<About />}/>
         </Routes>
-        </div>}
+        </div></Leader>}
 
         {internFlag && <Intern><div>
           <Navbar role={userrole}/>

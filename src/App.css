@@ -48,7 +48,7 @@ body{
     padding: 10px 0;
     color: white;
     font-weight: normal;
-    background-color:rgb(14, 20, 30);;
+    background-color:rgb(14, 20, 30);
   }
 
 .inputContainer{
@@ -389,6 +389,7 @@ tr:nth-child(even)
 /* width */
 ::-webkit-scrollbar {
   width: 0px;
+  height: 0px;
 }
 
 /* Track */
