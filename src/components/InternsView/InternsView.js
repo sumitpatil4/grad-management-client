@@ -7,6 +7,8 @@ import axios from 'axios';
 import { RiFileExcel2Fill } from "react-icons/ri";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { PuffLoader } from 'react-spinners';
+
 
 
 const InternsView = () => {
@@ -29,6 +31,7 @@ const InternsView = () => {
     const [useEffectReload, setUseEffectReload] = useState(false);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -52,10 +55,10 @@ const InternsView = () => {
     }
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
         .then((res)=>{
             updateinternSchedulesList(res.data.meeting);
-            console.log(internSchedulesList);
             // scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
             const currDate = getCurrentDate(); //To get the Current Date
 
@@ -64,9 +67,11 @@ const InternsView = () => {
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1).sort((a, b) => a.date.localeCompare(b.Date)));
 
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === 1).sort((a, b) => a.date.localeCompare(b.Date)));
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
     }, [useEffectReload])
 
@@ -138,19 +143,19 @@ const InternsView = () => {
             dummyMeetingList.push(obj);
           }
         }
-        
-        console.log(dummyMeetingList);
       }
       const ws = XLSX.utils.json_to_sheet(dummyMeetingList);
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: "xlsx" });
-      console.log(data);
       FileSaver.saveAs(data, "MeetingsFile" + ".xlsx");
   }
 
 
   return (<>
+  {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
     <h2 className='scheduleHeader'>Your&nbsp;Schedules</h2>
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">

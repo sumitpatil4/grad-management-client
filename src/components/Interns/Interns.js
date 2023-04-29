@@ -5,6 +5,7 @@ import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
+import { PuffLoader } from 'react-spinners';
 
 const Interns = () => {
 
@@ -39,6 +40,7 @@ const Interns = () => {
     const batchName = `${train.trainingName}_${train.trainingId}`;
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -75,21 +77,32 @@ const Interns = () => {
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             updateinternsList(res.data.intern);
             setUseeffectreload2(!useeffectreload2);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
     },[useeffectreload,defaultCheck,useeffectreload1])
 
     useEffect(()=>{
         if(groupName.length===0)
             setGroupName(train.trainingName);
-
-        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             res.data.batch.forEach((e)=>{
                 e.internList=getInternsListUsingBatchId(e.batchId);
@@ -100,9 +113,11 @@ const Interns = () => {
             setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
             updategroupsList(newBatchList);
             setUseeffectreload3(!useeffectreload3);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
     },[useeffectreload,defaultCheck,useeffectreload2])
 
@@ -125,14 +140,21 @@ const Interns = () => {
 
     const handleAddGroup=()=>{
         //call the add group api using above data
+        setIsLoading(true);
         axios.post(`http://localhost:8090/batch/createBatch/${train.trainingId}`,{
             "batchName":newGroup
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setisOpenNewGroup(false);
         setNewGroup("");
@@ -144,14 +166,21 @@ const Interns = () => {
     }
 
     const handleEditGroup=()=>{
+        setIsLoading(true);
         axios.put(`http://localhost:8090/batch/updateBatch/${currentGroup[0].batchId}`,{
             "batchName":newGroup
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         //call the update group name api using above data
         setisOpenEditGroup(false);
@@ -163,14 +192,21 @@ const Interns = () => {
         const arr=[];
         internlist.forEach((e)=>arr.push(e.internId))
         //call the delete group name api using above data
+        setIsLoading(true);
         axios.put(`http://localhost:8090/batch/updateInternBatch/${currentGroup[0].batchId}/${defBatch.batchId}`,{
             "internIdList":arr
-        }).
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).
         then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setGroupName(train.trainingName)
         setDefaultCheck(true);
@@ -181,12 +217,19 @@ const Interns = () => {
 
     const handleDeleteForGroup=()=>{
         //call the api with both of above
-        axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`)
+        setIsLoading(true);
+        axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`,null,{
+            headers:{
+                "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setisOpenDeleteForGroup(false)
     }
@@ -197,15 +240,22 @@ const Interns = () => {
             phoneNumber:phoneno,
             email:internemail
         }
+        setIsLoading(true);
         axios.post(`http://localhost:8090/intern/createIntern/${userid}/${train.trainingId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
-        }).then((res)=>{
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         //call add api here with above data
         setisOpenDefaultAddIntern(false);
@@ -226,15 +276,22 @@ const Interns = () => {
             email:internemail
         }
         //call edit api here with above data
+        setIsLoading(true);
         axios.put(`http://localhost:8090/intern/updateIntern/${internInstance.internId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
-        }).then((res)=>{
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setisOpenEditIntern(false);
     }
@@ -246,11 +303,18 @@ const Interns = () => {
 
     const handleDeleteIntern=()=>{
         //call delete api here with above data
-        axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`).then((res)=>{
+        setIsLoading(true);
+        axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setisOpenDeleteIntern(false);
     }
@@ -277,22 +341,32 @@ const Interns = () => {
 
     const handleGroupAddIntern=()=>{
         //call the add interns to group api
+        setIsLoading(true);
         axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
             "internIdList":defaultInternIdList
-        }).
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).
         then((res)=>{
             setdefaultInternIdList([]);
             setUseeffectreload1(!useeffectreload1);
             setDefaultCheck(false);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setisOpenGroupAddIntern(false);
     }
 
     return (
         <>
+        {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
         <div className='internsContainerWrapper'>
             <h2>Interns</h2>
             <div className='internsContainer'>

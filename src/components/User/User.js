@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import "./user.css"
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
-
+import { PuffLoader } from 'react-spinners';
 
 const User = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +13,7 @@ const User = () => {
     const {userid,username, usermail}=usecontext;
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const handleClick=(e)=>{
         const req={
@@ -23,12 +24,19 @@ const User = () => {
         // shoot email to admin
 
         //API
-        axios.post(`http://localhost:8090/notification/create/${userid}`,req)
+        setIsLoading(true);
+        axios.post(`http://localhost:8090/notification/create/${userid}`,req,{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
             setPopUp(true);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setIsOpen(false);
     }
@@ -36,6 +44,9 @@ const User = () => {
 
     return (
         <>
+        {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
         <div className='newuserContainer'>
             <div className='newuser'>
                 <h1>Hi {username} !</h1>

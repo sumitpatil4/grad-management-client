@@ -48,8 +48,8 @@ const Result = () => {
             )} */}
             {
               (searchQuery !== "" ? filteredList : completedTopicsList).map(
-                (t) => (
-                  <div className="topicbar">
+                (t,i) => (
+                  <div key={i} className="topicbar">
                     <p>{t.topicName}</p>
                     <div>
                       <BsFillInfoCircleFill

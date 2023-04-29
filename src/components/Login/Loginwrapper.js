@@ -3,12 +3,14 @@ import { FcGoogle } from 'react-icons/fc';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
 import "../common/Links";
+import { PuffLoader,ClipLoader } from 'react-spinners';
 
 const Loginwrapper = (props) => {
 
     const usecontext=useContext(AuthContext);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     useEffect(()=>{
         /* global google */
@@ -38,6 +40,7 @@ const Loginwrapper = (props) => {
     function handleLoginApi(response){
         // updateuserrole("ROLE_INTERN");
         // handleLogin();
+        setIsLoading(true);
         axios.post("http://localhost:8090/user/login",null,{
             headers:{
                 "Authorization":response.credential
@@ -54,14 +57,19 @@ const Loginwrapper = (props) => {
             localStorage.setItem('IDToken',response.credential);
             localStorage.setItem('userId',res.data.user.userId);
             handleLogin();
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         })
     }
 
     return (
         <>
+            {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
             <div className='loginWrapper'>
                 <h2>GRAD MANAGEMENT SYSTEM</h2>
                 <div className="google_btn" onClick={handleLoginApi}>

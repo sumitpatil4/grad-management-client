@@ -9,8 +9,10 @@ import AuthContext from '../Contextapi/Authcontext';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import axios from "axios";
+import { PuffLoader } from "react-spinners";
 
 const Trainers = () => {
+  const [isLoading,setIsLoading] = useState(false);
   const managercontext=useContext(ManagerContext);
   const {updateTrainerList,trainerList}=managercontext;
   const authcontext=useContext(AuthContext);
@@ -42,22 +44,37 @@ const Trainers = () => {
   const [avlId,setAvlId] =useState("");
   const [resPopUp,setResPopUp] = useState(false);
   const [resMessage,setResMessage] = useState("");
+  const [mailSentPopUp,setMailSentPopUp] = useState(false);
 
 
   const [selectedTrainerId, setSelectedTrainerId] = useState(2);
   useEffect(()=>{
-    axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       updateTrainerList(res.data.trainers);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
-    axios.get(`http://localhost:8090/user/getUsers`).then((res)=>{
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/user/getUsers`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    }).then((res)=>{
       setuserList(res.data.userList.filter((user)=>user.role==="ROLE_MANAGER"));
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
   },[useeffectreload])
 
@@ -77,16 +94,23 @@ const Trainers = () => {
   }
   
   const handleClick = () => {
+      setIsLoading(true);
       axios.post(`http://localhost:8090/trainer/createTrainer/${userid}`,{
         "trainerName":Name,
         "email":Email,
         "phoneNumber":Phone,
         "skill":Skill
+      },{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
       }).then((res)=>{
-        setUseeffectreload(!useeffectreload)
+        setUseeffectreload(!useeffectreload);
+        setIsLoading(false);
       }).catch((err)=>{
           setResMessage(err.response.data.message);
           setResPopUp(true);
+          setIsLoading(false);
       });
       setIsAdd(false);
       setName('');
@@ -96,17 +120,24 @@ const Trainers = () => {
   };
 
   const handleEditSubmitClick = () => {
+    setIsLoading(true);
     axios.put(`http://localhost:8090/trainer/updateTrainer`,{
       "trainerId":trainerTemp.trainerId,
       "trainerName":Name,
       "email":Email,
       "phoneNumber":Phone,
       "skill":Skill
+    },{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
     }).then((res)=>{
-      setUseeffectreload(!useeffectreload)
+      setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
     setIsEdit(false);
     setName('');
@@ -116,24 +147,34 @@ const Trainers = () => {
 };
 
 const handleEditSubmitAvailability = () => {
-
+  setIsLoading(true);
   axios.put(`http://localhost:8090/availability/updateAvailability/${availabilityTemp.availabilityId}`,{
     "date":date,
     "fromTime":fromTime,
     "toTime":toTime,
+  },{
+    headers:{
+      "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+    }
   }).then((res)=>{
-    axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`)
+    axios.get(`http://localhost:8090/availability/getAvailability/${trainerTemp.trainerId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       setUserAvailability(res.data.availability);
-      console.log(userAvailability);
       setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
   }).catch((err)=>{
       setResMessage(err.response.data.message);
       setResPopUp(true);
+      setIsLoading(false);
   });
   setIsEditAvailability(false);
   setDate('');
@@ -160,22 +201,36 @@ const handleEditSubmitAvailability = () => {
 
   const handleDelete = (trainerId) => {
     if(!isOpenProfile){
-      axios.delete(`http://localhost:8090/trainer/deleteTrainer/${trainerId}`)
+      setIsLoading(true);
+      axios.delete(`http://localhost:8090/trainer/deleteTrainer/${trainerId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
       .then((res)=>{
         setUseeffectreload(!useeffectreload);
+        setIsLoading(false);
       }).catch((err)=>{
           setResMessage(err.response.data.message);
           setResPopUp(true);
+          setIsLoading(false);
       });
     }
     else{
-      axios.delete(`http://localhost:8090/availability/deleteAvailability/${avlId}`)
+      setIsLoading(true);
+      axios.delete(`http://localhost:8090/availability/deleteAvailability/${avlId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
       .then((res)=>{
         handleProfile(trainerTemp);
         setUseeffectreload(!useeffectreload);
+        setIsLoading(false);
       }).catch((err)=>{
           setResMessage(err.response.data.message);
           setResPopUp(true);
+          setIsLoading(false);
       });
     }
     setIsOpenCon(false);
@@ -190,13 +245,20 @@ const handleEditSubmitAvailability = () => {
   const handleProfile = (trainer) => {
     setIsOpenProfile(true);
     settrainerTemp(trainer);
-    axios.get(`http://localhost:8090/availability/getAvailability/${trainer.trainerId}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/availability/getAvailability/${trainer.trainerId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       setUserAvailability(res.data.availability);
-      setUseeffectreload(!useeffectreload)
+      setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
   };
 
@@ -209,16 +271,23 @@ const handleEditSubmitAvailability = () => {
   };
 
   const handleAddAvailability = () =>{
+    setIsLoading(true);
     axios.post(`http://localhost:8090/availability/createAvailability/${trainerTemp.trainerId}`,{
       "date":date,
       "fromTime":fromTime,
       "toTime":toTime
+    },{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
     }).then((res)=>{
       handleProfile(trainerTemp);
-      setUseeffectreload(!useeffectreload)
+      setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
     setIsAvaliabilty(false);
     setDate('');
@@ -264,18 +333,19 @@ const handleEditSubmitAvailability = () => {
         } else if (key === "availabilityList") {
           // let availabilities = [];
           for (let j = 0; j < trainerList[i][key].length; j++) {
-            // availabilities.push(
-            //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-            // );
-            obj["DATE"] = trainerList[i][key][j].date;
-            obj["FROM TIME"] = trainerList[i][key][j].fromTime;
-            obj["TO TIME"] = trainerList[i][key][j].toTime;
-            dummyTrainersList.push(obj);
+            if(trainerList[i][key][j].active===true){
+              // availabilities.push(
+              //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+              // );
+              obj["DATE"] = trainerList[i][key][j].date;
+              obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+              obj["TO TIME"] = trainerList[i][key][j].toTime;
+              dummyTrainersList.push(obj);
+            }
           }
         }
       }
       
-      console.log(dummyTrainersList);
     }
     const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -291,15 +361,22 @@ const handleEditSubmitAvailability = () => {
         mailStr+=str;
       else mailStr+=str+",";
     });
+    setIsLoading(true);
     axios.post(`http://localhost:8090/trainer/sendMails`,formData,{
       params:{
         str:mailStr,
+      },
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
       }
     }).then((res)=>{
       setdefaultEmailList([]);
+      setMailSentPopUp(true);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
     setisOpenSelectMail(false);
   }
@@ -316,18 +393,19 @@ const handleEditSubmitAvailability = () => {
           } else if (key === "availabilityList") {
             // let availabilities = [];
             for (let j = 0; j < trainerList[i][key].length; j++) {
-              // availabilities.push(
-              //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
-              // );
-              obj["DATE"] = trainerList[i][key][j].date ;
-              obj["FROM TIME"] = trainerList[i][key][j].fromTime;
-              obj["TO TIME"] = trainerList[i][key][j].toTime;
-              dummyTrainersList.push(obj);
+              if(trainerList[i][key][j].active===true){
+                // availabilities.push(
+                //   `Date:${trainerList[i][key][j].date}    FromTime:${trainerList[i][key][j].fromTime}     ToTime:${trainerList[i][key][j].toTime}`
+                // );
+                obj["DATE"] = trainerList[i][key][j].date;
+                obj["FROM TIME"] = trainerList[i][key][j].fromTime;
+                obj["TO TIME"] = trainerList[i][key][j].toTime;
+                dummyTrainersList.push(obj);
+              }
             }
           }
         }
         
-        console.log(dummyTrainersList);
       }
       const ws = XLSX.utils.json_to_sheet(dummyTrainersList);
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
@@ -339,6 +417,9 @@ const handleEditSubmitAvailability = () => {
 
   return (
     <>
+    {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
     <div className='trainersHeader' >
       <h1>Trainers</h1>
     </div>
@@ -827,6 +908,22 @@ const handleEditSubmitAvailability = () => {
               </div>
               <div className='buttonsContainer'>
                 <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
+
+        {mailSentPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Mail Sent</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setMailSentPopUp(false)}>
                   Ok
                 </button>
               </div>

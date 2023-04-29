@@ -6,7 +6,7 @@ import { MdEdit,MdDelete } from 'react-icons/md';
 import profile from "../../images/profile.svg";
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
-
+import { PuffLoader } from 'react-spinners';
 
 const Users = () => {
     const useAdmincontext=useContext(AdminContext);
@@ -23,6 +23,7 @@ const Users = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const handleSearchInputChange = (event) => {
       setSearchQuery(event.target.value);
@@ -37,32 +38,53 @@ const Users = () => {
 
       const handleEditClick=(emp)=>{
         if(notificationEditCheck){
+          setIsLoading(true);
           axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
             "userId":emp.user.userId
+          },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
           })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
           }).catch((err)=>{
               setResMessage(err.response.data.message);
               setResPopUp(true);
+              setIsLoading(false);
           });
-          axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+          setIsLoading(true);
+          axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
           .then((res)=>{
-            setUseeffectreload(useeffectreload)
+            setUseeffectreload(useeffectreload);
+            setIsLoading(false);
           }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         }
         else{
+          setIsLoading(true);
           axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
             "userId":emp.userId
+          },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
           })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
           }).catch((err)=>{
               setResMessage(err.response.data.message);
               setResPopUp(true);
+              setIsLoading(false);
           });
         }
         setIsOpenEdit(false);
@@ -70,12 +92,19 @@ const Users = () => {
     }
 
     const handleRejectClick=(emp)=>{
-      axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+      setIsLoading(true);
+      axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
         setIsOpenEdit(false);
         setNotificationEditCheck(false);
@@ -83,7 +112,12 @@ const Users = () => {
 
 
       useEffect(()=>{
-        axios.get("http://localhost:8090/notification/getNotifications")
+        setIsLoading(true);
+        axios.get("http://localhost:8090/notification/getNotifications",{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
           updatenotificationList(res.data.notificationList);
           if(res.data.notificationList.length > 0){
@@ -92,17 +126,25 @@ const Users = () => {
           else{
             updatenotificationBadge(false);
           }
+          setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
-
-        axios.get("http://localhost:8090/user/getUsers")
+        setIsLoading(true);
+        axios.get("http://localhost:8090/user/getUsers",{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
-          updateuserList(res.data.userList)
+          updateuserList(res.data.userList);
+          setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
       },[useeffectreload])
 
@@ -142,6 +184,10 @@ const Users = () => {
     
 
     return (
+      <>
+        {isLoading?<div className="loading">
+        <PuffLoader color="#4CAF50" />
+        </div>:<></>}
       <div className='employeeContainer'>
         <div className="trainernavbar">
           <div></div>
@@ -312,6 +358,7 @@ const Users = () => {
           </div>
         </div>}
     </div>
+    </>
     )
 }
 

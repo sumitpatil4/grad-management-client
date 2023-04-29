@@ -6,6 +6,7 @@ import { BsFillInfoCircleFill } from "react-icons/bs";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from "axios";
+import { PuffLoader } from 'react-spinners';
 const Topic = () => {
     const managercontext=useContext(ManagerContext);
     const {train,topicsList,updateTopicsList}=managercontext;
@@ -28,17 +29,25 @@ const Topic = () => {
     const [topicMeetings,setTopicMeetings] = useState([]);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
 
     useEffect(()=>{
-        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
+      setIsLoading(true);
+        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`,{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
           updateTopicsList(res.data.topicList);
           setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
           setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
+          setIsLoading(false);
         }).catch((err)=>{
             setResMessage(err.response.data.message);
             setResPopUp(true);
+            setIsLoading(false);
         });
     },[useeffectreload])
     const activeClass=(e)=>{
@@ -56,85 +65,137 @@ const Topic = () => {
           t.topicName.toLowerCase().includes(searchQuery.toLowerCase())
     );
   const handleTopicCompletion = () => {
-
-    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/0`)
+    setIsLoading(true);
+    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/0`,null,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
     setCompletePopup(false);
   };
   const handleTopicUncompletion = () => {
-    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/1`)
+    setIsLoading(true);
+    axios.put(`http://localhost:8090/topic/updateCompleted/${compTemp.topicId}/1`,null,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       setUseeffectreload(!useeffectreload);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
     setRemainingPopup(false);
   };
   const handleAdd = () =>{
-
+      setIsLoading(true);
       axios.post(`http://localhost:8090/topic/createTopic/${train.trainingId}`,{
         "topicName":topicName
+      },{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
       }).then((res)=>{
         setUseeffectreload(!useeffectreload);
+        setIsLoading(false);
       }).catch((err)=>{
           setResMessage(err.response.data.message);
           setResPopUp(true);
+          setIsLoading(false);
       });
       setAddPopup(false);
   }
   const handleEditSubmit = ()=>{
-
+    setIsLoading(true);
     axios.put(`http://localhost:8090/topic/updateTopic/${editTopic.topicId}`,{
       "topicName":editTopic.topicName
+    },{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
     }).then((res)=>{
       setUseeffectreload(!useeffectreload);
       setShowEditForm(false);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
   }
   const handleDelete = () =>{
-    axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`)
+    setIsLoading(true);
+    axios.delete(`http://localhost:8090/topic/deleteTopic/${deleteId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       setUseeffectreload(!useeffectreload);
       setDeletePopup(false);
+      setIsLoading(false);
     }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
+        setIsLoading(false);
     });
   }
 
   const calcPercentage=(topicId)=>{
-    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
-    .then((res)=>{
-      console.log(res)
-      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
-      console.log(filteredRes)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
     })
+    .then((res)=>{
+      const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
+      setIsLoading(false);
+    }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+      setIsLoading(false);
+  });
   }
 
 
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
     setTopicTemp(t);
-    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
-      console.log(res)
       const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===t.topicId)
       setTopicMeetings(filteredRes);
-    })
+      setIsLoading(false);
+    }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+      setIsLoading(false);
+  });
     calcPercentage(t.topicId)
   }
 
     return (
       <>
+      {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
       <div className="topicContainer">
         <div className="topicWrapper">
           <h2>Topics</h2>
@@ -332,8 +393,8 @@ const Topic = () => {
                       </tr>
                     </thead>
                         <tbody className="popupbody">
-                          {topicMeetings.map((meet)=>
-                          <tr className="popuptr">
+                          {topicMeetings.map((meet,i)=>
+                          <tr key={i} className="popuptr">
                             <td className="popuptd">{meet.date}</td>
                             <td className="popuptd">{meet.fromTime}</td>
                             <td className="popuptd">{meet.toTime}</td>
