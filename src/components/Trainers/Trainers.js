@@ -664,7 +664,7 @@ const handleEditSubmitAvailability = () => {
                 <div className="input-group">
                   <label>Email </label>
                   <input
-                    type="text"
+                    type="email"
                     onChange={(event) => { setEmail(event.target.value); }}
                     required={true}
                   />
@@ -673,9 +673,9 @@ const handleEditSubmitAvailability = () => {
                 <div className="input-group">
                   <label>Phone </label>
                   <input
-                    type="text"
+                    type="text" pattern="[0-9]{10}"
                     onChange={(event) => { setPhone(event.target.value); }}
-                    required={true}
+                    required={true} title="Please enter a valid 10-digit phone number"
                   />
                 </div>
 
@@ -725,7 +725,7 @@ const handleEditSubmitAvailability = () => {
                 <div className="input-group">
                   <label>Email </label>
                   <input
-                    type="text"
+                    type="email" 
                     defaultValue={trainerTemp.email}
                     onChange={(event) => { setEmail(event.target.value); }}
                     required={true}
@@ -735,10 +735,10 @@ const handleEditSubmitAvailability = () => {
                 <div className="input-group">
                   <label>Phone </label>
                   <input
-                    type="text"
+                    type="text" pattern="[0-9]{10}"
                     defaultValue={trainerTemp.phoneNumber}
                     onChange={(event) => { setPhone(event.target.value); }}
-                    required={true}
+                    required={true} title="Please enter a valid 10-digit phone number"
                   />
                 </div>
 
