@@ -562,11 +562,12 @@ const Interns = () => {
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>
-                        <input type="text" id="name" onChange={(e)=>setinternemail(e.target.value)} required={true}/>
+                        <input type="email" id="name" onChange={(e)=>setinternemail(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">PhoneNo </label>
-                        <input type="text" id="name" onChange={(e)=>setphoneno(e.target.value)} required={true}/>
+                        <input type="text" id="name" pattern="[0-9]{10}" onChange={(e)=>setphoneno(e.target.value)} 
+                        required={true} title="Please enter a valid 10-digit phone number"/>
                     </div>
                 </div>
                 <div className='buttonsContainer'>
@@ -628,11 +629,12 @@ const Interns = () => {
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>
-                        <input type="text" id="name" value={internemail} onChange={(e)=>setinternemail(e.target.value)} required={true}/>
+                        <input type="email" id="name" value={internemail} onChange={(e)=>setinternemail(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">PhoneNo </label>
-                        <input type="text" id="name" value={phoneno} onChange={(e)=>setphoneno(e.target.value)} required={true}/>
+                        <input type="text" id="name" pattern="[0-9]{10}" value={phoneno} 
+                        onChange={(e)=>setphoneno(e.target.value)} required={true} title="Please enter a valid 10-digit phone number"/>
                     </div>
                 </div>
                 <div className='buttonsContainer'>
