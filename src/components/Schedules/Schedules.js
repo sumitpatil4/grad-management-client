@@ -11,8 +11,10 @@ import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import { Link } from 'react-router-dom';
 import * as XLSX from "xlsx";
+import { PuffLoader } from 'react-spinners';
 
 const Schedules = () => {
+    const [isLoading,setIsLoading] = useState(false);
     const [tokenClient,setTokenClient] = useState({});
     const [accessToken,setAccessToken] = useState("");
     const managerContext = useContext(ManagerContext);
@@ -72,6 +74,8 @@ const Schedules = () => {
     const [uploadPopUp,setuploadPopUp] = useState(false);
     const [internInstance,setinternInstance] = useState([]);
     const fileInput = useRef(null);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
 
     const handleFileSubmit = (e) => {
         e.preventDefault(); // prevent default form submission behavior
@@ -137,16 +141,25 @@ const Schedules = () => {
 
         let newarr=[];
         arr.forEach((d)=>newarr.push(d.replaceAll("/","-")))
-        
+        setIsLoading(true);
         axios.post(`http://localhost:8090/trainer/getTrainersByAvlAndSkill/${userid}`,{
-                "topicId":topic,
-                "dateList":newarr
-            }).then((res)=>{
-                setavlList(res.data.sort((a,b)=>{
-                    return new Date(a.date)-new Date(b.date);
-                }));
-                setselectTrainerCheck(true)
-            })
+            "topicId":topic,
+            "dateList":newarr
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
+            setavlList(res.data.sort((a,b)=>{
+                return new Date(a.date)-new Date(b.date);
+            }));
+            setselectTrainerCheck(true);
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     }
 
     const handleAvlCheck=(r,e,i,j,k)=>{
@@ -343,14 +356,24 @@ const Schedules = () => {
                 "trainerId":trainer,
                 "batchList":defaultGroupIdList
             }
-            axios.post(`http://localhost:8090/batch/checkBatchAvailability/${id}`,data)
+            setIsLoading(true);
+            axios.post(`http://localhost:8090/batch/checkBatchAvailability/${id}`,data,{
+                headers:{
+                  "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                }
+              })
             .then((res)=>{
                 if(res.data.result==1){
                     setGrpAvlValueArr([...grpAvlValueArr,id]);
                 }
                 defaultGroupIdList.push(id);
                 setdefaultGroupIdList(defaultGroupIdList);
-            })
+                setIsLoading(false);
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+                setIsLoading(false);
+            });
         }
         else{
             setGrpAvlValueArr(grpAvlValueArr.filter(val=>val!=id));
@@ -400,7 +423,11 @@ const Schedules = () => {
                 "trainerId":lst.trainerId,
                 "batchList":lst.batchList
             }
-            axios.post(`http://localhost:8090/meeting/createMeeting`,data)
+            axios.post(`http://localhost:8090/meeting/createMeeting`,data,{
+                headers:{
+                  "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                }
+              })
             .then((res)=>{
                 const meet = res.data.meeting;
                 const batchArr = [];
@@ -409,12 +436,15 @@ const Schedules = () => {
                 })
                 axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
                     "batchList":batchArr
-                }).then((res)=>{
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                  }).then((res)=>{
                     const interArr=[];
                     res.data.interns.forEach((intern)=>{
                         interArr.push({'email':intern.email});
                     })
-                    console.log(interArr);
                     interArr.push({'email':meet.trainer.email})
                     interArr.push({'email':usermail})
                     const TEST_EVENT = {
@@ -457,7 +487,10 @@ const Schedules = () => {
                         return data.json();
                     }).then((data) => {
                         alert('event created check google calendar')
-                    })
+                    }).catch((err)=>{
+                        setResMessage(err.response.data.message);
+                        setResPopUp(true);
+                    });
                     setUseEffectReload(!useEffectReload)
 
                     setCheckedArr([]);
@@ -475,14 +508,19 @@ const Schedules = () => {
 
     const newhandleClick = () => {
         finalList.forEach((lst,i)=>{
+            setIsLoading(true);
             axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
                 "batchList":lst.batchList
-            }).then((res)=>{
+            },{
+                headers:{
+                  "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                }
+              }).then((res)=>{
                 const interArr=[];
                 res.data.interns.forEach((intern)=>{
                     interArr.push({'email':intern.email});
                 })
-                interArr.push({'email':lst.trainerId.email})
+                // interArr.push({'email':lst.trainerId.email})
                 interArr.push({'email':usermail});
 
                 const EVENT = {
@@ -539,8 +577,13 @@ const Schedules = () => {
                         "eventId":data.id,
                         "availabilityUsed":lst.availablityId
                     }
-                    axios.post(`http://localhost:8090/meeting/createMeeting`,obj)
+                    axios.post(`http://localhost:8090/meeting/createMeeting`,obj,{
+                        headers:{
+                          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                        }
+                      })
                     .then((res)=>{
+                        setIsLoading(false);
                         handleCancelForAdd();
                         setfinalList([]);
                         setCheckedArr([]);
@@ -548,16 +591,27 @@ const Schedules = () => {
                         if(i===finalList.length-1){
                             setPopUp(true);
                         }
-                    })
-                })
-            })  
+                    }).catch((err)=>{
+                        setResMessage(err.response.data.message);
+                        setResPopUp(true);
+                        setIsLoading(false);
+                    });
+                }).catch((err)=>{
+                    setResMessage(err.response.data.message);
+                    setResPopUp(true);
+                    setIsLoading(false);
+                });
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+                setIsLoading(false);
+            });  
         })
     };
 
     const handleView = (e, i) => {
         setViewList(e);
         setinternInstance([]);
-        console.log(e)
         handleDetsSch();
     }
 
@@ -565,7 +619,6 @@ const Schedules = () => {
     const handleEdit = (e,i) => {
         setMeetingObj(e)
         handleEditSch();
-        console.log(meetingObj)
     }
 
     const handleSelectAll = (e)=>{
@@ -595,11 +648,20 @@ const Schedules = () => {
             "eventId":meetingObj.eventId,
             "availabilityUsed":meetingObj.availabilityUsed
         }
-        console.log(data);
-        axios.put(`http://localhost:8090/meeting/updateMeeting`,data)
+        setIsLoading(true);
+        axios.put(`http://localhost:8090/meeting/updateMeeting`,data,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
-            setUseEffectReload(!useEffectReload)
-        })
+            setUseEffectReload(!useEffectReload);
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setEditPopUp(true);
         setIsOpenEdit(false);
         // setIsOpenDets(true);
@@ -619,19 +681,33 @@ const Schedules = () => {
     }
 
     const handleRemoveClick = () => {
+        setIsLoading(true);
         fetch (`https://www.googleapis.com/calendar/v3/calendars/primary/events/${meetingObj.eventId}?sendUpdates=all`,{
             method: 'DELETE',
             headers: {
                 'Authorization':'Bearer '+accessToken
             }
         }).then((res)=>{
-            axios.delete(`http://localhost:8090/meeting/deleteMeeting/${meetingObj.meetingId}`)
+            axios.delete(`http://localhost:8090/meeting/deleteMeeting/${meetingObj.meetingId}`,{
+                headers:{
+                  "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                }
+              })
             .then((res)=>{
                 setIsOpenCon(false);
                 setUseEffectReload(!useEffectReload);
                 handleCreateSch();
-            })
-        })
+                setIsLoading(false);
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+                setIsLoading(false);
+            });
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     };
 
     const getCurrentDate = () => {
@@ -656,7 +732,12 @@ const Schedules = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`)
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setscheduleList(res.data.meeting);
             const currDate = getCurrentDate(); //To get the Current Date
@@ -664,19 +745,54 @@ const Schedules = () => {
             setPresent(res.data.meeting.filter(obj => obj.date == currDate));
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == -1));
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == 1));
-        })
-        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`)
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/topic/getTopics/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
-            setTopicList(res.data.topicList)
-        })
-        axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`)
+            setTopicList(res.data.topicList);
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/trainer/getTrainersById/${userid}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
-            setTrainerList(res.data.trainers)
-        })
-        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
+            setTrainerList(res.data.trainers);
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setdefaultGroupList(res.data.batch);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     }, [useEffectReload])
 
     useEffect(()=>{
@@ -724,32 +840,32 @@ const Schedules = () => {
         }
     },[localStorage,useEffectReload])
 
-    const activeClass=(e)=>{
-        let btns = document.getElementsByClassName("headerText");
+    const activeClass=(e,str)=>{
+        let btns = document.getElementsByClassName(str);
         let x=[...btns]
-        x.forEach((t)=>t.className="headerText")
+        x.forEach((t)=>t.className=str)
         e.target.className+=" active";
     }
 
-    const handleClickCompleted=(e)=>{
+    const handleClickCompleted=(e,str)=>{
         setPastCheck(true);
         setPresentCheck(false);
         setFutureCheck(false);
-        activeClass(e);
+        activeClass(e,str);
     }
 
-    const handleClickToday=(e)=>{
+    const handleClickToday=(e,str)=>{
         setPastCheck(false);
         setPresentCheck(true);
         setFutureCheck(false);
-        activeClass(e);
+        activeClass(e,str);
     }
 
-    const handleClickUpcoming=(e)=>{
+    const handleClickUpcoming=(e,str)=>{
         setPastCheck(false);
         setPresentCheck(false);
         setFutureCheck(true);
-        activeClass(e);
+        activeClass(e,str);
     }
 
     const handlePopUpOk = ()=>{
@@ -772,38 +888,47 @@ const Schedules = () => {
         return filteredList;
     }
 
-    const handleGetInternsByBatchId=(batchId,meetId)=>{
-        console.log(meetId)
+    const handleGetInternsByBatchId=(batchId,meetId,e,str)=>{
+        activeClass(e,str);
+        setIsLoading(true);
         axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
             "batchList":[batchId],
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
-            console.log(res);
             res.data.interns.forEach((intern)=>{
-                console.log(intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId))
                 intern.attendanceList=intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId);
             })
-            console.log(res.data.interns)
             setinternInstance(res.data.interns)
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     }
 
     const [meetIdAtt,setmeetIdAtt]=useState("");
 
     const AttendanceExcel = (file) => {
         setuploadPopUp(false);
-        console.log("hello");
         const reader = new FileReader();
         reader.onload = (event) => {
           const data = event.target.result;
           const workbook = XLSX.read(data, { type: "binary" });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           const attendanceData = XLSX.utils.sheet_to_json(worksheet);
-          console.log(attendanceData);
           const idList=[],attendanceList=[];
-          axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
+          setIsLoading(true);
+          axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
             .then((res)=>{
-                console.log(res);
                 attendanceData.forEach((record)=>{
                     const row=res.data.intern.filter((x)=>x.email===record.Email)
                     if(row.length===1)
@@ -815,28 +940,42 @@ const Schedules = () => {
                         //stop everything and show invalid excel file
                     }
                 })
-                console.log(idList,attendanceList);
                 axios.post(`http://localhost:8090/attendance/createAttendance/${meetIdAtt}`,{
                     idList:idList,
                     attendanceList:attendanceList,
-                }).then((resp)=>{
-                    console.log(resp);
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                  }).then((res)=>{
                     setmeetIdAtt("");
-                })
-            })
+                    setIsLoading(false);
+                }).catch((err)=>{
+                    setResMessage(err.response.data.message);
+                    setResPopUp(true);
+                    setIsLoading(false);
+                });
+            }).catch((err)=>{
+                setResMessage(err.response.data.message);
+                setResPopUp(true);
+                setIsLoading(false);
+            });
         };
         reader.readAsBinaryString(file);
       };
 
     return (<>
+    {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
     <h2 className='scheduleHeader'>Schedules</h2>
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">
             <div className='scheduleNavbar'>
                 <div className='SchbuttonsWrapper'>
-                    <p className='headerText active' onClick={(e) => {handleClickToday(e)}}>Today</p>
-                    <p className='headerText' onClick={(e) => {handleClickUpcoming(e)}}>Upcoming</p>
-                    <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
+                    <p className='headerText active' onClick={(e) => {handleClickToday(e,'headerText')}}>Today</p>
+                    <p className='headerText' onClick={(e) => {handleClickUpcoming(e,'headerText')}}>Upcoming</p>
+                    <p className='headerText' onClick={(e) => {handleClickCompleted(e,'headerText')}}>Completed</p>
                 </div>
 
             <div className="schsearchWrapper">
@@ -864,14 +1003,14 @@ const Schedules = () => {
         </div>
 
         <div className='schedules'>            
-            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -896,14 +1035,14 @@ const Schedules = () => {
             )}
 
             {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => 
-            <div className='schedule' onClick={() => handleView(e, i)}>
+            <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -931,14 +1070,14 @@ const Schedules = () => {
 
             {futureCheck && 
             
-            (searchQuery!==""?filteredList(future):future).map((e, i) => <div className='schedule' onClick={() => handleView(e, i)}>
+            (searchQuery!==""?filteredList(future):future).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
                     {e.batchList.map((batch,i)=>{
                         return(
                             // <span>{batch.batchName}&nbsp;</span>
-                            <span>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
+                            <span key={i}>{i==e.batchList.length-1?batch.batchName:batch.batchName+", "}</span>
                         )
                     })}
                     {/* <p>{e.batchList[0].batchName}</p> */}
@@ -980,10 +1119,10 @@ const Schedules = () => {
                         setTopic(e.target.value.substring(0,e.target.value.indexOf('_')));
                         setTopicName(e.target.value.substring(e.target.value.indexOf('_')+1))
                     }} required={true}>
-                        <option selected={true} hidden={true} disabled={true}>Select one Topic </option>
+                    <option selected={true} hidden={true} disabled={true} value="">Select one Topic</option>
                         {topicList.filter(topic=>topic.completed==false).map((e,i)=>{
                             return(
-                            <option value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
+                            <option key={i} value={`${e.topicId}_${e.topicName}`}>{e.topicName}</option>
                             )
                         })}
                     </select>                                                            
@@ -1012,14 +1151,14 @@ const Schedules = () => {
                         <>
                         <div className='avlWrapper'>
                         {avlList.map((list,k)=>
-                        <div className='avlContainer'>
+                        <div className='avlContainer' key={k}>
                             <h4>{list.date}</h4>
                             <div>
                                 {list.trainer.length!==0 ? list.trainer.map((row,i)=>
-                                        row.availabilityList.map((r,j)=><div className='avl_tile'>
+                                        row.availabilityList.map((r,j)=><div className='avl_tile' key={j}>
                                             <div className='avl_List'>
                                                 <input onClick={(e)=>handleAvlCheckBox(r,e,i,j,k,row)} id={`check${i}${j}${k}`} type='checkbox'/>
-                                                <p onClick={()=>console.log("hi")}>{row.trainerName}</p>
+                                                <p>{row.trainerName}</p>
                                                 <input id={`time${i}${j}${k}0`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.fromTime} step="1" type="time"/>
                                                 <input id={`time${i}${j}${k}1`} onChange={(e)=>{handleAvlCheck(r,e,i,j,k)}} min={r.fromTime} max={r.toTime} defaultValue={r.toTime} step="1" type="time"/>
                                             </div>
@@ -1060,10 +1199,10 @@ const Schedules = () => {
             <div className='sch_inputContainer'>
                 <div className="sch_input-group">
                     <label>Topic</label>
-                    <input onClick={(e)=>console.log(e.target.value)} value={meetingObj.topic.topicName} required={true} readOnly={true}>
+                    <input value={meetingObj.topic.topicName} required={true} readOnly={true}>
                     {/* {topicList.map((e,i)=>{
                             return(
-                            <option value={e.topicName}>{e.topicName}</option>
+                            <option key={i} value={e.topicName}>{e.topicName}</option>
                             )
                         })} */}
                     </input>                                                         
@@ -1089,7 +1228,7 @@ const Schedules = () => {
                     <input onClick={(e)=>setTrainer(e.target.value)} defaultValue={meetingObj.trainer.trainerName} required={true} readOnly={true}>
                     {/* {trainerList.map((e,i)=>{
                             return(
-                            <option value={e.trainerName}>{e.trainerName}</option>
+                            <option key={i} value={e.trainerName}>{e.trainerName}</option>
                             )
                         })} */}
                     </input>                                                            
@@ -1112,14 +1251,14 @@ const Schedules = () => {
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription} defaultValue={meetingObj.meetingDesc}>{description}</textarea>                                                             
+                    <textarea  onChange={handleDescription} defaultValue={meetingObj.meetingDesc}></textarea>                                                             
                 </div>
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Select Groups</label>
                     <div className='sch_internWrapperDiv'>
                         {
-                            meetingObj.batchList.map((e)=><div className='sch_ListInternWrapper'>
+                            meetingObj.batchList.map((e,i)=><div key={i} className='sch_ListInternWrapper'>
                                 {/* <form>
                                     <input onClick={(x)=>handleAddList(x,e.batchId)} type="checkbox"/>
                                 </form> */}
@@ -1158,15 +1297,15 @@ const Schedules = () => {
             </div>
             <h2 className='groupHead'>Groups</h2>
             <div className='meetBatchContainer'>
-                
+        
                 <div className='batchNavbar'>
-                    {viewList.batchList.map((batch)=><p onClick={()=>handleGetInternsByBatchId(batch.batchId,viewList.meetingId)}>{batch.batchName}</p>)}
+                    {viewList.batchList.map((batch,i)=><p key={i} className={`grpText${viewList.meetingId}`} onClick={(e)=>handleGetInternsByBatchId(batch.batchId,viewList.meetingId,e,`grpText${viewList.meetingId}`)}>{batch.batchName}</p>)}
                 </div>
                 <div className='meetBatchContent'>
-                    {internInstance.map((intern)=><div className='attendanceContainer'>
+                    {internInstance.map((intern,i)=><div key={i} className='attendanceContainer'>
                         <p>{intern.internName}</p>
                         <p style={{fontStyle:"italic"}}>{intern.attendanceList.length===1 ? <>{intern.attendanceList[0].present ? "Present":"Absent"}</> : <>NA</>}</p>
-                        </div>)}
+                    </div>)}
                 </div>
             </div>
         </div>
@@ -1208,7 +1347,7 @@ const Schedules = () => {
                     <p>No Groups Available</p> 
                 </div>}  
                 {
-                    tempGroupList.map((e)=><div className='ListInternWrapper'>
+                    tempGroupList.map((e,i)=><div key={i} className='ListInternWrapper'>
                         <form>
                             <input name='group_checkbox' id={e.batchId} onChange={(x)=>handleEachAddList(x,e.batchId)} type="checkbox"/>
                         </form>
@@ -1312,6 +1451,21 @@ const Schedules = () => {
         </div>
     </div>
 </div>}
+{resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
 </>     
     )
 }

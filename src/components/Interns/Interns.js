@@ -5,6 +5,7 @@ import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
+import { PuffLoader } from 'react-spinners';
 
 const Interns = () => {
 
@@ -37,6 +38,9 @@ const Interns = () => {
     const [useeffectreload2, setUseeffectreload2] = useState(false)
     const [useeffectreload3, setUseeffectreload3] = useState(false)
     const batchName = `${train.trainingName}_${train.trainingId}`;
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -73,18 +77,32 @@ const Interns = () => {
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`)
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             updateinternsList(res.data.intern);
             setUseeffectreload2(!useeffectreload2);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     },[useeffectreload,defaultCheck,useeffectreload1])
 
     useEffect(()=>{
         if(groupName.length===0)
             setGroupName(train.trainingName);
-
-        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`)
+        setIsLoading(true);
+        axios.get(`http://localhost:8090/batch/getBatch/${train.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             res.data.batch.forEach((e)=>{
                 e.internList=getInternsListUsingBatchId(e.batchId);
@@ -95,8 +113,12 @@ const Interns = () => {
             setDefBatch(data.filter(e=>e.batchName===batchName)[0]);
             updategroupsList(newBatchList);
             setUseeffectreload3(!useeffectreload3);
-        })
-        
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     },[useeffectreload,defaultCheck,useeffectreload2])
 
     useEffect(()=>{
@@ -118,12 +140,22 @@ const Interns = () => {
 
     const handleAddGroup=()=>{
         //call the add group api using above data
+        setIsLoading(true);
         axios.post(`http://localhost:8090/batch/createBatch/${train.trainingId}`,{
             "batchName":newGroup
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setisOpenNewGroup(false);
         setNewGroup("");
     }
@@ -134,12 +166,22 @@ const Interns = () => {
     }
 
     const handleEditGroup=()=>{
+        setIsLoading(true);
         axios.put(`http://localhost:8090/batch/updateBatch/${currentGroup[0].batchId}`,{
             "batchName":newGroup
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         //call the update group name api using above data
         setisOpenEditGroup(false);
         setNewGroup("");
@@ -150,12 +192,22 @@ const Interns = () => {
         const arr=[];
         internlist.forEach((e)=>arr.push(e.internId))
         //call the delete group name api using above data
+        setIsLoading(true);
         axios.put(`http://localhost:8090/batch/updateInternBatch/${currentGroup[0].batchId}/${defBatch.batchId}`,{
             "internIdList":arr
-        }).
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).
         then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setGroupName(train.trainingName)
         setDefaultCheck(true);
         defactiveClass()
@@ -165,10 +217,20 @@ const Interns = () => {
 
     const handleDeleteForGroup=()=>{
         //call the api with both of above
-        axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`)
+        setIsLoading(true);
+        axios.put(`http://localhost:8090/intern/deleteInternBatch/${internInstance.internId}/${defBatch.batchId}`,null,{
+            headers:{
+                "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
         .then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setisOpenDeleteForGroup(false)
     }
 
@@ -178,13 +240,23 @@ const Interns = () => {
             phoneNumber:phoneno,
             email:internemail
         }
+        setIsLoading(true);
         axios.post(`http://localhost:8090/intern/createIntern/${userid}/${train.trainingId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
-        }).then((res)=>{
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         //call add api here with above data
         setisOpenDefaultAddIntern(false);
     }
@@ -204,13 +276,23 @@ const Interns = () => {
             email:internemail
         }
         //call edit api here with above data
+        setIsLoading(true);
         axios.put(`http://localhost:8090/intern/updateIntern/${internInstance.internId}`,{
             "internName":internname,
             "email":internemail,
             "phoneNumber":phoneno
-        }).then((res)=>{
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setisOpenEditIntern(false);
     }
 
@@ -221,9 +303,19 @@ const Interns = () => {
 
     const handleDeleteIntern=()=>{
         //call delete api here with above data
-        axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`).then((res)=>{
+        setIsLoading(true);
+        axios.delete(`http://localhost:8090/intern/deleteIntern/${internInstance.internId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).then((res)=>{
             setUseeffectreload(!useeffectreload);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setisOpenDeleteIntern(false);
     }
 
@@ -249,19 +341,32 @@ const Interns = () => {
 
     const handleGroupAddIntern=()=>{
         //call the add interns to group api
+        setIsLoading(true);
         axios.put(`http://localhost:8090/intern/updateInternBatch/${currentGroup[0].batchId}`,{
             "internIdList":defaultInternIdList
-        }).
+        },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }).
         then((res)=>{
             setdefaultInternIdList([]);
             setUseeffectreload1(!useeffectreload1);
             setDefaultCheck(false);
-        })
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
         setisOpenGroupAddIntern(false);
     }
 
     return (
         <>
+        {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
         <div className='internsContainerWrapper'>
             <h2>Interns</h2>
             <div className='internsContainer'>
@@ -310,7 +415,7 @@ const Interns = () => {
                         </thead>
                         <tbody>
                             {defaultCheck ? 
-                                ((searchQuery !== "" ? filteredInterns : internsList).map((e)=><tr>
+                                ((searchQuery !== "" ? filteredInterns : internsList).map((e,i)=><tr key={i}>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
@@ -319,7 +424,7 @@ const Interns = () => {
                                         <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
                                     </td>
                                 </tr>)):(
-                                    (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e)=><tr>
+                                    (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e,j)=><tr key={j}>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>
@@ -334,7 +439,7 @@ const Interns = () => {
                 </div>
                 <div className='internsGroupsContainer'>
                     <div className='groupbtns active' id='defBatch' onClick={(x)=>{handleDefaultGroup();activeClass(x)}}>{train.trainingName}</div>
-                    {groupsList.map((e)=><div className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
+                    {groupsList.map((e,i)=><div key={i} className='groupbtns' onClick={(x)=>{handlegroupName(e.batchId,e.batchName);activeClass(x)}}>{e.batchName}</div>)}
                 </div>
             </div>
         </div>
@@ -486,7 +591,7 @@ const Interns = () => {
                     <h2>Select Interns</h2>
                     <div className='internWrapperDiv'>
                         {
-                            defaultInternList.map((e)=><div className='ListInternWrapper'>
+                            defaultInternList.map((e,i)=><div key={i} className='ListInternWrapper'>
                                 <form>
                                     <input 
                                     onClick={(x)=>handleAddList(x,e.internId)} 
@@ -540,6 +645,21 @@ const Interns = () => {
                 </div>
                 </div>
             </div></form>}
+            {resPopUp && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Opps Something went wrong!!</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>{resMessage}</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
 
     </>
     )
