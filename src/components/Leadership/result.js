@@ -8,6 +8,7 @@ import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import "./Leadership.css";
 import Barchart from './Barchart';
+import { PuffLoader } from 'react-spinners';
 
 const Result = () => {
     const [searchQuery,setSearchQuery] = useState("");  
@@ -21,14 +22,24 @@ const Result = () => {
     const [trainingInstance,settrainingInstance] = useState({}); 
     const leadercontext=useContext(Leadercontext);
     const {managerInstance}=leadercontext;
-
+    const [isLoading,setIsLoading] = useState(false);
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
     useEffect(()=>{
-      console.log(managerInstance)
-      axios.get(`http://localhost:8090/training/getTrainingById/${managerInstance.userId}`)
+      setIsLoading(true);
+      axios.get(`http://localhost:8090/training/getTrainingById/${managerInstance.userId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
       .then((res)=>{
-        console.log(res.data.training)
         settrainingsList(res.data.training)
-      })
+        setIsLoading(false);
+      }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+        setIsLoading(false);
+    })
     },[])
 
     const filteredList = (list)=>{
@@ -45,14 +56,22 @@ const Result = () => {
       settopicInstance({})
       attendanceReport.length=0;
       setattendanceReport([]);
-      axios.get(`http://localhost:8090/topic/getTopics/${trng.trainingId}`)
+      setIsLoading(true);
+      axios.get(`http://localhost:8090/topic/getTopics/${trng.trainingId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
         .then((res)=>{
-
           settopicsList(res.data.topicList);
           setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
           setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
-
-      })
+          setIsLoading(false);
+      }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+        setIsLoading(false);
+    })
       activeClass(e);
     }
 
@@ -69,24 +88,29 @@ const Result = () => {
   },[trigger])
 
   const calcPercentage=(topicId)=>{
-    axios.get(`http://localhost:8090/meeting/getMeetings/${trainingInstance.trainingId}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/meeting/getMeetings/${trainingInstance.trainingId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+  })
     .then((res)=>{
-      console.log(res)
+      setIsLoading(false);
       const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===topicId)
-      console.log(filteredRes)
-
       const tempAttdReport=[];
-      
       filteredRes.forEach((meet,j)=>{
           const newBatchList=[],newPercentageList=[];
-          console.log(meet.meetingId)
           meet.batchList.forEach((lst,i)=>{
             newBatchList.push(lst.batchName);
+            setIsLoading(true)
             axios.post(`http://localhost:8090/batch/getInternsByBatch`,{
               "batchList":[lst.batchId],
-            })
+            },{
+              headers:{
+                "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+              }
+          })
             .then((res)=>{
-                console.log(res);
                 const total=res.data.interns.length;
                 let cnt=0,meetcheck=0;
                 res.data.interns.forEach((intern)=>{
@@ -99,10 +123,8 @@ const Result = () => {
                       }
                     })
                   })
-                  if(meetcheck===0)
-                    console.log("Attendance report not yet uploaded")
-                  newPercentageList.push((cnt*100)/total)
-                  console.log(lst.batchName,(cnt*100)/total);
+                  if(cnt!==0)
+                    newPercentageList.push((cnt*100)/total)
                   // intern.attendanceList=intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId);
                   if(meet.batchList.length-1===i)
                   {
@@ -112,7 +134,6 @@ const Result = () => {
                         meetDate:meet.date,
                         report:false,
                       }
-                      console.log(obj);
                       tempAttdReport.push(obj);
                     }
                     else{
@@ -122,19 +143,25 @@ const Result = () => {
                         percentageList:newPercentageList,
                         report:true,
                       }
-                      console.log(obj);
                       tempAttdReport.push(obj);
                     }
                     if(j===filteredRes.length-1)
                     {
                       setattendanceReport(tempAttdReport)
-                      console.log(tempAttdReport)
                     }
                   }
+                  setIsLoading(false);
+                }).catch((err)=>{
+                    setResMessage(err.response.data.message);
+                    setResPopUp(true);
+                    setIsLoading(false);
                 })
-              })
-              
+              })  
       })
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+        setIsLoading(false);
     })
   }
 
@@ -147,6 +174,9 @@ const Result = () => {
 
     return (
         <>
+            {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
             <h2 className='scheduleHeader'>Trainings Under {managerInstance.uname}</h2>
             <div className='managerContainer'>
               <div className='trainContainer'>
@@ -248,7 +278,6 @@ const Result = () => {
                         <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
                         <>{attendanceReport.length !==0 ?
                           attendanceReport.map((meetReport,i)=>{
-                              console.log(i,meetReport.report,meetReport)
                               if(meetReport.report){
                                 return <>
                                   <h3 className='managerTopicheads'>{meetReport.meetDate}</h3>
@@ -272,6 +301,21 @@ const Result = () => {
               </div>
           </div>
         </div> 
+        {resPopUp && <div className='popupContainer'>
+                <div className='popup-boxd'>
+                    <div className='popupHeader'>
+                    <h2>Opps Something went wrong!!</h2>
+                    </div>
+                    <div className='msgContainer'>
+                        <p>{resMessage}</p>
+                    </div>
+                    <div className='buttonsContainer'>
+                        <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                            Ok
+                        </button>
+                    </div>
+                </div>
+            </div>}
 </>        
     )
 }

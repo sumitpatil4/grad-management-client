@@ -947,7 +947,7 @@ const Schedules = () => {
                     headers:{
                       "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
                     }
-                  }).then((resp)=>{
+                  }).then((res)=>{
                     setmeetIdAtt("");
                     setIsLoading(false);
                 }).catch((err)=>{

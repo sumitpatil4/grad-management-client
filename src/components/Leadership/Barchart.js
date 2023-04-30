@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import './Leadership.css';
 
 
-const Barchart = (props) => {
-    
+const Barchart = (props) => {    
   return (
     <div className="LeadershipChart">
       <div className="chart-container">

@@ -72,7 +72,7 @@ const Loginwrapper = (props) => {
             </div>:<></>}
             <div className='loginWrapper'>
                 <h2>GRAD MANAGEMENT SYSTEM</h2>
-                <div className="google_btn" onClick={handleLoginApi}>
+                <div className="google_btn">
                     <div id="LoginButton"></div>
                 </div>
             </div>
