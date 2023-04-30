@@ -6,7 +6,7 @@ import { MdEdit,MdDelete } from 'react-icons/md';
 import profile from "../../images/profile.svg";
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
-
+import { PuffLoader } from 'react-spinners';
 
 const Users = () => {
     const useAdmincontext=useContext(AdminContext);
@@ -21,6 +21,9 @@ const Users = () => {
     const [temprole,setTemprole]=useState("");
     const [isOpenCon, setIsOpenCon] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [resPopUp,setResPopUp] = useState(false);
+    const [resMessage,setResMessage] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const handleSearchInputChange = (event) => {
       setSearchQuery(event.target.value);
@@ -31,32 +34,57 @@ const Users = () => {
         user.uname.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const [users, setUsers] = useState([
-        { userid: 1, username: 'Ashish Tripathy', useremail: 'ashish@gmail.com', role: 'manager' },
-        { userid: 2, username: 'Sumit Vasant Patil', useremail: 'sumit@gmail.com', role: 'leadership'},
-        { userid: 3, username: 'Sai Krupananda', useremail: 'sai@gmail.com', role: 'manager'},
-        { userid: 4, username: 'Akriti Singh', useremail: 'akriti@gmail.com', role: 'leadership'},
-      ]);
+    const [users, setUsers] = useState([]);
 
       const handleEditClick=(emp)=>{
         if(notificationEditCheck){
+          setIsLoading(true);
           axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
             "userId":emp.user.userId
+          },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
           })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
+          }).catch((err)=>{
+              setResMessage(err.response.data.message);
+              setResPopUp(true);
+              setIsLoading(false);
           });
-          axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+          setIsLoading(true);
+          axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
           .then((res)=>{
-            setUseeffectreload(useeffectreload)
+            setUseeffectreload(useeffectreload);
+            setIsLoading(false);
+          }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
         });
         }
         else{
+          setIsLoading(true);
           axios.put(`http://localhost:8090/user/updateRole/${temprole}`,{
             "userId":emp.userId
+          },{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
           })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
+          }).catch((err)=>{
+              setResMessage(err.response.data.message);
+              setResPopUp(true);
+              setIsLoading(false);
           });
         }
         setIsOpenEdit(false);
@@ -64,9 +92,19 @@ const Users = () => {
     }
 
     const handleRejectClick=(emp)=>{
-      axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`)
+      setIsLoading(true);
+      axios.delete(`http://localhost:8090/notification/deleteNotification/${emp.notificationId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
           .then((res)=>{
-            setUseeffectreload(!useeffectreload)
+            setUseeffectreload(!useeffectreload);
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
         });
         setIsOpenEdit(false);
         setNotificationEditCheck(false);
@@ -74,8 +112,12 @@ const Users = () => {
 
 
       useEffect(()=>{
-
-        axios.get("http://localhost:8090/notification/getNotifications")
+        setIsLoading(true);
+        axios.get("http://localhost:8090/notification/getNotifications",{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
           updatenotificationList(res.data.notificationList);
           if(res.data.notificationList.length > 0){
@@ -84,11 +126,25 @@ const Users = () => {
           else{
             updatenotificationBadge(false);
           }
+          setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
         });
-
-        axios.get("http://localhost:8090/user/getUsers")
+        setIsLoading(true);
+        axios.get("http://localhost:8090/user/getUsers",{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         .then((res)=>{
-          updateuserList(res.data.userList)
+          updateuserList(res.data.userList);
+          setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
         });
       },[useeffectreload])
 
@@ -128,9 +184,13 @@ const Users = () => {
     
 
     return (
+      <>
+        {isLoading?<div className="loading">
+        <PuffLoader color="#4CAF50" />
+        </div>:<></>}
       <div className='employeeContainer'>
         <div className="trainernavbar">
-          
+          <div></div>
           <div>
             <div className="buttonContainer2">
               <div className="search-bar2">
@@ -158,7 +218,7 @@ const Users = () => {
             </thead>
             <tbody>
                 {
-                    (searchQuery !== "" ? filteredUsers : userList).map((e)=><tr>
+                    (searchQuery !== "" ? filteredUsers : userList).map((e,i)=><tr key={i}>
                         <td>{e.uname}</td>
                         <td>{e.email}</td>
                         <td>{displayRole(e.role)}</td>
@@ -172,7 +232,7 @@ const Users = () => {
 
         {
           notificationCheck && <div className='notificationContainer'>
-            {notificationList.map((e)=><div onClick={()=>handleNotification(e)} className='notification'>
+            {notificationList.map((e,i)=><div onClick={()=>handleNotification(e)} className='notification' key={i}>
                 <div className='empprofile'>
                   <img className="profile_icon" src={e.user.picture} alt="profile_logo"/>
                 </div>
@@ -230,7 +290,7 @@ const Users = () => {
 
                   <div className="input-group">
                     <label>Description</label>
-                    <textarea readOnly={true}>{userTemp.notificationDesc}</textarea>                                                        
+                    <textarea value={userTemp.notificationDesc} readOnly={true}></textarea>                                                        
                   </div>
 
                   <div className="input-group">
@@ -281,7 +341,24 @@ const Users = () => {
             </div>)}
           </div>
         </div></form>}
+
+        {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </div>
+    </>
     )
 }
 

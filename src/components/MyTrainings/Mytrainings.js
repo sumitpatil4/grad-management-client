@@ -7,6 +7,7 @@ import { NavLink, Navigate ,useNavigate} from 'react-router-dom';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
+import { PuffLoader } from 'react-spinners';
 
 const Mytrainings = () => {
   const [validMsg,setValidMsg] = useState("");
@@ -21,12 +22,25 @@ const Mytrainings = () => {
   const authcontext=useContext(AuthContext);
   const {updateTrain,updatetrainingsList,trainingsList}=managercontext;
   const {userid}=authcontext;
+  const [resPopUp,setResPopUp] = useState(false);
+  const [resMessage,setResMessage] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
 
   useEffect(()=>{
-    axios.get(`http://localhost:8090/training/getTrainingById/${userid}`)
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/training/getTrainingById/${userid}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
     .then((res)=>{
       updatetrainingsList(res.data.training);
-    })
+      setIsLoading(false);
+    }).catch((err)=>{
+        setResMessage(err.response.data.message);
+        setResPopUp(true);
+        setIsLoading(false);
+    });
   },[useeffectreload])
 
   const handleChange = event => {
@@ -42,13 +56,21 @@ const Mytrainings = () => {
     }
     else{
       setIsOpen(false);
-
+      setIsLoading(true);
       axios.post(`http://localhost:8090/training/createTraining/${userid}`,{
         "trainingName":temp
-       }).then((res)=>{
-        console.log(res);
-        setUseeffectreload(!useeffectreload)
-      })
+       },{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      }).then((res)=>{
+         setUseeffectreload(!useeffectreload);
+         setIsLoading(false);
+      }).catch((err)=>{
+          setResMessage(err.response.data.message);
+          setResPopUp(true);
+          setIsLoading(false);
+      });
       setTemp('');
     }
   };
@@ -60,11 +82,20 @@ const handleRem =  (i) => {
 }
 
 const handleRemoveClick = (i) => {
-  axios.delete(`http://localhost:8090/training/deleteTraining/${trainingsList[i].trainingId}`)
-  .then((res)=>{
-    console.log(res);
-    setUseeffectreload(!useeffectreload);
+  setIsLoading(true);
+  axios.delete(`http://localhost:8090/training/deleteTraining/${trainingsList[i].trainingId}`,{
+    headers:{
+      "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+    }
   })
+  .then((res)=>{
+    setUseeffectreload(!useeffectreload);
+    setIsLoading(false);
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+      setIsLoading(false);
+  });
   setIsOpenCon(false);
 };
 
@@ -77,12 +108,22 @@ const handleEdit = (i) => {
 }
 
 const handleEditClick = (i) => {
+  setIsLoading(true);
   axios.put("http://localhost:8090/training/updateTraining",{
     "trainingId":trainingsList[i].trainingId,
     "trainingName":temp
+  },{
+    headers:{
+      "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+    }
   }).then((res)=>{
-    setUseeffectreload(!useeffectreload)
-  })
+    setUseeffectreload(!useeffectreload);
+    setIsLoading(false);
+  }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+      setIsLoading(false);
+  });
 
   setIsOpenEdit(false);
   setTemp('');
@@ -94,11 +135,15 @@ const navigate = useNavigate();
   }
 
   return (
+    <>
+    {isLoading?<div className="loading">
+            <PuffLoader color="#4CAF50" />
+            </div>:<></>}
     <div className='mytrainingsContainer' >
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}}> 
+        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit className='edit_icon'/>
@@ -181,7 +226,24 @@ const navigate = useNavigate();
         </div>
       </div>
       </div></form>}
+
+      {resPopUp && <div className='popupContainer'>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+              <div className='msgContainer'>
+                <p>{resMessage}</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </div>
+    </>
   )
 }
 
