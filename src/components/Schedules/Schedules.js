@@ -12,8 +12,11 @@ import DatePicker from "react-multi-date-picker";
 import { Link } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import { PuffLoader } from 'react-spinners';
+import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 const Schedules = () => {
+    const navigate=useNavigate();
     const [isLoading,setIsLoading] = useState(false);
     const [tokenClient,setTokenClient] = useState({});
     const [accessToken,setAccessToken] = useState("");
@@ -968,7 +971,10 @@ const Schedules = () => {
     {isLoading?<div className="loading">
             <PuffLoader color="#4CAF50" />
             </div>:<></>}
-    <h2 className='scheduleHeader'>Schedules</h2>
+    <div className='internHeader' style={{width:"95vw"}}>
+        <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+        <h2>Schedules</h2>
+    </div>
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">
             <div className='scheduleNavbar'>
