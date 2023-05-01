@@ -7,7 +7,11 @@ import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from "axios";
 import { PuffLoader } from 'react-spinners';
+import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from 'react-icons/io';
+
 const Topic = () => {
+    const navigate=useNavigate();
     const managercontext=useContext(ManagerContext);
     const {train,topicsList,updateTopicsList}=managercontext;
     const [completedList,setcompletedList]=useState([]);
@@ -175,7 +179,10 @@ const Topic = () => {
             </div>:<></>}
       <div className="topicContainer">
         <div className="topicWrapper">
-          <h2>Topics</h2>
+          <div className='internHeader' style={{width:"54.8vw"}}>
+                <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+                <h2>Topics</h2>
+          </div>
           <div className="topicNavbar">
             <div className="buttonsWrapper">
               <p

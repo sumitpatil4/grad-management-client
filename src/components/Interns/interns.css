@@ -9,11 +9,35 @@
     flex-direction: column;
 }
 
-.internsContainerWrapper>h2
+.internHeader{
+    display: flex;
+    width: 85vw;
+    margin: 0px auto;
+}
+
+.internHeader>h2
 {
     text-align: center;
+    width: 100%;
     font-size: 24px;
     padding: 10px;
+}
+
+.internHeader>span{
+    position: absolute;
+}
+
+.backButton{
+    font-size: 28px;
+    margin-top: 5px;
+    padding: 7px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.backButton:hover{
+    background-color: rgb(219, 219, 219);
+
 }
 
 .internsContainer{
@@ -77,6 +101,11 @@
 
 .addIntern:hover{
     transform: scale(1.1);
+}
+
+.internIcons{
+    font-size: 28px;
+    padding-top: 5px;
 }
 
 .groupWrapper{

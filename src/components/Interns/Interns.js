@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import "./interns.css"
-import { MdEdit,MdDelete,MdAddBox } from 'react-icons/md';
+import { MdAddCircle,MdEdit,MdDelete,MdAddBox } from 'react-icons/md';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import { PuffLoader } from 'react-spinners';
+import { useNavigate } from "react-router-dom";
 
 const Interns = () => {
-
+    const navigate=useNavigate();
     const managercontext=useContext(ManagerContext);
     const {train,internsList,groupsList,updateinternsList,updategroupsList}=managercontext;
     const authcontext=useContext(AuthContext);
@@ -368,17 +370,20 @@ const Interns = () => {
             <PuffLoader color="#4CAF50" />
             </div>:<></>}
         <div className='internsContainerWrapper'>
-            <h2>Interns</h2>
+            <div className='internHeader'>
+                <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+                <h2>Interns</h2>
+            </div>
             <div className='internsContainer'>
                 <div className='titleContainer'>
                     <div className='titleWrapper'>
                         <p className='titleIntern'>{groupName}</p>
                         {!defaultCheck ?
                         <>
-                        <p><MdAddBox title='Add Intern to Group' className='addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
-                        <p><MdEdit onClick={()=>handleEditPopup(groupName)} className='edit-icon'/></p>
-                        <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} className='del_icon'/></p>
-                        </>:<p><MdAddBox title='Add Intern to Training' className='addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
+                        <p><MdAddCircle title='Add Intern to Group' className='internIcons addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
+                        <p><MdEdit onClick={()=>handleEditPopup(groupName)} className='internIcons edit-icon'/></p>
+                        <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} className='internIcons del_icon'/></p>
+                        </>:<p><MdAddCircle title='Add Intern to Training' className='internIcons addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
                         }
                     </div>
                     <div className='internsearchwrapper'>
@@ -399,8 +404,8 @@ const Interns = () => {
                 </div>
                 <div className='groupContainer'>
                     <div className='groupWrapper'>
-                        <p className='titleIntern'>Groups</p>
-                        <p><MdAddBox className='addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
+                        <p className='titleIntern' style={{fontSize:"25px"}}>Groups</p>
+                        <p><MdAddCircle className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
                     </div>
                 </div>
                 <div className='internsTableContainer'>
