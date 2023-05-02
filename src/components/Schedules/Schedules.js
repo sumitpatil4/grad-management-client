@@ -75,6 +75,7 @@ const Schedules = () => {
     const [calendarFlag,setCalendarFlag] = useState(true);
     const [calendarPopUp,setCalendarPopUp] = useState(false);
     const [uploadPopUp,setuploadPopUp] = useState(false);
+    const [uploaded, setUploaded] = useState(false);
     const [internInstance,setinternInstance] = useState([]);
     const fileInput = useRef(null);
     const [resPopUp,setResPopUp] = useState(false);
@@ -83,6 +84,7 @@ const Schedules = () => {
     const handleFileSubmit = (e) => {
         e.preventDefault(); // prevent default form submission behavior
         AttendanceExcel(fileInput.current.files[0]);
+        setUploaded(true);
       };
 
     const handleCreateSch=()=>{
@@ -889,6 +891,11 @@ const Schedules = () => {
         setUseEffectReload(!useEffectReload);
     }
 
+    const handleUploadPopUpOk = () => {
+        setUploaded(false);
+        setUseEffectReload(!useEffectReload);
+    }
+
     const filteredList = (list)=>{
 
         const filteredList = list.filter(
@@ -1402,6 +1409,19 @@ const Schedules = () => {
         </div>
         <div className='buttonsContainer'>
             <button type="submit" className="submit-btn" onClick={() => handleEditPopUpOk()}>
+                Ok
+            </button>
+        </div>
+    </div>
+</div>}
+
+{uploaded && <div className='popupContainer'>
+    <div className='popup-boxd'>
+        <div className='popupHeader'>
+            <h2>File Uploaded</h2>
+        </div>
+        <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={() => handleUploadPopUpOk()}>
                 Ok
             </button>
         </div>
