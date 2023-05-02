@@ -744,7 +744,15 @@ const Schedules = () => {
         .then((res)=>{
             setscheduleList(res.data.meeting);
             const currDate = getCurrentDate(); //To get the Current Date
-            scheduleList.sort((a, b) => a.date.localeCompare(b.date));
+            // res.data.meeting.sort((a, b) => {
+            //     const dateComparison = a.date.localeCompare(b.date);
+            //     if (dateComparison === 0) {
+            //         return a.time.localeCompare(b.time);
+            //       }
+            //       return dateComparison;
+            // });
+            // res.data.meeting.sort((a, b) => a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+            res.data.meeting.sort((a, b) => a.date.localeCompare(b.date));
             setPresent(res.data.meeting.filter(obj => obj.date == currDate));
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == -1));
             setFuture(res.data.meeting.filter(obj => compareDates(obj.date, currDate) == 1));
