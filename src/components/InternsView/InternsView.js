@@ -8,6 +8,7 @@ import { RiFileExcel2Fill } from "react-icons/ri";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { PuffLoader } from 'react-spinners';
+import { Link } from 'react-router-dom';
 
 
 
@@ -59,9 +60,9 @@ const InternsView = () => {
         axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
         .then((res)=>{
             updateinternSchedulesList(res.data.meeting);
-            // scheduleList.sort((a, b) => a.date.localeCompare(b.Date));
+            
             const currDate = getCurrentDate(); //To get the Current Date
-
+            res.data.meeting.sort((a, b) => b.date.localeCompare(a.date));
             setPresent(res.data.meeting.filter(obj => obj.date === currDate).sort((a, b) => a.date.localeCompare(b.Date)));
 
             setPast(res.data.meeting.filter(obj => compareDates(obj.date, currDate) === -1).sort((a, b) => a.date.localeCompare(b.Date)));
@@ -285,10 +286,10 @@ const InternsView = () => {
                     <div className="sch_input-group">
                         <label htmlFor="name">Meet Link</label>
             
-                        <p>{viewList.meetingLink}</p>                                                              
+                        <p><Link className='meetLink'>{viewList.meetingLink}</Link></p>                                                              
                     </div>
 
-                    <div className="sch_input-group">
+                    {/* <div className="sch_input-group">
                         <label htmlFor="name">Assessment Link</label>
                         <p>{viewList.assessmentLink}</p>                                                              
                     </div>
@@ -296,7 +297,7 @@ const InternsView = () => {
                     <div className="sch_input-group">
                         <label htmlFor="name">Feedback Link</label>
                         <p>{viewList.feedbackLink}</p>                                                              
-                    </div>
+                    </div> */}
 
                     <div className="sch_input-group">
                         <label htmlFor="name">Description</label>
