@@ -169,7 +169,12 @@ const Topic = () => {
     .then((res)=>{
       const filteredRes=res.data.meeting.filter((meet)=>meet.topic.topicId===t.topicId)
       setTopicMeetings(filteredRes);
-    })
+      setIsLoading(false);
+    }).catch((err)=>{
+      setResMessage(err.response.data.message);
+      setResPopUp(true);
+      setIsLoading(false);
+  });
   }
 
     return (
