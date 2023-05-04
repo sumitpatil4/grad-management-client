@@ -84,7 +84,7 @@ const Schedules = () => {
     const handleFileSubmit = (e) => {
         e.preventDefault(); // prevent default form submission behavior
         AttendanceExcel(fileInput.current.files[0]);
-        setUploaded(true);
+        
       };
 
     const handleCreateSch=()=>{
@@ -929,7 +929,7 @@ const Schedules = () => {
         });
     }
 
-    const [meetIdAtt,setmeetIdAtt]=useState("");
+    const [meetIdAtt,setmeetIdAtt]=useState({});
 
     const AttendanceExcel = (file) => {
         setuploadPopUp(false);
@@ -939,7 +939,7 @@ const Schedules = () => {
           const workbook = XLSX.read(data, { type: "binary" });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           const attendanceData = XLSX.utils.sheet_to_json(worksheet);
-          const idList=[],attendanceList=[];
+          const idList=[],attendanceList=[],currentMeetBatch=[];
           setIsLoading(true);
           axios.get(`http://localhost:8090/intern/getInterns/${train.trainingId}`,{
             headers:{
@@ -947,8 +947,12 @@ const Schedules = () => {
             }
           })
             .then((res)=>{
+                console.log(res.data,meetIdAtt)
+                meetIdAtt.batchList.forEach((bch)=>{
+                    currentMeetBatch.push(bch.batchId)
+                })
                 attendanceData.forEach((record)=>{
-                    const row=res.data.intern.filter((x)=>x.email===record.Email)
+                    const row=res.data.intern.filter((x)=>x.email===record.Email && currentMeetBatch.includes(x.batch.batchId))
                     if(row.length===1)
                     {
                         idList.push(row[0].internId);
@@ -958,7 +962,8 @@ const Schedules = () => {
                         //stop everything and show invalid excel file
                     }
                 })
-                axios.post(`http://localhost:8090/attendance/createAttendance/${meetIdAtt}`,{
+                console.log(idList)
+                axios.post(`http://localhost:8090/attendance/createAttendance/${meetIdAtt.meetingId}`,{
                     idList:idList,
                     attendanceList:attendanceList,
                 },{
@@ -966,8 +971,9 @@ const Schedules = () => {
                       "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
                     }
                   }).then((res)=>{
-                    setmeetIdAtt("");
+                    setmeetIdAtt({});
                     setIsLoading(false);
+                    setUploaded(true);
                 }).catch((err)=>{
                     setResMessage(err.response.data.message);
                     setResPopUp(true);
@@ -1042,7 +1048,7 @@ const Schedules = () => {
                     <div className='edit_icon_wrapper' >
 
                         <div>
-                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
                         </div>
                         <div>
                             <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
@@ -1076,7 +1082,7 @@ const Schedules = () => {
                         <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
                     </div> */}
                     <div>
-                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
                         </div>
                     <div>
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
@@ -1111,7 +1117,7 @@ const Schedules = () => {
                     </div> */}
                     <div className='edit_icon_wrapper'>
                         <div>
-                            <FiUpload className='edit_icon' style={{color:"black"}} onClick={(x) => {setmeetIdAtt(e.meetingId);setuploadPopUp(true);x.stopPropagation();}}/>
+                            <FiUpload className='edit_icon' style={{color:"black"}} onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
                         </div>
                         <div>
                         <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
