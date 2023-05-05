@@ -16,6 +16,7 @@
 
 .website_logo{
     height: 8vh;
+    cursor: pointer;
 }
 
 .navlinksContainer
@@ -118,4 +119,45 @@
 
 .notificationBadgeContainer{
     position: relative;
+}
+
+/* Error Page Styling */
+
+.errorContainer{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.errorContainer>h1{
+    font-size: 130px;
+    color: rgb(46, 200, 102);
+}
+
+.errorContainer>div{
+    font-size: 33px;
+    font-weight: 200;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+.errorContainer>p{
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.returnHome{
+    color: rgb(46, 200, 102);
+    cursor: pointer;
+    border-bottom: 1px dashed rgb(46, 200, 102);
+}
+
+.returnHome:hover{
+    font-weight: 350;
+    transform: scale(1.01);
 }

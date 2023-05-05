@@ -31,7 +31,7 @@ export const Auth=(props)=>{
     const [userid,setUserid]=useState("");
     const [username,setUsername]=useState("");
     const [usermail,setUsermail]=useState("");
-    const [userpicture,setUserpicture]=useState("");
+    const [userpicture,setUserpicture]=useState(null);
     const [userrole,setUserrole]=useState("");
     const [accessToken,setAccessToken]=useState("");
     const [idToken,setIdToken]=useState("");

@@ -1,3 +1,22 @@
+/* Colors Used In Application
+BC : background color
+Website BC
+navbar BC
+navbar Links color and hover BC
+table head BC and text color
+table odd , even rows BC
+Search Bar BC
+edit , delete , profile , add , attendance , score ,notification icons color
+icons hover BC
+border bottom color
+box shadow colors (2 - 3 types are there)
+popup BC
+popup buttons color and BC & change on hover
+trainings container BC
+and some other colors .... */
+
+
+
 :root {
   --color-body: white;
   --color-back: whitesmoke;
@@ -33,6 +52,10 @@
 a{
   color: inherit;
 text-decoration: none;
+}
+
+:root{
+  --basicColor:#4CAF50;
 }
 
 a:hover {
@@ -453,7 +476,11 @@ tr:nth-child(even)
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(128, 128, 128, 0.274); */
   z-index: 100;
 }
 
+.loader{
+  color:black ;
+  font-weight: 1000;
+}

@@ -58,7 +58,13 @@
     box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
     margin: 15px 20px;
     padding: 10px;
+    cursor: pointer;
 }
+
+.topicbar:hover{
+    transform: scale(1.01);
+}
+
 .topicbar>p{
     padding: 2px;
     padding-left: 10px;
@@ -118,3 +124,12 @@ input[type=checkbox] {
   }
 
 
+.uploadIcon{
+    color: rgb(22, 22, 71);
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.uploadIcon:hover{
+    transform: scale(1.1);
+}

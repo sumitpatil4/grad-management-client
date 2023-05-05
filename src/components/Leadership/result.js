@@ -9,6 +9,8 @@ import axios from 'axios';
 import "./Leadership.css";
 import Barchart from './Barchart';
 import { PuffLoader } from 'react-spinners';
+import { Chart } from "react-google-charts";
+
 
 const Result = () => {
     const [searchQuery,setSearchQuery] = useState("");  
@@ -19,12 +21,22 @@ const Result = () => {
     const [topicsList,settopicsList] = useState([]); 
     const [trainingsList,settrainingsList] = useState([]); 
     const [attendanceReport,setattendanceReport] = useState([]); 
+    const [allScores,setallScores] = useState([]); 
     const [trainingInstance,settrainingInstance] = useState({}); 
     const leadercontext=useContext(Leadercontext);
-    const {managerInstance}=leadercontext;
+    const {managerInstance}=leadercontext; 
+    const [data,setdata] = useState([
+      ["Category", "No Of Interns"],
+      ["Above (75%)", 0],
+      ["Between (50-75%)", 0],
+      ["Below (50%)", 0],
+    ]);
     const [isLoading,setIsLoading] = useState(false);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
+    const [attendanceReportView,setattendanceReportView] = useState(true);
+    const [reportAnalysisView,setreportAnalysisView] = useState(false);
+
     useEffect(()=>{
       setIsLoading(true);
       axios.get(`http://localhost:8090/training/getTrainingById/${managerInstance.userId}`,{
@@ -123,8 +135,7 @@ const Result = () => {
                       }
                     })
                   })
-                  if(cnt!==0)
-                    newPercentageList.push((cnt*100)/total)
+                  newPercentageList.push((cnt*100)/total)
                   // intern.attendanceList=intern.attendanceList.filter((att)=>att.meeting.meetingId===meetId);
                   if(meet.batchList.length-1===i)
                   {
@@ -147,7 +158,10 @@ const Result = () => {
                     }
                     if(j===filteredRes.length-1)
                     {
-                      setattendanceReport(tempAttdReport)
+                      setattendanceReport(tempAttdReport.sort((a,b)=>new Date(a.meetDate)-new Date(b.meetDate)))
+                      setTimeout(() => {
+                        settrigger(!trigger)
+                      }, 500);
                     }
                   }
                   setIsLoading(false);
@@ -165,8 +179,57 @@ const Result = () => {
     })
   }
 
+  const getScores=(topicId)=>{
+    setIsLoading(true);
+    axios.get(`http://localhost:8090/scores/getScores/${topicId}`,{
+      headers:{
+        "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
+    .then((res)=>{
+      setallScores(res.data.batch.sort((a,b)=>b.score-a.score))
+      setIsLoading(false);
+      let cnt1=0,cnt2=0,cnt3=0;
+      res.data.batch.forEach((scr)=>{
+        let percentage=(scr.score*100)/scr.totalScore;
+        if(percentage>=75)
+          cnt1++;
+        else if(percentage>=50 && percentage<75)
+          cnt2++;
+        else if(percentage<50)
+          cnt3++;
+      })
+      data[1][1]=cnt1;
+      data[2][1]=cnt2;
+      data[3][1]=cnt3;
+      setdata(data);
+    });
+  }
+
+  const handleScores=(topic)=>{
+    setdata([
+      ["Category", "No Of Interns"],
+      ["Above (75%)", 0],
+      ["Between (50-75%)", 0],
+      ["Below (50%)", 0],
+    ])
+    setattendanceReportView(false);
+    setreportAnalysisView(true);
+    setallScores([])
+    settopicInstance(topic);
+    getScores(topic.topicId)
+  }
+
   const handleAttendance=(topic)=>{
+    setdata([
+      ["Category", "No Of Interns"],
+      ["Above (75%)", 0],
+      ["Between (50-75%)", 0],
+      ["Below (50%)", 0],
+    ])
     attendanceReport.length=0;
+    setreportAnalysisView(false);
+    setattendanceReportView(true);
     setattendanceReport([])
     settopicInstance(topic);
     calcPercentage(topic.topicId)
@@ -229,11 +292,14 @@ const Result = () => {
                                 <div>
                                   <TbReportAnalytics
                                     className="report-icon"
+                                    title='Score Analysis'
+                                    onClick={()=>handleScores(t)}
                                   />
                                 </div>
                                 <div>
                                   <HiDocumentReport
                                     className="attd_icon"
+                                    title='Attendance Report'
                                     onClick={()=>handleAttendance(t)}
                                   />
                                 </div>
@@ -250,11 +316,13 @@ const Result = () => {
                                 <div>
                                   <TbReportAnalytics
                                     className="report-icon"
-                                    
+                                    title='Score Analysis'
+                                    onClick={()=>handleScores(t)}
                                   />
                                 </div>
                                 <div>
                                   <HiDocumentReport
+                                    title='Attendance Report'
                                     className="attd_icon"
                                     onClick={()=>handleAttendance(t)}
                                   />
@@ -270,7 +338,8 @@ const Result = () => {
                     </div> 
                 </div>
           <div className='scheduleDetails'>
-            <div className='sch_popupHeader'>
+
+            {attendanceReportView && <div className='sch_popupHeader'>
                   <h2>Attendance Report</h2>
                   <div className='barchartContainer'>
                     {
@@ -298,9 +367,59 @@ const Result = () => {
                     }
                     
                   </div>
-              </div>
+              </div>}
+
+              {reportAnalysisView && <div className='sch_popupHeader'>
+                  <h2>Score Analysis</h2>
+                  <div className='barchartContainer'>
+                  <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
+
+                    {
+                      allScores.length===0 ? <div className='noTrainers'>-- Score Not Yet Updated --</div>:<>
+                      <div className="availabilityContainer">
+                        <h2>Pie Chart</h2>
+                        <Chart
+                          backgroundColor={"gray"}
+                          chartType="PieChart"
+                          data={data}
+                          options= {{
+                            backgroundColor:"whitesmoke"}
+                          }
+                          className="pieChart"
+                        />
+                      </div>
+
+                      <div className="availabilityContainer">
+                        <h2>Score Board</h2>
+                        <div className="availability">
+                        <table className="popuptable">
+                          <thead className="popuphead">
+                            <tr className="popuptr">
+                              <th className="popupth">Rank</th>
+                              <th className="popupth">Name</th>
+                              <th className="popupth">Batch</th>
+                              <th className="popupth">Score</th>
+                            </tr>
+                          </thead>
+                          <tbody className="popupbody">
+                            {allScores.map((scr,i) => (
+                              <tr className="popuptr" key={i}>
+                                <td className="popuptd">{i+1}</td>
+                                <td className="">{scr.intern.internName}</td>
+                                <td className="popuptd">{scr.intern.batch.batchName}</td>
+                                <td className="popuptd">{scr.score}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                    </div>
+                  </div></>}
+                </div>
+              </div>}
           </div>
         </div> 
+
+
         {resPopUp && <div className='popupContainer'>
                 <div className='popup-boxd'>
                     <div className='popupHeader'>
