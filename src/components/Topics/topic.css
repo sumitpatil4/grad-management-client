@@ -16,8 +16,8 @@
 .topicNavbar{
     display: grid;
     grid-template-columns: 50% 50%;
-    background-color: rgb(14, 20, 30);
-    color: white;
+    background-color: var(--color-topbar);
+    color: var(--color-body);
 }
 .buttonsWrapper{
     display: flex;
@@ -29,14 +29,14 @@
     cursor: pointer;
 }
 .buttonsWrapper>p:hover{
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttonsHover);
 }
 .searchWrapper{
     /* display: flex; */
 }
 .topicAdd{
     font-weight: 500;
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
     font-size: 18px;
     margin: 14px 8px;
     padding: 4px 15px;
@@ -44,7 +44,7 @@
     cursor: pointer;
 }
 .topicAdd:hover{
-    background-color: rgb(45, 177, 94);
+    background-color: var(--color-buttonsHover);
 }
 
 .topicsdiv{
@@ -71,7 +71,7 @@
 }
 input[type=checkbox] {
     position: relative;
-      border: 2px solid rgb(45, 177, 94);
+      border: 2px solid var(--color-buttons);
       border-radius: 2px;
       background: none;
       cursor: pointer;
@@ -89,7 +89,7 @@ input[type=checkbox] {
     opacity: 1;
   }
   input[type=checkbox]:checked {
-    background-color: rgb(45, 177, 94);
+    background-color: var(--color-buttons);
     opacity: 1;
   }
   input[type=checkbox]:before {
@@ -99,7 +99,7 @@ input[type=checkbox] {
     top: 50%;
     width: 4px;
     height: 10px;
-    border: solid #FFF;
+    border: solid var(--color-body);
     border-width: 0 2px 2px 0;
     margin: -1px -1px 0 -1px;
     transform: rotate(45deg) translate(-50%, -50%);

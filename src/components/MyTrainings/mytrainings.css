@@ -4,7 +4,7 @@
   height: 80vh;
   margin: 30px auto;
   box-shadow: rgba(29, 29, 29, 0.35) 0px 5px 15px;
-  background-color: whitesmoke;
+  background-color: var(--color-back);
 }
 
 .mytrainingsContainer>h1{
@@ -34,7 +34,7 @@
     font-size: 18px;
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
-    background-color: white;
+    background-color: var(--color-body);
 }
 
 
@@ -55,11 +55,11 @@
 }
 
 .close-icon {
-  color: rgb(255, 54, 54);
+  color: var(--color-del);
 }
 
 .edit_icon {
-  color: rgb(94, 132, 255);
+  color: var(--color-edit);
 }
 
 .close-icon,
@@ -71,7 +71,7 @@
 
 .close-icon:hover,
 .edit_icon:hover{
-  background-color: rgba(185, 185, 185, 0.295);
+  background-color: var(--color-iconHover);
   border-radius: 50%;
 
 }

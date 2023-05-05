@@ -2,7 +2,7 @@
     display: grid;
     width: 100vw;
     height: 10vh;
-    background-color: rgb(14, 20, 30);
+    background-color: var(--color-navbar);
     grid-template-columns: 20vw 80vw;
 }
 
@@ -29,7 +29,7 @@
 
 .navlinks{
     width:fit-content;
-    color: white;
+    color: var(--color-body);
     font-size: 20px;
     padding: 0px 2vw;
     display: flex;
@@ -41,12 +41,12 @@
 
 .active
 {
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
 }
 
 
 .navlinks:hover{
-    background-color:rgb(46, 200, 102) ;
+    background-color: var(--color-buttons);
 }
 
 
@@ -72,19 +72,19 @@
     position: absolute;
     top:10.3vh;
     right: 0px;
-    background-color: rgb(14, 20, 30);
+    background-color: var(--color-navbar);
     z-index: 2;
 }
 
 .profile_layout>div{
     font-weight: bold;
-    color: white;
+    color: var(--color-body);
     padding: 10px 15px;
     word-break: keep-all;
 }
 
 .profile_layout>div:hover{
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
     cursor: pointer;
 }
 
@@ -98,7 +98,7 @@
 .notification_icon
 {
     padding: 0px 2vw;
-    color: white;
+    color: var(--color-body);
     font-size: 28px;
     cursor: pointer;
 }
@@ -108,7 +108,7 @@
 }
 
 #notificationBadge{
-    background-color: red;
+    background-color: var(--color-notificationBadge);
     padding: 5px;
     border-radius: 50%;
     position: absolute;

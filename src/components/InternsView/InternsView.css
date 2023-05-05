@@ -11,7 +11,7 @@
 }
 
 .scheduleDetails{
-    background-color: whitesmoke;
+    background-color: var(--color-back);
 }
 
 #popUp{
@@ -20,7 +20,7 @@
 
 
 .Excel-Icon{
-    color: rgb(29, 111, 66);
+    color: var(--color-excel);
     margin-right: 20px;
     margin-top: 10px;
   }

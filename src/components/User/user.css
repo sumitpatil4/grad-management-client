@@ -10,9 +10,9 @@
 }
 
 .newuser>p{
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
     /* background-color: gray; */
-    color: white;
+    color: var(--color-body);
     margin: 5px auto;
     padding: 10px 20px;
     border-radius: 3px;
@@ -23,5 +23,5 @@
 }
 
 .newuser>p:hover{
-    background-color: rgba(46, 200, 102, 0.829);
+    background-color: var(--color-edit);
 }
