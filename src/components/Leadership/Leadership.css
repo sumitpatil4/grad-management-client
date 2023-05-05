@@ -137,3 +137,10 @@
 {
     transform: scale(1.1);
 }
+
+.pieChart{
+  margin: 0 auto;
+  width: 90%;
+  height: 250px;
+  cursor: pointer;
+}

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import website_logo from "../../images/website_logo.png";
 import accolite_logo from "../../images/Accolite.PNG";
 import "./navbar.css"
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import profile from "../../images/profile.svg"
 import Profile from './Profile';
 import { IoNotifications } from 'react-icons/io5';
@@ -11,7 +11,7 @@ import AuthContext from '../Contextapi/Authcontext';
 const Navbar = (props) => {
 
   const usecontext=useContext(AuthContext);
-  const {userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
+  const {isAuthenticated,userrole,userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
 
   const [profileflag,setProfileflag]=useState(false);
   const [managerflag,setManagerflag]=useState(false);
@@ -49,10 +49,39 @@ const Navbar = (props) => {
     }
   },[props.role]);
 
+  const navigate=useNavigate();
+
+  const handleNavigate=()=>{
+    if(!isAuthenticated)
+    {
+      navigate("/",true)
+    }
+    else{
+      switch(userrole)
+        {
+          case 'ROLE_MANAGER':
+            navigate("/mytrainings",true);
+            break;
+          case 'ROLE_LEADER':
+            navigate("/leadership",true);
+            break;
+          case 'ROLE_ADMIN':
+            navigate("/admin",true);
+            break;
+          case 'ROLE_USER':
+            navigate("/user",true);
+            break;
+          case 'ROLE_INTERN':
+            navigate("/intern",true);
+            break;
+        }
+    }
+  }
+
   return (
     <>
     <nav className='navbar'>
-        <div className='website_logo_wrapper'><img className='website_logo' src={accolite_logo}/></div>
+        <div className='website_logo_wrapper'><img className='website_logo' onClick={handleNavigate} src={accolite_logo}/></div>
         <div className='navlinksContainer'>
           {managerflag && <>
             <NavLink className="navlinks" to={"/mytrainings"} >My Trainings</NavLink>
@@ -88,7 +117,8 @@ const Navbar = (props) => {
           }
 
             <div onClick={()=>{profileflag ? setProfileflag(false):setProfileflag(true)}} className="profile_div">
-                <img className="profile_logo" src={userpicture} />
+                {userpicture ? <img className="profile_logo" src={userpicture} />:
+                <img className="profile_logo" src={profile} />}
             </div>
         </div>
     </nav>

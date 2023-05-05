@@ -45,7 +45,7 @@ const User = () => {
     return (
         <>
         {isLoading?<div className="loading">
-            <PuffLoader color="#4CAF50" />
+            <PuffLoader className='loader' />
             </div>:<></>}
         <div className='newuserContainer'>
             <div className='newuser'>
