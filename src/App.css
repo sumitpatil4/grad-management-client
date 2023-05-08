@@ -450,7 +450,7 @@ tr:nth-child(even)
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: skyblue; 
+  background: rgb(0, 255, 89); 
   border-radius: 10px;
   padding: 0px 3px;
 }

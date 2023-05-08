@@ -23,5 +23,5 @@
 }
 
 .newuser>p:hover{
-    background-color: var(--color-edit);
+    background-color: var(--color-buttonsHover);
 }
