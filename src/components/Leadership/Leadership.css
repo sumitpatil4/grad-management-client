@@ -28,7 +28,7 @@
 
   .trainContainer{
     background-color: rgb(14, 20, 30);
-    color: white;
+    color: var(--color-body);
   }
 
 
@@ -57,7 +57,7 @@
 }
 
 .trainContainer>div>div:hover{
-  background-color: rgb(46, 200, 102);
+  background-color: var(--color-buttons);
 }
 
 .SchbuttonsWrapper>div{
@@ -77,7 +77,7 @@
 .managerTopicheads{
   margin: 0px 20px;
   margin-top: 10px;
-  color: gray;
+  color: var(--color-smallHeads);
   font-size: 18px;
 }
 
@@ -124,12 +124,12 @@
 
 .report-icon
 {
-    color: rgb(94, 132, 255);
+    color: var(--color-edit);
 }
 
 .attd_icon
 {
-    color: rgb(50, 32, 68);
+    color: var(--color-attd);
 }
 
 .report-icon:hover,

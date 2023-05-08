@@ -17,7 +17,7 @@
 .scheduleNavbar{
     display: flex;
     background-color: rgb(14, 20, 30);
-    color: white;
+    color: var(--color-body);
     justify-content: space-between;
     padding-right: 5px;
 }
@@ -33,7 +33,7 @@
     cursor: pointer;
 }
 .SchbuttonsWrapper>p:hover{
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
 }
 
 .schsearchWrapper{
@@ -43,7 +43,7 @@
 
 .topicAdd{
     font-weight: 500;
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
     font-size: 18px;
     padding: 4px 15px;
     border-radius: 3px;
@@ -51,20 +51,20 @@
     float: right;
 }
 .topicAdd:hover{
-    background-color: rgb(45, 177, 94);
+    background-color: var(--color-buttonsHover);
 }
 
 .schedules{
     padding:0px 10px;
     height: 70.8vh;
     overflow-y: scroll;
-    background-color: whitesmoke;
+    background-color: var(--color-back);
     border-right:1px solid rgba(172, 172, 172, 0.678);
 
 }
 
 .schedule{
-    background-color: white;
+    background-color: var(--color-body);
     border-radius: 5px;
     margin: 15px 0px;
     display: grid;
@@ -96,7 +96,7 @@
 }
 
 .schedulesText>div{
-    color: gray;
+    color: var(--color-smallHead);
     font-weight: 500;
     padding: 2px 0px;
 }
@@ -104,7 +104,7 @@
 
 
 .scheduleDetails{
-    background-color: rgb(255, 255, 255);
+    background-color: var(--color-body);
 }
 
 /* new styling for popup */
@@ -124,7 +124,7 @@
     position: sticky;
     text-align: center;
     padding: 14px 0;
-    color: white;
+    color: var(--color-body);
     font-weight:500;
     background-color:rgb(19, 28, 44);
 }
@@ -151,7 +151,7 @@
 .sch_input-group>input {
   padding:5px 20px;
   font-size: 17px;
-  border: 1px solid lightgrey;
+  border: 1px solid var(--color-inputbox);
 }
 
 
@@ -159,7 +159,7 @@
     width:90%;
     padding:10px 15px;
     font-size: 17px;
-    border: 1px solid lightgrey;
+    border: 1px solid var(--color-inputbox);
   }
   
 
@@ -173,19 +173,19 @@
 .sch_input-group>textarea {
   padding:5px 20px;
   font-size: 17px;
-  border: 1px solid lightgrey;
+  border: 1px solid var(--color-inputbox);
 }
 
 .sch_input-group>select {
   padding:10px 20px;
   font-size: 17px;
-  border: 1px solid lightgrey;
+  border: 1px solid var(--color-inputbox);
 }
 
 .selectBtn{
     border: none;
-    background-color: #27ae60;
-    color: white;
+    background-color: var(--color-buttons);
+    color: var(--color-body);
     padding: 10px 15px;
     border-radius: 3px;
     font-size: 18px;
@@ -200,7 +200,7 @@
 }
 
 .selectBtn:hover{
-    background-color: #27ae5fdc;
+    background-color: var(--color-buttonsHover);
 }
 
 .sch_buttonsContainer{
@@ -211,9 +211,9 @@
 }
 
 .sch_buttonsContainer>button{
-    background-color: white;
-    color: #27ae60;
-    border: 1px solid #27ae60;
+    background-color: var(--color-body);
+    color: var(--color-buttons);
+    border: 1px solid var(--color-buttons);
     padding: 10px 0;
     border-radius: 3px;
     margin:3px 10px;
@@ -222,8 +222,8 @@
 }
 
 .sch_buttonsContainer>button:hover{
-  background: #27ae60;
-  color: white;
+  background: var(--color-buttons);
+  color: var(--color-body);
 }
 
 .sch_internWrapperDiv{
@@ -256,7 +256,7 @@
 }
 
 .avl_tile{
-    background-color: white;
+    background-color: var(--color-body);
     margin: 10px 0px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 5px;
     cursor: pointer;
@@ -289,7 +289,7 @@
 
 
 input[type="time"]:invalid{
-    border:2px solid red;
+    border:2px solid var(--color-del);
 }
 input[type="time"]{
     outline: none;
@@ -321,8 +321,8 @@ input[type="time"]{
 
 .accessBtn{
     border: none;
-    background-color: #27ae60;
-    color: white;
+    background-color: var(--color-buttons);
+    color: var(--color-body);
     padding: 5px 10px;
     border-radius: 3px;
     font-size: 14px;
@@ -348,7 +348,7 @@ input[type="time"]{
 }
 
 .Detail_schedulesText>div{
-    color: gray;
+    color: var(--color-smallHeads);
     font-weight: 500;
     padding: 2px 0px;
 }
@@ -376,7 +376,7 @@ input[type="time"]{
 .batchNavbar{
     display: flex;
     background-color: rgb(14, 20, 30);
-    color: white;
+    color: var(--color-body);
 }
 
 .batchNavbar>p{
@@ -386,7 +386,7 @@ input[type="time"]{
 }
 
 .batchNavbar>p:hover{
-    background-color: rgb(46, 200, 102);
+    background-color: var(--color-buttons);
 }
 
 

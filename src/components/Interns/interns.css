@@ -36,7 +36,7 @@
 }
 
 .backButton:hover{
-    background-color: rgb(219, 219, 219);
+    background-color: var(--color-Hover);
 
 }
 
@@ -64,17 +64,17 @@
     text-align: center;
     padding: 10px 20px;
     cursor: pointer;
-    color: white;
+    color: var(--color-body);
 }
 
 .internsGroupsContainer>div:hover{
-    background-color:rgb(46, 200, 102);
+    background-color: var(--color-buttons);
 }
 
 .titleContainer{
-    background-color: rgb(14, 20, 30);
+    background-color: var(--color-topbar);
     height: 10vh;
-    color: white;
+    color: var(--color-body);
     padding: 0px 10px;
     display: grid;
     grid-template-columns: 75% 25%;
@@ -83,7 +83,7 @@
 .groupContainer{
     height: 10vh;
     background-color: rgb(19, 28, 44);
-    color: white;
+    color: var(--color-body);
 }
 
 .titleWrapper{
@@ -91,9 +91,8 @@
 }
 
 
-
 .addIntern{
-    color: rgb(46, 200, 102);
+    color: var(--color-buttons);
     padding: 0px 10px;
     font-size: 27px;
     cursor: pointer;
