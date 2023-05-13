@@ -133,3 +133,33 @@ input[type=checkbox] {
 .uploadIcon:hover{
     transform: scale(1.1);
 }
+
+.scrHeader{
+    display: flex;
+    width: inherit;
+    margin: 0px auto;
+}
+
+.scrHeader>h2
+{
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    padding: 5px 0px;
+    margin:0px 10px;
+    border-bottom: 1px solid black;
+}
+
+.scrHeader>span{
+    position: absolute;
+    right: 2%;
+}
+
+.scoreBtn{
+    font-size: 28px;
+    margin-top: 10px;
+    padding-left: 7px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
