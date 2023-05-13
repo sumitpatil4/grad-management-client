@@ -223,7 +223,7 @@ const Users = () => {
                         <td>{e.email}</td>
                         <td>{displayRole(e.role)}</td>
                         <td>
-                            <MdEdit  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
+                            <MdEdit title='Edit User Details'  onClick={()=>handleEditPopup(e)} className='edit-icon'/>
                         </td>
                     </tr>)
                 }

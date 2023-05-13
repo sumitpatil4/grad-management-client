@@ -143,12 +143,12 @@ const navigate = useNavigate();
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
+        {trainingsList.map((e, i)=> <div title={`Go to ${e.trainingName}`} onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
-              <MdEdit className='edit_icon'/>
+              <MdEdit title='Edit Training' className='edit_icon'/>
             </div>
-            <div onClick={(e) => {e.stopPropagation();handleRem(i);}}>
+            <div title='Delete Training' onClick={(e) => {e.stopPropagation();handleRem(i);}}>
               <MdDelete className="close-icon"/>
             </div>
           </div> 
@@ -157,7 +157,7 @@ const navigate = useNavigate();
         
 
         <div className='trainingText' onClick={() => setIsOpen(true)}>
-          <GrAdd className='add_icon'/>                           
+          <GrAdd title='Add New Training' className='add_icon'/>                           
         </div>            
       </div>
         

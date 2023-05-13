@@ -276,7 +276,7 @@ const Topic = () => {
       <div className="topicContainer">
         <div className="topicWrapper">
           <div className='internHeader' style={{width:"54.8vw"}}>
-                <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+                <span><IoMdArrowRoundBack title='Go Back To Previous Page' onClick={()=>navigate(-1)} className='backButton'/></span>
                 <h2>Topics</h2>
           </div>
           <div className="topicNavbar">
@@ -319,10 +319,11 @@ const Topic = () => {
 
             {completedCheck &&
               (searchQuery !== "" ? compltedfilteredList : completedList).map((t,i) => (
-                  <div className="topicbar" onClick={() => handleInfoPopup(t)} key={i}>
+                  <div className="topicbar" title='View History & Scores' onClick={() => handleInfoPopup(t)} key={i}>
                     <form>
                       <input
                         type="checkbox"
+                        title="checkbox"
                         checked={t.completed}
                         onClick={(x)=>x.stopPropagation()}
                         onChange={(x) => { setCompletePopup(true); setCompTemp(t);x.stopPropagation(); }}
@@ -330,17 +331,19 @@ const Topic = () => {
                     </form>
                     <p>{t.topicName}</p>
                     <div>
-                      <FiUpload className='uploadIcon' onClick={(x) => {settopicInstance(t);setuploadPopUp(true);x.stopPropagation();}}/>
+                      <FiUpload title='Upload Scores' className='uploadIcon' onClick={(x) => {settopicInstance(t);setuploadPopUp(true);x.stopPropagation();}}/>
                     </div>
                     <div>
                       <MdEdit
                         className="edit-icon"
+                        title='Edit Topic'
                         onClick={(x) => {setEditTopic(t);setShowEditForm(true);x.stopPropagation();}}
                       />
                     </div>
                     <div>
                       <MdDelete
                         className="del_icon"
+                        title='Delete Topic'
                         onClick={(x) => {setDeletePopup(true);setDeleteId(t.topicId);x.stopPropagation();}}
                       />
                     </div>
@@ -354,6 +357,7 @@ const Topic = () => {
                   <form>
                     <input
                       type="checkbox"
+                      title="checkbox"
                       checked={t.completed}
                       onChange={() => {setRemainingPopup(true);setCompTemp(t);}}
                     />
@@ -363,12 +367,14 @@ const Topic = () => {
                   <div>
                     <MdEdit
                       className="edit-icon"
+                      title='Edit Topic'
                       onClick={() => {setEditTopic(t);setShowEditForm(true);}}
                     />
                   </div>
                   <div>
                     <MdDelete
                       className="del_icon"
+                      title='Delete Topic'
                       onClick={() => {setDeletePopup(true);setDeleteId(t.topicId);}}
                     />
                   </div>
@@ -601,7 +607,7 @@ const Topic = () => {
                     </div>
                   </div>
                   <div>
-                      <label htmlFor="attendance"> Upload the Excel Sheet</label>
+                      <label htmlFor="attendance"> Upload Excel File</label>
                       <input
                         type="file"
                         id="file"

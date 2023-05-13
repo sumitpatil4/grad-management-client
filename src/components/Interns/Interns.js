@@ -371,7 +371,7 @@ const Interns = () => {
             </div>:<></>}
         <div className='internsContainerWrapper'>
             <div className='internHeader'>
-                <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+                <span><IoMdArrowRoundBack title='Go Back To Previous Page' onClick={()=>navigate(-1)} className='backButton'/></span>
                 <h2>Interns</h2>
             </div>
             <div className='internsContainer'>
@@ -381,8 +381,8 @@ const Interns = () => {
                         {!defaultCheck ?
                         <>
                         <p><MdAddCircle title='Add Intern to Group' className='internIcons addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
-                        <p><MdEdit onClick={()=>handleEditPopup(groupName)} className='internIcons edit-icon'/></p>
-                        <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} className='internIcons del_icon'/></p>
+                        <p><MdEdit title='Edit Group' onClick={()=>handleEditPopup(groupName)} className='internIcons edit-icon'/></p>
+                        <p><MdDelete title='Delete Group' onClick={()=>setisOpenDeleteGroup(true)} className='internIcons del_icon'/></p>
                         </>:<p><MdAddCircle title='Add Intern to Training' className='internIcons addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
                         }
                     </div>
@@ -405,7 +405,7 @@ const Interns = () => {
                 <div className='groupContainer'>
                     <div className='groupWrapper'>
                         <p className='titleIntern' style={{fontSize:"25px"}}>Groups</p>
-                        <p><MdAddCircle className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
+                        <p><MdAddCircle title='Add New Group' className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
                     </div>
                 </div>
                 <div className='internsTableContainer'>
@@ -425,16 +425,16 @@ const Interns = () => {
                                     <td>{e.email}</td>
                                     <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
                                     <td>
-                                        <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
-                                        <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
+                                        <MdEdit title='Edit Intern' className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
+                                        <MdDelete title='Delete Intern' className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
                                     </td>
                                 </tr>)):(
                                     (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e,j)=><tr key={j}>
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>
-                                        <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
-                                        <MdDelete onClick={()=>{setisOpenDeleteForGroup(true);setinternInstance(e)}} className='del_icon'/>
+                                        <MdEdit title='Edit Intern' className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
+                                        <MdDelete title='Delete Intern From Group' onClick={()=>{setisOpenDeleteForGroup(true);setinternInstance(e)}} className='del_icon'/>
                                     </td>
                                 </tr>)
                                 )
