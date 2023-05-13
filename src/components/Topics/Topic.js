@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import "./topic.css"
 import { FaSearch } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { TbReportAnalytics, TbHistory } from 'react-icons/tb';
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
@@ -11,6 +12,7 @@ import { FiUpload } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import * as XLSX from "xlsx";
+import { Chart } from "react-google-charts";
 
 
 const Topic = () => {
@@ -42,6 +44,56 @@ const Topic = () => {
     const [topicInstance,settopicInstance]=useState({});
     const [maxScore,setmaxScore]=useState("");
     const [uploaded, setUploaded] = useState(false);
+    const [showMeets, setShowMeets] = useState(false);
+    const [showScores, setshowScores] = useState(false);
+    const [allScores,setallScores] = useState([]);
+    const [data,setdata] = useState([
+      ["Category", "No Of Interns"],
+      ["Above (75%)", 0],
+      ["Between (50-75%)", 0],
+      ["Below (50%)", 0],
+    ]);
+
+    const getScores=(topicId)=>{
+      setIsLoading(true);
+      axios.get(`http://localhost:8090/scores/getScores/${topicId}`,{
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
+      .then((res)=>{
+        setallScores(res.data.batch.sort((a,b)=>b.score-a.score))
+        setIsLoading(false);
+        let cnt1=0,cnt2=0,cnt3=0;
+        res.data.batch.forEach((scr)=>{
+          let percentage=(scr.score*100)/scr.totalScore;
+          if(percentage>=75)
+            cnt1++;
+          else if(percentage>=50 && percentage<75)
+            cnt2++;
+          else if(percentage<50)
+            cnt3++;
+        })
+        data[1][1]=cnt1;
+        data[2][1]=cnt2;
+        data[3][1]=cnt3;
+        setdata(data);
+      });
+    }
+
+    const handleScores=(topic)=>{
+      setdata([
+        ["Category", "No Of Interns"],
+        ["Above (75%)", 0],
+        ["Between (50-75%)", 0],
+        ["Below (50%)", 0],
+      ])
+      setShowMeets(false);
+      setshowScores(true);
+      setallScores([])
+      settopicInstance(topicTemp);
+      getScores(topicTemp.topicId)
+    }
 
     useEffect(()=>{
       setIsLoading(true);
@@ -166,6 +218,8 @@ const Topic = () => {
 
   const handleInfoPopup = (t) =>{
     setShowInfo(true);
+    setShowMeets(true);
+    setshowScores(false);
     setTopicTemp(t);
     setIsLoading(true);
     axios.get(`http://localhost:8090/meeting/getMeetings/${train.trainingId}`,{
@@ -184,13 +238,18 @@ const Topic = () => {
     });
   }
 
+  const handleMeets = () => {
+    setShowMeets(true);
+    setshowScores(false);
+  }
+
   const handleFileSubmit = (e) => {
     e.preventDefault(); // prevent default form submission behavior
-    AttendanceExcel(fileInput.current.files[0]);
+    ScoresExcel(fileInput.current.files[0]);
     
   };
 
-  const AttendanceExcel = (file) => {
+  const ScoresExcel = (file) => {
     setuploadPopUp(false);
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -319,7 +378,7 @@ const Topic = () => {
 
             {completedCheck &&
               (searchQuery !== "" ? compltedfilteredList : completedList).map((t,i) => (
-                  <div className="topicbar" onClick={() => handleInfoPopup(t)} key={i}>
+                  <div className="topicbar" title='Meetings & Scores' onClick={() => handleInfoPopup(t)} key={i}>
                     <form>
                       <input
                         type="checkbox"
@@ -460,10 +519,19 @@ const Topic = () => {
             <div className="popupContainer" onClick={() => {setShowInfo(false);}} >
               <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
                 <div className="popupHeader">
-                  <h2>Scheduled Date & Time</h2>
+                  <h2>{topicTemp.topicName}    </h2>
                 </div>
-                  <div className="availabilityContainer">
-                  <h2>{topicTemp.topicName}</h2>
+                  {showMeets && (<div className="availabilityContainer">
+                    <div className='scrHeader'>
+                      <h2>Scheduled Date & Time</h2>            
+                      <span> 
+                        <TbReportAnalytics
+                          className="scoreBtn"
+                          title='Score Analysis'
+                          onClick={()=>handleScores(topicTemp)}
+                        />
+                      </span>
+                  </div>
                   <div className="availability">
                   <table className="popuptable">
                     <thead className="popuphead">
@@ -485,6 +553,60 @@ const Topic = () => {
                       </table>
                     </div>
                 </div>
+                )}
+                {showScores && ( <div className='barchartContainer'>
+                  <div className='scrHeader'>
+                    <h2>Scores Analysis</h2>            
+                    <span> 
+                      <TbHistory
+                        className="scoreBtn"
+                        title='Meetings'
+                        onClick={()=>handleMeets()}
+                      />
+                    </span>
+                  </div>
+                    {
+                      allScores.length===0 ? <div className='noTrainers'>-- Score Not Yet Updated --</div>:<>
+                      <div className="availabilityContainer">
+                        {/* <h2>Pie Chart</h2> */}
+                        <Chart
+                          backgroundColor={"gray"}
+                          chartType="PieChart"
+                          data={data}
+                          options= {{
+                            backgroundColor:"whitesmoke"}
+                          }
+                          className="pieChart"
+                        />
+                      </div>
+
+                      <div className="availabilityContainer">
+                        <h2>Score Board</h2>
+                        <div className="availability">
+                        <table className="popuptable">
+                          <thead className="popuphead">
+                            <tr className="popuptr">
+                              <th className="popupth">Rank</th>
+                              <th className="popupth">Name</th>
+                              <th className="popupth">Batch</th>
+                              <th className="popupth">Score</th>
+                            </tr>
+                          </thead>
+                          <tbody className="popupbody">
+                            {allScores.map((scr,i) => (
+                              <tr className="popuptr" key={i}>
+                                <td className="popuptd">{i+1}</td>
+                                <td className="">{scr.intern.internName}</td>
+                                <td className="popuptd">{scr.intern.batch.batchName}</td>
+                                <td className="popuptd">{scr.score}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                    </div>
+                  </div></>}
+                </div>            
+        )}
                 <div className="buttonsContainer">
                   <button type="button" onClick={()=>setShowInfo(false)}>
                        Cancel
@@ -650,6 +772,9 @@ const Topic = () => {
                 </div>
             </div>
             </div>}
+
+
+
       </>
     );
 }
