@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import './Schedules.css'
-import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
-import {BsFillInfoCircleFill} from 'react-icons/bs'
+import { MdEdit, MdDelete } from 'react-icons/md';
 import { FaSearch } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 import ManagerContext from '../Contextapi/Managercontext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
-import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import { Link } from 'react-router-dom';
 import * as XLSX from "xlsx";
@@ -993,7 +991,7 @@ const Schedules = () => {
             <PuffLoader color="#4CAF50" />
             </div>:<></>}
     <div className='internHeader' style={{width:"95vw"}}>
-        <span><IoMdArrowRoundBack onClick={()=>navigate(-1)} className='backButton'/></span>
+        <span><IoMdArrowRoundBack title='Go Back To Previous Page' onClick={()=>navigate(-1)} className='backButton'/></span>
         <h2>Schedules</h2>
     </div>
     <div className='scheduleContainer'>
@@ -1030,7 +1028,7 @@ const Schedules = () => {
         </div>
 
         <div className='schedules'>            
-            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
+            {pastCheck && (searchQuery!==""?filteredList(past):past).map((e, i) => <div key={i} className='schedule' title='View Meet Details' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -1048,13 +1046,13 @@ const Schedules = () => {
                     <div className='edit_icon_wrapper' >
 
                         <div>
-                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
+                            <FiUpload title='Upload Attendance' style={{color:"black"}} className='edit_icon' onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
                         </div>
                         <div>
-                            <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
+                            <MdEdit title='Edit Meet' className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                         </div>
                         <div>
-                            <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
+                            <MdDelete title='Delete Meet' className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                         </div>
                     </div>
                 </div>
@@ -1062,7 +1060,7 @@ const Schedules = () => {
             )}
 
             {presentCheck && (searchQuery!==""?filteredList(present):present).map((e, i) => 
-            <div key={i} className='schedule' onClick={() => handleView(e, i)}>
+            <div key={i} className='schedule' title='View Meet Details' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -1078,17 +1076,12 @@ const Schedules = () => {
                 </div>
                 <div className='iconContainer'>
                     <div className='edit_icon_wrapper' >
-                    {/* <div className='infoSchedule'>
-                        <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                    </div> */}
+                    <div></div>
                     <div>
-                            <FiUpload className='edit_icon' onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
-                        </div>
-                    <div>
-                        <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
+                        <MdEdit title='Edit Meet' className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                     </div>
                     <div>
-                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
+                        <MdDelete title='Delete Meet' className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
                     </div>
                 </div>
             </div>
@@ -1097,7 +1090,7 @@ const Schedules = () => {
 
             {futureCheck && 
             
-            (searchQuery!==""?filteredList(future):future).map((e, i) => <div key={i} className='schedule' onClick={() => handleView(e, i)}>
+            (searchQuery!==""?filteredList(future):future).map((e, i) => <div key={i} className='schedule' title='View Meet Details' onClick={() => handleView(e, i)}>
                 <div className='schedulesText'>
                     <h3>{e.topic.topicName}</h3>
                     <p>Trainer&nbsp;-&nbsp;{e.trainer.trainerName}</p>
@@ -1112,19 +1105,14 @@ const Schedules = () => {
                     <div>Timing&nbsp;-&nbsp;{e.fromTime}&nbsp;to&nbsp;{e.toTime}</div>
                 </div>
                 <div className='iconContainer'>
-                    {/* <div className='infoSchedule'>
-                        <BsFillInfoCircleFill className='info_icon' onClick={() => handleView(e, i)}/>
-                    </div> */}
                     <div className='edit_icon_wrapper'>
+                        <div></div>
                         <div>
-                            <FiUpload className='edit_icon' style={{color:"black"}} onClick={(x) => {setmeetIdAtt(e);setuploadPopUp(true);x.stopPropagation();}}/>
+                            <MdEdit title='Edit Meet' className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
                         </div>
-                        <div>
-                        <MdEdit className='edit_icon' onClick={(x) => {handleEdit(e,i);x.stopPropagation();}}/>
-                    </div>
-                    <div >
-                        <MdDelete className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
-                    </div>
+                        <div >
+                            <MdDelete title='Delete Meet' className="close-icon" onClick={(x)=>{handleRem(e,i);x.stopPropagation();}}/>
+                        </div>
                 </div>
                 </div>
             </div>
@@ -1456,12 +1444,12 @@ const Schedules = () => {
 {uploadPopUp && <div className='popupContainer'>
     <div className='popup-boxd'>
         <div className='popupHeader'>
-            <h2>Meet Attendance</h2>
+            <h2>Upload Attendance</h2>
         </div>
 
         <form className="attendance-form">
             <div>
-                <label htmlFor="attendance"> Upload the Excel Sheet</label>
+                <label htmlFor="attendance"> Upload Excel File</label>
                 <input
                   type="file"
                   id="file"

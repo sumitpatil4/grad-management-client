@@ -99,7 +99,7 @@ const Navbar = (props) => {
           {superadminflag && <>
               <NavLink className="navlinks" to={"/admin"}>Users</NavLink> 
               <div className='notificationBadgeContainer'>
-              <IoNotifications onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
+              <IoNotifications title='Notifications' onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
                 {notificationBadge && <p id="notificationBadge"></p>}
               </div>
             </>

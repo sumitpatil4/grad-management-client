@@ -62,6 +62,13 @@ const Result = () => {
       return filteredList;
   }
 
+  const checkMeets=(meets,topicId)=>{
+    const list=meets.filter((meet)=>meet.topic.topicId===topicId)
+    if(list.length>0)
+      return true;
+    return false;
+  }
+
     const handleTraining=(e,trng)=>{
       setSearchQuery("")
       settrainingInstance(trng);
@@ -76,9 +83,18 @@ const Result = () => {
     })
         .then((res)=>{
           settopicsList(res.data.topicList);
-          setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
-          setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active));
-          setIsLoading(false);
+          console.log(res.data.topicList)
+          axios.get(`http://localhost:8090/meeting/getMeetings/${trng.trainingId}`,{
+            headers:{
+              "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
+          .then((meets)=>{
+            setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
+            setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active && checkMeets(meets.data.meeting,t.topicId)));
+            setIsLoading(false);
+          })
+          
       }).catch((err)=>{
         setResMessage(err.response.data.message);
         setResPopUp(true);
@@ -306,20 +322,14 @@ const Result = () => {
                               </div>
                             )
                           )}
-                      <h3 className='managerTopicheads'>OnGoing</h3>
+                      <h3 className='managerTopicheads'>In Progress</h3>
                       {  (searchQuery !== "" ? filteredList(reamainingList) : reamainingList).length===0 ? <p className='noTrainers'>-- No Topics Here --</p> :
                           (searchQuery !== "" ? filteredList(reamainingList) : reamainingList).map(
                             (t) => (
                               <div className="topicbar_ldr">
                                 <p>{t.topicName}</p>
                                 <div></div>
-                                <div>
-                                  <TbReportAnalytics
-                                    className="report-icon"
-                                    title='Score Analysis'
-                                    onClick={()=>handleScores(t)}
-                                  />
-                                </div>
+                                <div></div>
                                 <div>
                                   <HiDocumentReport
                                     title='Attendance Report'

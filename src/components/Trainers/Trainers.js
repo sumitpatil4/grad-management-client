@@ -465,14 +465,17 @@ const handleEditSubmitAvailability = () => {
                     <div className="actionButton">
                       <FaUserAlt
                         onClick={() => handleProfile(trainer)}
+                        title="Trainer Profile"
                         className="profileIconButton"
                       />
                       <MdEdit
                         onClick={() => handleEdit(trainer)}
+                        title="Edit Trainer Details"
                         className="edit-icon"
                       />
                       <MdDelete
                         onClick={() => handleDeletePopup(trainer.trainerId)}
+                        title="Delete Trainer"
                         className="del_icon"
                       />
                     </div>
@@ -823,10 +826,12 @@ const handleEditSubmitAvailability = () => {
                           <td className="popuptd">
                           <MdEdit
                               onClick={() => handleEditAvailablity(item)}
+                              title="Edit Availability"
                               className="edit-icon"
                             />
                             <MdDelete
                               onClick={() => handleAvlDeletePopup(item.availabilityId)}
+                              title="Delete Availability"
                               className="del_icon"
                             />
                               
