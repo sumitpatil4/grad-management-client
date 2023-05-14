@@ -47,7 +47,7 @@ const Leadership = () => {
           <div className='mytrainings'>   
             {
               usersList.map((user)=><div onClick={()=>navigatetotopics(user)}>
-                <div className='managerText'>{user.uname}</div>
+                <div className='managerText' title={`Go to ${user.uname}`}>{user.uname}</div>
               </div>)
             }       
           </div>

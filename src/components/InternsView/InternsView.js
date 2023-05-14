@@ -285,19 +285,8 @@ const InternsView = () => {
 
                     <div className="sch_input-group">
                         <label htmlFor="name">Meet Link</label>
-            
                         <p><Link className='meetLink'>{viewList.meetingLink}</Link></p>                                                              
                     </div>
-
-                    {/* <div className="sch_input-group">
-                        <label htmlFor="name">Assessment Link</label>
-                        <p>{viewList.assessmentLink}</p>                                                              
-                    </div>
-
-                    <div className="sch_input-group">
-                        <label htmlFor="name">Feedback Link</label>
-                        <p>{viewList.feedbackLink}</p>                                                              
-                    </div> */}
 
                     <div className="sch_input-group">
                         <label htmlFor="name">Description</label>
