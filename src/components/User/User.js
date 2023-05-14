@@ -73,6 +73,8 @@ const User = () => {
                 <div className="input-group">
                     <label htmlFor="name">Description</label>
                     <textarea name='message' id="name" onChange={(e)=>setTempdesc(e.target.value)} 
+                              pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                              title="Please enter a valid description"
                     placeholder='Write a request description' required={true}></textarea>                                                        
                 </div>
             </div>

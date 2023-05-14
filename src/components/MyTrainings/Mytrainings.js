@@ -146,10 +146,10 @@ const navigate = useNavigate();
         {trainingsList.map((e, i)=> <div onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
-              <MdEdit className='edit_icon'/>
+              <MdEdit className='edit_icon' title='Edit'/>
             </div>
             <div onClick={(e) => {e.stopPropagation();handleRem(i);}}>
-              <MdDelete className="close-icon"/>
+              <MdDelete className="close-icon" title='Delete'/>
             </div>
           </div> 
           <div className='trainingText'>{e.trainingName}</div>
@@ -185,7 +185,12 @@ const navigate = useNavigate();
               <div className='inputContainer'>
                 <div className="input-group">
                   <label htmlFor="name">Name </label>
-                    <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
+                    <input type="text" id="name" 
+                           pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                           title="Please enter a valid name" 
+                           onChange={handleChange} 
+                           value={temp} required={true}
+                    />
                 </div>
               </div>
               <div className='buttonsContainer'>
@@ -210,7 +215,11 @@ const navigate = useNavigate();
           <div className="input-group">
             <label htmlFor="name">Name </label>
             <div>
-              <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
+              <input type="text" id="name"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name" 
+                    onChange={handleChange} value={temp} required={true}
+              />
               <p id="val">{validMsg}</p>     
             </div>                                                         
           </div>

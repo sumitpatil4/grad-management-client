@@ -380,10 +380,20 @@ const Interns = () => {
                         <p className='titleIntern'>{groupName}</p>
                         {!defaultCheck ?
                         <>
-                        <p><MdAddCircle title='Add Intern to Group' className='internIcons addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
-                        <p><MdEdit onClick={()=>handleEditPopup(groupName)} className='internIcons edit-icon'/></p>
-                        <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} className='internIcons del_icon'/></p>
-                        </>:<p><MdAddCircle title='Add Intern to Training' className='internIcons addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
+                        <p><MdAddCircle title='Add Intern to Group' 
+                                        className='internIcons addIntern' 
+                                        onClick={()=>handleGroupAddInternPopup()}/>
+                        </p>
+                        <p><MdEdit onClick={()=>handleEditPopup(groupName)} 
+                                   className='internIcons edit-icon'/>
+                        </p>
+                        <p><MdDelete onClick={()=>setisOpenDeleteGroup(true)} 
+                                     className='internIcons del_icon'/>
+                        </p>
+                        </>:<p><MdAddCircle title='Add Intern to Training' 
+                                            className='internIcons addIntern' 
+                                            onClick={()=>setisOpenDefaultAddIntern(true)}/>
+                            </p>
                         }
                     </div>
                     <div className='internsearchwrapper'>
@@ -405,7 +415,10 @@ const Interns = () => {
                 <div className='groupContainer'>
                     <div className='groupWrapper'>
                         <p className='titleIntern' style={{fontSize:"25px"}}>Groups</p>
-                        <p><MdAddCircle className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
+                        <p><MdAddCircle className='internIcons addIntern'
+                                        title='Add new subgroup'
+                                        onClick={()=>setisOpenNewGroup(true)}/>
+                        </p>
                     </div>
                 </div>
                 <div className='internsTableContainer'>
@@ -425,8 +438,14 @@ const Interns = () => {
                                     <td>{e.email}</td>
                                     <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
                                     <td>
-                                        <MdEdit className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
-                                        <MdDelete className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
+                                        <MdEdit className='edit-icon' 
+                                                title='Edit'
+                                                onClick={()=>handleEditInternPopup(e)}
+                                        />
+                                        <MdDelete className='del_icon' 
+                                                  title='Delete'
+                                                  onClick={()=>handleDeleteInternPopup(e)}
+                                        />
                                     </td>
                                 </tr>)):(
                                     (searchQuery !== "" ? filteredInterns : currentGroup[0].internList).map((e,j)=><tr key={j}>
@@ -457,7 +476,9 @@ const Interns = () => {
             <div className="input-group">
               <label htmlFor="name">Name </label>
               <div>
-                <input type="text" id="name" onChange={(e)=>setNewGroup(e.target.value)} required={true}/>
+                <input type="text" id="name" pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                       title="Please enter a valid name" 
+                       onChange={(e)=>setNewGroup(e.target.value)} required={true}/>
               </div>                                                              
             </div>
           </div>
@@ -485,6 +506,8 @@ const Interns = () => {
               <input 
               type="text" 
               id="name" 
+              pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+              title="Please enter a valid name" 
               onChange={(e)=>setNewGroup(e.target.value)} 
               value={newGroup} 
               required={true}/>
@@ -563,7 +586,9 @@ const Interns = () => {
                 <div className='inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
-                        <input type="text" id="name" onChange={(e)=>setinternname(e.target.value)} required={true}/>
+                        <input type="text" id="name" pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                               title="Please enter a valid name"
+                               onChange={(e)=>setinternname(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>
@@ -630,7 +655,10 @@ const Interns = () => {
                 <div className='inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
-                        <input type="text" id="name" value={internname} onChange={(e)=>setinternname(e.target.value)} required={true}/>
+                        <input type="text" id="name" value={internname} 
+                               pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                               title="Please enter a valid name"
+                               onChange={(e)=>setinternname(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>
