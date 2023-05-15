@@ -638,6 +638,8 @@ const Topic = () => {
                       <input
                         type="text"
                         id="topic-name"
+                        pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                        title="Please enter a valid name"
                         value={editTopic.topicName}
                         onChange={(e) => {setEditTopic({ ...editTopic, topicName: e.target.value,});}}
                         required={true}
@@ -681,6 +683,8 @@ const Topic = () => {
                         <input
                           type="text"
                           id="topic-name"
+                          pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                          title="Please enter a valid name"
                           onChange={(e) => setTopicName(e.target.value)}
                           required={true}
                         />
@@ -723,6 +727,8 @@ const Topic = () => {
                           type="text"
                           id="topic-name"
                           name="maxScore"
+                          pattern="[0-9]" 
+                          title="Please enter a number"
                           onChange={(e)=>setmaxScore(e.target.value)}
                           required={true}
                         />

@@ -185,7 +185,12 @@ const navigate = useNavigate();
               <div className='inputContainer'>
                 <div className="input-group">
                   <label htmlFor="name">Name </label>
-                    <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
+                    <input type="text" id="name" 
+                           pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                           title="Please enter a valid name" 
+                           onChange={handleChange} 
+                           value={temp} required={true}
+                    />
                 </div>
               </div>
               <div className='buttonsContainer'>
@@ -210,7 +215,11 @@ const navigate = useNavigate();
           <div className="input-group">
             <label htmlFor="name">Name </label>
             <div>
-              <input type="text" id="name" onChange={handleChange} value={temp} required={true}/>
+              <input type="text" id="name"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name" 
+                    onChange={handleChange} value={temp} required={true}
+              />
               <p id="val">{validMsg}</p>     
             </div>                                                         
           </div>

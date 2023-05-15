@@ -457,7 +457,9 @@ const Interns = () => {
             <div className="input-group">
               <label htmlFor="name">Name </label>
               <div>
-                <input type="text" id="name" onChange={(e)=>setNewGroup(e.target.value)} required={true}/>
+                <input type="text" id="name" pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                       title="Please enter a valid name" 
+                       onChange={(e)=>setNewGroup(e.target.value)} required={true}/>
               </div>                                                              
             </div>
           </div>
@@ -485,6 +487,8 @@ const Interns = () => {
               <input 
               type="text" 
               id="name" 
+              pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+              title="Please enter a valid name" 
               onChange={(e)=>setNewGroup(e.target.value)} 
               value={newGroup} 
               required={true}/>
@@ -563,7 +567,9 @@ const Interns = () => {
                 <div className='inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
-                        <input type="text" id="name" onChange={(e)=>setinternname(e.target.value)} required={true}/>
+                        <input type="text" id="name" pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                               title="Please enter a valid name"
+                               onChange={(e)=>setinternname(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>
@@ -630,7 +636,10 @@ const Interns = () => {
                 <div className='inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
-                        <input type="text" id="name" value={internname} onChange={(e)=>setinternname(e.target.value)} required={true}/>
+                        <input type="text" id="name" value={internname} 
+                               pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                               title="Please enter a valid name"
+                               onChange={(e)=>setinternname(e.target.value)} required={true}/>
                     </div>
                     <div className="input-group">
                         <label htmlFor="name">Email </label>

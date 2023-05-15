@@ -647,18 +647,22 @@ const handleEditSubmitAvailability = () => {
               <div className="inputContainer">
                 <div className="input-group">
                   <label>Name </label>
-                    <input
-                      type="text"
-                      onChange={(event) => { setName(event.target.value); }}
-                      required={true}
-                    />
-                    {/* <p id="val">{validMsg}</p> */}
+                  <input
+                    type="text"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name"
+                    onChange={(event) => { setName(event.target.value); }}
+                    required={true}
+                  />
+                  {/* <p id="val">{validMsg}</p> */}
                 </div>
 
                 <div className="input-group">
                   <label>Skill </label>
                   <input
                     type="text"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name"
                     onChange={(event) => { setSkill(event.target.value); }}
                     required={true}
                   />
@@ -709,6 +713,8 @@ const handleEditSubmitAvailability = () => {
                   <label>Name </label>
                   <input
                     type="text"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name"
                     value={trainerTemp.trainerName}
                     onChange={(event) => {setName(event.target.value); }}
                     required={true}
@@ -719,6 +725,8 @@ const handleEditSubmitAvailability = () => {
                   <label>Skill </label>
                   <input
                     type="text"
+                    pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                    title="Please enter a valid name"
                     defaultValue={trainerTemp.skill}
                     onChange={(event) => { setSkill(event.target.value); }}
                     required={true}

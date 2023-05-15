@@ -1156,7 +1156,10 @@ const Schedules = () => {
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription}  value={description} >{description}</textarea>                                                                                                                     
+                    <textarea  onChange={handleDescription}  
+                               pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                               title="Please enter a valid description"
+                               value={description} >{description}</textarea>                                                                                                                     
                 </div>
 
                 <button className='selectBtn' onClick={()=>handleGetTrainersByDate()}>Select&nbsp;Trainers</button>                                                                                                                     
@@ -1266,7 +1269,10 @@ const Schedules = () => {
 
                 <div className="sch_input-group">
                     <label htmlFor="name">Description</label>
-                    <textarea  onChange={handleDescription} defaultValue={meetingObj.meetingDesc}></textarea>                                                             
+                    <textarea onChange={handleDescription} 
+                              pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
+                              title="Please enter a valid description"
+                              defaultValue={meetingObj.meetingDesc}></textarea>                                                             
                 </div>
 
                 <div className="sch_input-group">
