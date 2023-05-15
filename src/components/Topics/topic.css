@@ -164,7 +164,5 @@ input[type=checkbox] {
     font-size: 28px;
     margin-top: 10px;
     padding-left: 7px;
-    border-radius: 50%;
     cursor: pointer;
 }
-
