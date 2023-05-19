@@ -189,7 +189,7 @@ const Users = () => {
         <PuffLoader color="#4CAF50" />
         </div>:<></>}
       <div className='employeeContainer'>
-        <div className="trainernavbar">
+        <div className="trainernavbar adminnavbar">
           <div></div>
           <div>
             <div className="buttonContainer2">
@@ -270,7 +270,7 @@ const Users = () => {
             <div className='popupHeader'>
               <h2>Edit Role For User</h2>
             </div>
-            <div className='inputContainer'>
+            <div className='res_inputContainer inputContainer'>
               {
                 notificationEditCheck ? <>
                   <div className="input-group">

@@ -3,6 +3,9 @@
     margin: 10px 0;
 }
 
+.scheduleWrapper{
+}
+
 .scheduleContainer{
     border-radius: 5px;
     height: 80vh;
@@ -28,7 +31,7 @@
 }
 .SchbuttonsWrapper>p{
     font-size: 20px;
-    padding: 15px 20px;
+    padding: 15px 10px;
     font-weight: 500;
     cursor: pointer;
 }
@@ -37,8 +40,13 @@
 }
 
 .schsearchWrapper{
+    width:22vw;
     display: flex;
     justify-content: space-between;
+}
+
+.schSearchIcon{
+    margin-top: 4px;
 }
 
 .topicAdd{
@@ -49,6 +57,11 @@
     border-radius: 3px;
     cursor: pointer;
     float: right;
+}
+.schAddBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .topicAdd:hover{
     background-color: var(--color-buttonsHover);
@@ -123,7 +136,7 @@
 .sch_popupHeader>h2 {
     position: sticky;
     text-align: center;
-    padding: 14px 0;
+    padding: 12.5px 0;
     color: var(--color-body);
     font-weight:500;
     background-color:rgb(19, 28, 44);
@@ -421,4 +434,45 @@ input[type="time"]{
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+}
+
+@media all and (min-width:500px) and (max-width:900px){
+    .scheduleContainer{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .scheduleWrapper{
+        border:2px solid blue;
+    }
+}
+
+@media all and (min-width:900px) and (max-width:1200px){
+    .SchbuttonsWrapper>p{
+        font-size: 14px;
+        padding: 15px 10px;
+        font-weight: 500;
+        cursor: pointer;
+    } 
+
+    .schsearchWrapper{
+        width:24vw;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .topicAdd{
+        padding:3px 6px;
+    }
+
+    .sch_popupHeader>h2 {
+        position: sticky;
+        text-align: center;
+        font-size: 18px;
+        padding: 12.5px 0;
+        color: var(--color-body);
+        font-weight:500;
+        background-color:rgb(19, 28, 44);
+    }
 }

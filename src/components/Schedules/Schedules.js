@@ -1014,17 +1014,16 @@ const Schedules = () => {
                   />
                 </div>
                 <div>
-                  <FaSearch className="searchIcon"/>
+                  <FaSearch className="schSearchIcon searchIcon"/>
                 </div>
               </div>
-              <div>
+              <div className='schAddBtn'>
 
               <p className="topicAdd" title='Add New Schedule' onClick={() => {handleCreateSch();handleSetEmpty();}}>
                     Add
                 </p>
               </div>
             </div>
-
         </div>
 
         <div className='schedules'>            
@@ -1121,7 +1120,6 @@ const Schedules = () => {
         </div> 
     </div>
     <div className='scheduleDetails'>
-
         {isOpen && <div className="sch_popup-boxd">
             <div className='sch_popupHeader'>
                 <h2>Add a new schedule</h2>

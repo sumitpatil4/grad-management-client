@@ -84,6 +84,9 @@
     height: 10vh;
     background-color: rgb(19, 28, 44);
     color: var(--color-body);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .titleWrapper{
@@ -109,11 +112,13 @@
 
 .groupWrapper{
     display: flex;
+    justify-content: center;
+    align-items: end;
 }
 
 .groupWrapper>p{
     font-weight: 600;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .titleIntern{
@@ -129,7 +134,7 @@
 }
 
 .groupWrapper>p{
-    padding-top: 15px;
+    padding-top: 10px;
     padding-left: 25px;
 }
 
@@ -151,4 +156,122 @@
 .ListInternWrapper>p{
     padding: 3px 0px;
     font-weight: 500;
+}
+
+@media all and (max-width:600px){
+    .internsContainer{
+        width:95vw;
+    }
+    .res_table{
+        display: block;
+        width:100%;
+        margin: 0;
+    }
+    .res_table tr{
+        width:100%;
+    }
+    .groupWrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .groupWrapper>p{
+        font-weight: 600;
+        font-size: 14px;
+        padding: 0;
+    }
+    .groupWrapper .internIcons{
+        padding: 0;
+        padding-top: 5px;
+    }
+    .titleWrapper{
+        display: flex;
+        align-items: center;
+    }
+    .titleIntern{
+        font-size: 14px;
+    }
+    .internsTableContainer th{
+        font-size: 12px;
+    } 
+    .internsTableContainer td{
+        font-size: 12px;
+    }
+    .groupWrapper{
+        width:100%;
+        display: flex;
+        justify-content: space-around;
+    }
+    .internIcons{
+        width:16px;
+    }
+    .internsGroupsContainer>div{
+        font-size: 14px;
+        text-align: center;
+        padding: 10px 20px;
+        cursor: pointer;
+        color: var(--color-body);
+    }
+    .action_icons{
+        /* border:2px solid blue; */
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .titleContainer{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+@media all and (min-width:600px) and (max-width:900px){
+    .internsContainer{
+        width:90vw;
+    }
+    .res_table{
+        display: block;
+        width:100%;
+        margin: 0;
+    }
+    .res_table tr{
+        width:100%;
+    }
+    .groupWrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .groupWrapper>p{
+        font-weight: 600;
+        font-size: 18px;
+        padding: 0;
+    }
+    .titleWrapper{
+        display: flex;
+        align-items: center;
+    }
+    .titleIntern{
+        font-size: 18px;
+    }
+    .internsTableContainer th{
+        font-size: 15px;
+    } 
+    .internsTableContainer td{
+        font-size: 14px;
+    }
+    .internsGroupsContainer>div{
+        font-size: 16px;
+        text-align: center;
+        padding: 10px 20px;
+        cursor: pointer;
+        color: var(--color-body);
+    }
+    .action_icons{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
 }

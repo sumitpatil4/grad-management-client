@@ -103,11 +103,7 @@ const Home = () => {
   return (
     <>
     {
-      !isAuthenticated ? (
-        <Routes>
-          <Route exact path="/" element={<Login/>}/>
-          <Route exact path="/error" element={<Error />}/>
-        </Routes>
+      !isAuthenticated ? (<Login/>
       ) : <>
          {managerflag && <Manager><div>
             <Navbar role={userrole}/>

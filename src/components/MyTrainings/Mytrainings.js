@@ -143,7 +143,7 @@ const navigate = useNavigate();
       <h1>My&nbsp;Trainings</h1>
       <div className='mytrainings'>
         
-        {trainingsList.map((e, i)=> <div title={`Go to ${e.trainingName}`} onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
+        {trainingsList.map((e, i)=> <div className='training_tile' title={`Go to ${e.trainingName}`} onClick={()=>{navigatetotrainings(e);updateTrain(e)}} key={i}> 
           <div className='iconContainer' >
             <div className='edit_icon_wrapper' onClick={(e) => {e.stopPropagation();handleEdit(i);}}>
               <MdEdit title='Edit Training' className='edit_icon'/>
@@ -156,7 +156,7 @@ const navigate = useNavigate();
         </div> )}    
         
 
-        <div className='trainingText' onClick={() => setIsOpen(true)}>
+        <div className='training_tile trainingText' onClick={() => setIsOpen(true)}>
           <GrAdd title='Add New Training' className='add_icon'/>                           
         </div>            
       </div>
@@ -210,18 +210,14 @@ const navigate = useNavigate();
           <div className='popupHeader'>
             <h2>Enter New Training Name</h2>
           </div>
-            
         <div className='inputContainer'>
           <div className="input-group">
             <label htmlFor="name">Name </label>
-            <div>
               <input type="text" id="name"
                     pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
                     title="Please enter a valid name" 
                     onChange={handleChange} value={temp} required={true}
-              />
-              <p id="val">{validMsg}</p>     
-            </div>                                                         
+              />                                                             
           </div>
         </div>
 

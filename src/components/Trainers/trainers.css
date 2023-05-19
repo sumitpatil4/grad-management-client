@@ -197,3 +197,160 @@
 #avldelpop{
   z-index: 2;
 }
+
+.popupContainer p{
+  width: 100%;
+  overflow-x: auto;
+  overflow-wrap: break-word;
+  display: inline-block;
+}
+
+.res_profile {
+  max-height:100vh;
+  width: 40vw;;
+}
+
+@media all and (max-width:500px){
+  .trainernavbar{
+    margin: 0px auto;
+    width: 80vw;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: no-wrap;
+    margin-top: 20px;
+  }
+  .add-button{
+    width: 100%;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .buttonContainer2{
+    width: 100%;
+  }
+  .shareIcon{
+    font-size: 20px;
+    padding: 5px 0px;
+    margin: 0px 5px;
+    cursor: pointer;
+    color: var(--color-share);
+  }
+  
+
+  .ExcelIcon{
+    font-size: 22px;
+    color: var(--color-excel);
+    margin-right: 20px;
+  }
+
+  .buttonContainer2{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .search-bar2>input{
+    width:20vw;
+  }
+  .trainernavbar{
+    width:80vw;
+  }
+  table{
+    width:70%;
+  }
+  tbody{
+    width:100%;
+  }
+  th{
+    padding: 15px 5px;
+    font-size: 16px;
+  }
+  .actionButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .profileIconButton {
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .edit-icon{
+    font-size: 20px;
+    padding: 2px;
+  }
+  .del_icon{
+    font-size: 20px;
+    padding: 2px;
+  }
+
+  .res_inputContainer{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .res_buttonsContainer{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .internWrapperDiv{
+    width: 90%;
+  }
+
+  .ListInternWrapper>p{
+    width: 100%;
+    overflow-x: hidden;
+    display: inline-block;
+  }
+  .res_profile {
+    width: 75vw;;
+  }
+  .input-group>label{
+    width:100px;
+  }
+}
+
+@media all and (min-width:500px) and (max-width:900px){
+  .trainernavbar{
+    margin: 0px auto;
+    width: 90vw;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: no-wrap;
+    margin-top: 20px;
+  }
+  .ListInternWrapper>p{
+    width: 100%;
+    overflow-wrap: break-word;
+    display: inline-block;
+  }
+  .res_profile {
+    width: 55vw;;
+  }
+  .res_inputContainer{
+    display: flex;
+    flex-direction: column;
+  }
+  table{
+    width:70vw;
+  }
+  tbody{
+    width:100%;
+  }
+  thead{
+    width:100%;
+  }
+  .actionButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .input-group>label{
+    width:100px;
+  }
+}

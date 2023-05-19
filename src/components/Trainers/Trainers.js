@@ -451,7 +451,7 @@ const handleEditSubmitAvailability = () => {
         <table>
           <thead>
             <tr>
-              <th>TrainerName</th>
+              <th>Trainer&nbsp;Name</th>
               <th>Skill</th>
               <th>Action</th>
             </tr>
@@ -588,7 +588,7 @@ const handleEditSubmitAvailability = () => {
               <div className="popupHeader">
                 <h2>Edit Availability</h2>
               </div>
-              <div className="inputContainer">
+              <div className="res_inputContainer inputContainer">
                 <div className="input-group">
                   <label>Date:</label>
                   <input type="date" Value={availabilityTemp.date}
@@ -644,7 +644,7 @@ const handleEditSubmitAvailability = () => {
               <div className="popupHeader">
                 <h2>Add New Trainer</h2>
               </div>
-              <div className="inputContainer">
+              <div className="res_inputContainer inputContainer">
                 <div className="input-group">
                   <label>Name </label>
                   <input
@@ -708,7 +708,7 @@ const handleEditSubmitAvailability = () => {
               <div className="popupHeader">
                 <h2>Edit Trainer</h2>
               </div>
-              <div className="inputContainer">
+              <div className="res_inputContainer inputContainer">
                 <div className="input-group">
                   <label>Name </label>
                   <input
@@ -780,11 +780,11 @@ const handleEditSubmitAvailability = () => {
               setUserAvailability([]);
             }}
           >
-            <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+            <div className="res_profile popup-boxd" onClick={(e) => e.stopPropagation()}>
               <div className="popupHeader">
                 <h2>Profile</h2>
               </div>
-              <div className="inputContainer">
+              <div className="res_inputContainer inputContainer">
                 <div className="input-group">
                   <label>Name </label>
                   <p>{trainerTemp.trainerName}</p>
@@ -843,10 +843,10 @@ const handleEditSubmitAvailability = () => {
                 </div>
                 
                 <div className="buttonsContainer">
-                  <button type="button" onClick={handleAvaliabiltyPopup}>
+                  <button className="addAvlButton" type="button" onClick={handleAvaliabiltyPopup}>
                        Add&nbsp;Availability
                   </button>
-                  <button type="button" onClick={()=>setIsOpenProfile(false)}>
+                  <button className="addAvlButton" type="button" onClick={()=>setIsOpenProfile(false)}>
                        Cancel
                   </button>
                 </div>
@@ -861,7 +861,7 @@ const handleEditSubmitAvailability = () => {
                 <div className='popupHeader'>
                     <h2>Share Trainer File</h2>
                 </div>
-                <div className='inputContainer'>
+                <div className='res_inputContainer inputContainer'>
                     <h2>Select Mails</h2>
                     <div className='internWrapperDiv'>
                         {
@@ -874,7 +874,7 @@ const handleEditSubmitAvailability = () => {
                         }
                     </div>
                 </div>
-                <div className='buttonsContainer'>
+                <div className='res_buttonsContainer buttonsContainer'>
                     <button type="submit" className="submit-btn" >
                         Submit
                     </button>

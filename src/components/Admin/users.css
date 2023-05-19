@@ -64,3 +64,102 @@
     height: 45px;
     cursor: pointer;
 }
+
+@media all and (max-width:500px){
+    table{
+      width:90vw;
+    }
+    thead{
+        width:100%;
+    }
+    tbody>tr{
+        width:100%;
+    }
+    th{
+      padding: 15px 5px;
+      font-size: 16px;
+    }
+    .actionButton{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .profileIconButton {
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px;
+    }
+    .edit-icon{
+      font-size: 20px;
+      padding: 2px;
+    }
+    .del_icon{
+      font-size: 20px;
+      padding: 2px;
+    }
+  
+    .res_inputContainer{
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .res_buttonsContainer{
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .internWrapperDiv{
+      width: 90%;
+    }
+  
+    .ListInternWrapper>p{
+      width: 100%;
+      overflow-x: hidden;
+      display: inline-block;
+    }
+    .res_profile {
+      width: 75vw;;
+    }
+    .input-group>label{
+      width:100px;
+    }
+    .adminnavbar{
+        width:90vw;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+  }
+
+@media all and (min-width:500px) and (max-width:900px){
+    .res_inputContainer{
+      display: flex;
+      flex-direction: column;
+    }
+    table{
+      width:90vw;
+    }
+    thead{
+      width:100%;
+    }
+    .actionButton{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .input-group>label{
+      width:100px;
+    }
+    .adminnavbar{
+        width:90vw;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+  }

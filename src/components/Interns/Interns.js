@@ -404,12 +404,12 @@ const Interns = () => {
                 </div>
                 <div className='groupContainer'>
                     <div className='groupWrapper'>
-                        <p className='titleIntern' style={{fontSize:"25px"}}>Groups</p>
-                        <p><MdAddCircle title='Add New Group' className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></p>
+                        <p className='titleIntern'>Groups</p>
+                        <span><MdAddCircle title='Add New Group' className='internIcons addIntern' onClick={()=>setisOpenNewGroup(true)}/></span>
                     </div>
                 </div>
                 <div className='internsTableContainer'>
-                    <table style={{boxShadow:"none"}}>
+                    <table className='res_table' style={{boxShadow:"none"}}>
                         <thead style={{borderRadius:"0px"}}>
                             <tr>
                                 <th>Name</th>
@@ -424,7 +424,7 @@ const Interns = () => {
                                     <td>{e.internName}</td>
                                     <td>{e.email}</td>
                                     <td>{e.batch.batchName===defBatch.batchName ? <i>{"NA"}</i> : e.batch.batchName}</td>
-                                    <td>
+                                    <td className='action_icons'>
                                         <MdEdit title='Edit Intern' className='edit-icon' onClick={()=>handleEditInternPopup(e)}/>
                                         <MdDelete title='Delete Intern' className='del_icon' onClick={()=>handleDeleteInternPopup(e)}/>
                                     </td>
@@ -453,7 +453,7 @@ const Interns = () => {
           <div className='popupHeader'>
             <h2>Add New Group</h2>
           </div>
-          <div className='inputContainer'>
+          <div className='res_inputContainer inputContainer'>
             <div className="input-group">
               <label htmlFor="name">Name </label>
               <div>
@@ -564,7 +564,7 @@ const Interns = () => {
                 <div className='popupHeader'>
                     <h2>Add New Intern</h2>
                 </div>
-                <div className='inputContainer'>
+                <div className='res_inputContainer inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
                         <input type="text" id="name" pattern="^[a-zA-Z][a-zA-Z0-9]*$" 
@@ -599,7 +599,7 @@ const Interns = () => {
                 <div className='popupHeader'>
                     <h2>Add Interns To Group</h2>
                 </div>
-                <div className='inputContainer'>
+                <div className='res_inputContainer inputContainer'>
                     <h2>Select Interns</h2>
                     <div className='internWrapperDiv'>
                         {
@@ -631,9 +631,9 @@ const Interns = () => {
                 <div className='popupContainer'>
                 <div className="popup-boxd">
                 <div className='popupHeader'>
-                    <h2>Add New Intern</h2>
+                    <h2>Edit Intern</h2>
                 </div>
-                <div className='inputContainer'>
+                <div className='res_inputContainer inputContainer'>
                     <div className="input-group">
                         <label htmlFor="name">Name </label>
                         <input type="text" id="name" value={internname} 

@@ -109,19 +109,21 @@ body{
 
 .input-group {
   width: 25vw;
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   grid-template-columns: 30% 70%;
   margin: 25px auto;
 }
 
 .input-group label {
+  width: 100px;
   font-size: 18px;
   padding-top: 10px;
   font-weight: 500;
 } 
 
 .input-group input {
-  width: 90%;
+  width: 80%;
   padding:5px 20px;
   font-size: 17px;
   border: 1px solid lightgrey;
@@ -162,7 +164,7 @@ body{
 
 .buttonsContainer{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   margin: 20px 0px;
 }
@@ -262,20 +264,19 @@ body{
 /*end of searchbar styling */
 
 /* new searchbar styling */
-
 .buttonContainer2
 {
     display: flex;
     float: right;
-    
     /* margin-top: 10px; */
   }
 
   .buttonContainer3
 {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     float: right;
-    padding-top: 15px;
     /* margin-top: 10px; */
   }
 
@@ -290,6 +291,7 @@ body{
   .search-bar2{
   }
   .search-bar2>input{
+    width:12vw;
     padding: 8px 10px;
     border: none;
     border-radius: 3px 0px 0px 3px;
@@ -297,7 +299,6 @@ body{
   }
   
   .searchdiv{
-    
   }
   .search-bar2>input:focus{
     outline: none;
@@ -305,7 +306,7 @@ body{
   .searchIcon{
     background-color: var(--color-buttons);
     border-radius: 0px 3px 3px 0px;
-  padding: 7.5px 8px;
+    padding: 7.7px 8px;
 }
 
 /* end of search bar */
@@ -390,17 +391,16 @@ tr:nth-child(even)
 
 .popuptable
 {
+    width:80%;
     margin: 0px auto;
     border-collapse: collapse;
-    width: 33vw;
-
     /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
 }
 
 .popupbody{
     display: block;
     max-height:20vh;
-    width: 33vw;
+    width: 38vw;
     font-size: 14px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -408,8 +408,7 @@ tr:nth-child(even)
 
 .popuphead, .popupbody .popuptr {
     display: table;
-    table-layout: fixed;
-    width: 33vw;
+    width: 100%;
     text-align: center;
     /* even columns width , fix width of table too*/
 }
@@ -483,4 +482,236 @@ tr:nth-child(even)
 .loader{
   color:black ;
   font-weight: 1000;
+}
+
+@media all and (max-width:500px){
+  .popup-boxd {
+    position: absolute;
+    background: var(--color-back);
+    width: 75vw;
+    border-radius: 3px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+  }
+
+  .inputContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px auto;
+  }
+
+  .input-group {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin-top:20px;
+    margin-bottom: 10px;
+  }
+  
+  .input-group label {
+    font-size: 18px;
+    padding-top: 10px;
+    font-weight: 500;
+  } 
+  
+  .input-group input {
+    width: 60%;
+    padding:5px 20px;
+    font-size: 17px;
+    border: 1px solid lightgrey;
+  }
+  
+  .input-group p {
+    padding:0px 30px;
+    padding-top: 10px;
+    font-size: 17px;
+  }
+
+  .buttonsContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  
+  .buttonsContainer>button{
+      width: 20vw;
+      border: 1px solid var(--color-buttons);
+      border-radius: 3px;
+      color: var(--color-buttons);
+      padding: 8px 10px;
+      font-size: 14px;
+      cursor: pointer;
+  }
+  
+  .buttonsContainer>button:hover{
+    background: var(--color-buttons);
+    color: var(--color-body);
+  }
+
+  thead, tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 80vw;
+    text-align: center;
+    /* even columns width , fix width of table too*/
+  }
+  .buttonsContainer{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  .ListInternWrapper>p{
+    overflow-wrap: break-word;
+  }
+
+  .popuptable
+  {
+      margin: 0px auto;
+      border-collapse: collapse;
+      width: 95%;
+
+      /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
+  }
+
+  .popupbody{
+      display: block;
+      max-height:20vh;
+      width: 100%;
+      font-size: 14px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+  }
+
+  .popuphead, .popupbody .popuptr {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+      text-align: center;
+      /* even columns width , fix width of table too*/
+  }
+  .popupth{
+    font-size: 13px;
+  }
+
+  .buttonsContainer .addAvlButton{
+    width:fit-content;
+  }
+}
+
+@media all and (min-width:500px) and (max-width:900px){
+  .popup-boxd {
+    width: 55vw;;
+    position: absolute;
+    background: var(--color-back);
+    border-radius: 3px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+  }
+
+  .inputContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px auto;
+  }
+
+  .input-group {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin-top:20px;
+    margin-bottom: 10px;
+  }
+  
+  .input-group label {
+    font-size: 18px;
+    padding-top: 10px;
+    font-weight: 500;
+  } 
+  
+  .input-group input {
+    width: 60%;
+    padding:5px 20px;
+    font-size: 17px;
+    border: 1px solid lightgrey;
+  }
+  
+  .input-group p {
+    padding:0px 30px;
+    padding-top: 10px;
+    font-size: 17px;
+  }
+
+  .buttonsContainer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  
+  .buttonsContainer>button{
+      width: 20vw;
+      border: 1px solid var(--color-buttons);
+      border-radius: 3px;
+      color: var(--color-buttons);
+      padding: 8px 10px;
+      font-size: 14px;
+      cursor: pointer;
+  }
+  
+  .buttonsContainer>button:hover{
+    background: var(--color-buttons);
+    color: var(--color-body);
+  }
+
+  thead, tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 90vw;
+    text-align: center;
+    /* even columns width , fix width of table too*/
+  }
+  .buttonsContainer{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0px;
+  }
+
+  .popuptable
+  {
+      margin: 0px auto;
+      border-collapse: collapse;
+      width: 90%;
+
+      /* box-shadow: rgba(118, 245, 186, 0.795) 0px 8px 24px; */
+  }
+
+  .popupbody{
+      display: block;
+      max-height:20vh;
+      width: 100%;
+      font-size: 14px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+  }
+
+  .popuphead, .popupbody .popuptr {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+      text-align: center;
+      /* even columns width , fix width of table too*/
+  }
+  .popupth{
+    font-size: 13px;
+  }
+  .buttonsContainer .addAvlButton{
+    width:fit-content;
+  }
 }

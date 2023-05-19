@@ -37,3 +37,48 @@
     color: var(--color-body);
     background-color: #4285f4;
 }
+
+@media all and (max-width:800px){
+    .website_logo{
+        width:45vw;
+    }
+
+    .navlinksContainer{
+        display: none;
+    }
+    .navbar{
+        display: flex;
+        justify-content: space-between;
+    }
+    .menu_div{
+        padding: 20px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .menu_layout{
+        display: block;
+        position: absolute;
+        top:10.3vh;
+        right: 0px;
+        background-color: var(--color-navbar);
+        z-index: 2;
+    }
+    
+    .menu_layout>div{
+        font-weight: bold;
+        color: var(--color-body);
+        padding:0;
+        word-break: keep-all;
+    }
+    
+    .menulinksContainer>div:hover{
+        background-color: var(--color-buttons);
+        cursor: pointer;
+    }
+    .navlinks{
+        padding: 5px;
+        width: 100%;
+    }
+}

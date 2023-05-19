@@ -334,7 +334,7 @@ const Topic = () => {
             </div>:<></>}
       <div className="topicContainer">
         <div className="topicWrapper">
-          <div className='internHeader' style={{width:"54.8vw"}}>
+          <div className='topicHeader internHeader'>
                 <span><IoMdArrowRoundBack title='Go Back To Previous Page' onClick={()=>navigate(-1)} className='backButton'/></span>
                 <h2>Topics</h2>
           </div>
@@ -353,6 +353,7 @@ const Topic = () => {
                 Completed
               </p>
             </div>
+            <div></div>
             <div className="searchWrapper">
               <div className="buttonContainer3">
                 <div className="search-bar2">
@@ -364,11 +365,11 @@ const Topic = () => {
                   />
                 </div>
                 <div className="searchdiv">
-                  <FaSearch className="searchIcon" />
+                  <FaSearch className="schSearchIcon searchIcon" />
                 </div>
               </div>
               <div>
-                <p className="topicAdd" onClick={(e) => {setAddPopup(true); }} >
+                <p className="topicAdd1" onClick={(e) => {setAddPopup(true); }} >
                   Add&nbsp;Topic
                 </p>
               </div>
@@ -523,7 +524,7 @@ const Topic = () => {
         {showinfo && (
           <form>
             <div className="popupContainer" onClick={() => {setShowInfo(false);}} >
-              <div className="popup-boxd" onClick={(e) => e.stopPropagation()}>
+              <div className="popup-boxd res_topicpopup" onClick={(e) => e.stopPropagation()}>
                 <div className="popupHeader">
                   <h2>{topicTemp.topicName}    </h2>
                 </div>
@@ -539,7 +540,7 @@ const Topic = () => {
                       </span>
                   </div>
                   <div className="availability">
-                  <table className="popuptable">
+                  <table className="popuptable res_table">
                     <thead className="popuphead">
                       <tr className="popuptr">
                         <th className="popupth">Date</th>

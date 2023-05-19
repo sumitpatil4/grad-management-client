@@ -19,7 +19,7 @@
     display: grid;
     grid-template-columns: repeat(3,1fr);
     margin: 0px auto;
-    height: 70vh;
+    height: 69vh;
     overflow-y: scroll;
 }
 
@@ -78,4 +78,22 @@
 
 .add_icon{
     font-size: 30px;
+}
+
+@media all and (max-width:900px){
+  .mytrainings{
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      margin: 0px auto;
+      height: 69vh;
+      overflow-y: scroll;
+  }
+  .mytrainings>div{
+    width: 35vw;
+  }
+  .edit_pop{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }

@@ -66,6 +66,22 @@
     transform: scale(1.1);
 }
 
+.menu_logo
+{
+    margin-top: 0px;
+    margin: 0px 3vw;
+    /* padding: 0px 3vw; */
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.menu_logo:hover
+{
+    transform: scale(1.1);
+}
+
+
 
 /* css for profile component */
 
@@ -160,4 +176,58 @@
 .returnHome:hover{
     font-weight: 350;
     transform: scale(1.01);
+}
+.menu_div{
+    display: none;
+}
+
+
+@media all and (max-width:900px){
+    .website_logo_wrapper
+    {
+        width: 25%;
+        height: 10vh;
+        display: flex;
+        align-items: center;
+        padding-left:5px;
+    }
+
+    .navlinksContainer{
+        display: none;
+    }
+    .navbar{
+        display: flex;
+        justify-content: space-between;
+    }
+    .menu_div{
+        padding: 20px;
+        width: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .menu_layout{
+        display: block;
+        position: absolute;
+        top:10.3vh;
+        right: 0px;
+        background-color: var(--color-navbar);
+        z-index: 2;
+    }
+    
+    .menu_layout>div{
+        font-weight: bold;
+        color: var(--color-body);
+        padding:0;
+        word-break: keep-all;
+    }
+    
+    .menulinksContainer>div:hover{
+        background-color: var(--color-buttons);
+        cursor: pointer;
+    }
+    .navlinks{
+        padding: 5px;
+        width: 100%;
+    }
 }

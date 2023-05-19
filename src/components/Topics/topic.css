@@ -14,13 +14,15 @@
     margin: 0px 10px;
 }
 .topicNavbar{
-    display: grid;
-    grid-template-columns: 50% 50%;
+    display: flex;
+    justify-content: space-between;
     background-color: var(--color-topbar);
     color: var(--color-body);
+    height:10vh;
 }
 .buttonsWrapper{
     display: flex;
+    width: 46%;
 }
 .buttonsWrapper>p{
     font-size: 20px;
@@ -32,19 +34,26 @@
     background-color: var(--color-buttonsHover);
 }
 .searchWrapper{
-    /* display: flex; */
+    width:50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
-.topicAdd{
+
+.topicAdd1{
     font-weight: 500;
     background-color: var(--color-buttons);
-    font-size: 18px;
-    margin: 14px 8px;
-    padding: 4px 15px;
+    font-size: 16px;
+    /* margin: 14px 8px; */
+    padding:5px 5px;
     border-radius: 3px;
     cursor: pointer;
 }
 .topicAdd:hover{
     background-color: var(--color-buttonsHover);
+}
+.searchWrapper>p{
+    font-size: 12px;
 }
 
 .topicsdiv{
@@ -136,6 +145,7 @@ input[type=checkbox] {
 
 .scrHeader{
     display: flex;
+    justify-content: space-between;
     width: inherit;
     margin: 0px auto;
     margin-bottom: 50px;
@@ -147,7 +157,7 @@ input[type=checkbox] {
     background-color: var(--color-back);
     position: absolute;
     text-align: center;
-    width: 96%;
+    width: 86%;
     font-size: 24px;
     padding: 5px 0px;
     margin:0px 10px;
@@ -167,4 +177,111 @@ input[type=checkbox] {
     border-radius: 50%;
     cursor: pointer;
 }
+
+.buttonsWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.buttonsWrapper>p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width:50%;
+    height:100%;
+}
+
+.topicHeader{
+    width:58vw;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+@media all and (min-width:900px) {
+    .popup-boxd{
+        width:40vw;
+    }
+}
+
+
+@media all and (max-width:600px){
+    .topicContainer
+    {
+        width: 95vw;
+        margin: 5px auto;
+        margin-top: 10px;
+        height: 87vh;
+        box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
+    }
+    .buttonsWrapper{
+        width:40%;
+    }
+    .buttonsWrapper>p{
+        font-size: 14px;
+    }
+
+    .searchWrapper{
+        width:56%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .topicAdd1{
+        font-weight: 500;
+        background-color: var(--color-buttons);
+        font-size: 14px;
+        /* margin: 14px 8px; */
+        padding:5px 5px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .search-bar2>input{
+        width:15vw;
+        padding: 8px 10px;
+        border: none;
+        border-radius: 3px 0px 0px 3px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+    .topicbar{
+        display: grid;
+        grid-template-columns: 6% 67% 9% 9% 9%;
+        width: inherit;
+        box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
+        margin: 15px 20px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .res_table{
+        margin-top: 30px;
+    }
+
+    .topicHeader{
+        width:95vw;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+@media all and (min-width:600px) and (max-width:900px){
+    .topicContainer
+    {
+        width: 75vw;
+        margin: 5px auto;
+        margin-top: 10px;
+        height: 87vh;
+        box-shadow: rgba(0, 0, 0, 0.137) 0px 10px 20px;
+    }
+
+    .topicHeader{
+        width:75vw;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+
 

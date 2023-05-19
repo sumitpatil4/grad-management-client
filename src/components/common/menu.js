@@ -8,24 +8,15 @@ import menu_icon from "../../images/menu1.png"
 import Profile from './Profile';
 import { IoNotifications } from 'react-icons/io5';
 import AuthContext from '../Contextapi/Authcontext';
-import Menu from './menu';
 
-const Navbar = (props) => {
-
-  const usecontext=useContext(AuthContext);
-  const {isAuthenticated,userrole,userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
-
-  const [profileflag,setProfileflag]=useState(false);
-  const [menuflag,setMenuflag]=useState(false);
+const Menu = (props) => {
+    const usecontext=useContext(AuthContext);
+    const {username,handleLogout,isAuthenticated,userrole,userpicture,notificationBadge,notificationCheck,updatenotificationCheck}=usecontext;
   const [managerflag,setManagerflag]=useState(false);
   const [leadershipflag,setLeadershipflag]=useState(false);
   const [superadminflag,setSuperadminflag]=useState(false);
   const [userflag,setUserflag]=useState(false);
   const [internFlag, setInternFlag] = useState(false);
-
-  const handleProfileIcon=()=>{
-    document.getElementById('profile_icon').src=profile;
-  }
 
   useEffect(()=>{
     if(props.role!=="")
@@ -35,7 +26,7 @@ const Navbar = (props) => {
         setSuperadminflag(false);
         setUserflag(false);
         setInternFlag(false);
-        switch(props.role)
+        switch(props.props.role)
         {
           case 'ROLE_MANAGER':
             setManagerflag(true);
@@ -84,12 +75,9 @@ const Navbar = (props) => {
         }
     }
   }
-
   return (
-    <>
-    <nav className='navbar'>
-        <div className='website_logo_wrapper'><img className='website_logo' onClick={handleNavigate} src={accolite_logo}/></div>
-        <div className='navlinksContainer'>
+    <div className="menu_layout">
+        <div className='menulinksContainer'>
           {managerflag && <>
             <NavLink className="navlinks" to={"/mytrainings"} >My Trainings</NavLink>
             <NavLink className="navlinks" to={"/trainers"}>Trainers</NavLink>
@@ -103,15 +91,6 @@ const Navbar = (props) => {
             </>
           }
 
-          {superadminflag && <>
-              <NavLink className="navlinks" to={"/admin"}>Users</NavLink> 
-              <div className='notificationBadgeContainer'>
-              <IoNotifications title='Notifications' onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
-                {notificationBadge && <span id="notificationBadge"></span>}
-              </div>
-            </>
-          }
-
           {internFlag && <>
             <NavLink className="navlinks" to={"/intern"}>My Trainings</NavLink>
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
@@ -122,30 +101,10 @@ const Navbar = (props) => {
             <NavLink className="navlinks" to={"/aboutus"}>AboutUs</NavLink>
             </>
           }
-
-            <div onClick={()=>{profileflag ? setProfileflag(false):setProfileflag(true)}} className="profile_div">
-              <img id="profile_icon" className="profile_logo" src={userpicture} onError={handleProfileIcon}/>
-            </div>
-        </div>
-        <div className="menu_div">
-          {superadminflag && <>
-                <div className='notificationBadgeContainer'>
-                <IoNotifications title='Notifications' onClick={()=>{notificationCheck ? updatenotificationCheck(false):updatenotificationCheck(true)}} className="notification_icon"/>
-                  {notificationBadge && <span id="notificationBadge"></span>}
-                </div>
-              </>
-            }
-          <img onClick={()=>{menuflag ? setMenuflag(false):setMenuflag(true)}} id="menu_icon" className="menu_logo" src={menu_icon}/>
-        </div>
-    </nav>
-    {
-      profileflag && <Profile />
-    }
-    {
-      menuflag && <Menu props={props}/>
-    }
-    </>
+          <div className='navlinks' onClick={handleLogout}>Logout</div>
+          </div>
+    </div>
   )
 }
 
-export default Navbar
+export default Menu;

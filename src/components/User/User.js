@@ -61,7 +61,7 @@ const User = () => {
             </div>
 
 
-            <div className='inputContainer'>
+            <div className='res_inputContainer inputContainer'>
                 <div className="input-group">
                     <label htmlFor="name">Role </label>
                     <select id="name" onClick={(e)=>setTemprole(e.target.value)} required={true}>
