@@ -1,0 +1,66 @@
+.employeeContainer
+{
+    display: block;
+    width: 100vw;
+    margin: 5% auto;
+}
+
+/* styling for notification */
+
+.notificationContainer
+{
+    position: absolute;
+    background-color: var(--color-body);
+    box-shadow: rgba(58, 58, 58, 0.795) 0px 8px 24px;
+    display: flex;
+    flex-direction: column;
+    top:10vh;
+    right: 7vw;
+    float: right;
+}
+
+.notification{
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(124, 124, 124, 0.308);
+}
+
+.notification:hover{
+    background-color: var(--color-Hover);
+}
+
+.notification_data
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.notification_data > .empname{
+    font-weight: bold;
+    padding: 0px 5px;
+    font-size: 18px;
+}
+
+.notification_data > .emprole{
+    padding: 0px 5px;
+    font-weight: 400;
+    color: var(--color-notificationData);
+}
+
+.notification_time
+{
+    color: var(--color-smallHeads);
+    font-weight: 500;
+    padding: 5px;
+}
+
+.profile_icon
+{
+    padding: 5px 1vw;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+}

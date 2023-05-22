@@ -1,0 +1,39 @@
+.loginWrapper{
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.loginWrapper>h2{
+    padding: 10px 0px;
+}
+
+.google_btn
+{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid rgba(0, 0, 0, 0.541);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+}
+
+.google_btn:hover
+{
+    transform: scale(1.05);
+}
+
+.google-icon-wrapper
+{
+    padding: 5px 10px;
+    background-color: white;
+}
+
+.btn-text{
+    padding: 3px 10px;
+    color: var(--color-body);
+    background-color: #4285f4;
+}

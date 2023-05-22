@@ -1,0 +1,182 @@
+.LeadershipChart {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .chart-container {
+    max-width: 250px;
+    max-height: 300px;
+    margin: 0 auto;
+  }
+
+  .managerText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .managerContainer{
+    border-radius: 5px;
+    height: 80.3vh;
+    display: grid;
+    grid-template-columns: 17% 43% 40%;
+    margin: 0px 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: auto;
+  }
+
+  .trainContainer{
+    background-color: rgb(14, 20, 30);
+    color: var(--color-body);
+  }
+
+
+.trainContainer>h3{
+    font-size: 20px;
+    padding: 16.5px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.trainContainer>div{
+  height: 71.1vh;
+  overflow-y: scroll;
+}
+
+.ldr_topicContainer{
+  height: 62.7vh;
+  overflow-y: scroll;
+}
+
+.trainContainer>div>div{
+  font-size: 20px;
+  padding: 15px 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.trainContainer>div>div:hover{
+  background-color: var(--color-buttons);
+}
+
+.SchbuttonsWrapper>div{
+  font-size: 20px;
+  padding: 16.5px 20px;
+  font-weight: 500;
+}
+
+.leaderTopics{
+  text-align: center;
+  font-size: 24px;
+  padding: 10px;
+  margin: 0px 15px;
+  border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
+.managerTopicheads{
+  margin: 0px 20px;
+  margin-top: 10px;
+  color: var(--color-smallHeads);
+  font-size: 18px;
+}
+
+.barchartContainer{
+  height: 71.1vh;
+  overflow-y: scroll;
+}
+
+.topicbar_ldr{
+    display: grid;
+    grid-template-columns: 79% 7% 7% 7%;
+    width: inherit;
+    box-shadow: rgba(0, 0, 0, 0.123) 0px 10px 20px;
+    margin: 15px 20px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.topicbar_ldr:hover{
+  transform: scale(1.01);
+}
+
+.topicbar_ldr>p{
+  padding: 2px;
+  padding-left: 10px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.topicbar_ldr>div{
+  float: right;
+  justify-content: right;
+}
+
+
+
+.report-icon,
+.attd_icon
+{
+    padding: 0px 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.report-icon
+{
+    color: var(--color-edit);
+}
+
+.attd_icon
+{
+    color: var(--color-attd);
+}
+
+.report-icon:hover,
+.attd_icon:hover
+{
+    transform: scale(1.1);
+}
+
+.pieChart{
+  margin: 0 auto;
+  width: 90%;
+  height: 250px;
+  cursor: pointer;
+}
+
+.overHeader{
+  display: flex;
+  margin: 0px auto;
+  margin-bottom: 50px;
+  width: 37vw;
+}
+
+.overHeader>h2
+{
+  z-index: 5;
+  background-color: var(--color-back);
+  position: absolute;
+  width: inherit;
+  text-align: center;
+  font-size: 24px;
+  padding: 5px 0px;
+  border-bottom: 1px solid rgba(163, 160, 160, 0.61);
+}
+
+.overHeader>span{
+  z-index: 5;
+  position: absolute;
+  padding-left: 5px;
+}
+
+.overallscoreBtn{
+  font-size: 28px;
+  margin-top: 10px;
+  padding-left: 7px;
+  cursor: pointer;
+}
+
+.overallscoreBtn:hover{
+  transform: scale(1.05);
+}

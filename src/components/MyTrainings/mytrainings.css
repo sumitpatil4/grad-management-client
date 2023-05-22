@@ -1,0 +1,81 @@
+
+.mytrainingsContainer{
+  width: 85vw;
+  height: 80vh;
+  margin: 30px auto;
+  box-shadow: rgba(29, 29, 29, 0.35) 0px 5px 15px;
+  background-color: var(--color-back);
+}
+
+.mytrainingsContainer>h1{
+    text-align: center;
+    font-size: 30px;
+    padding: 10px;
+    margin: 0px 20px;
+    border-bottom: 1px solid rgba(58, 56, 56, 0.212);
+}
+
+.mytrainings{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    margin: 0px auto;
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+
+.mytrainings>div{
+    width: 22vw;
+    height: 22vh;
+    margin: 3vw;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    background-color: var(--color-body);
+}
+
+
+.mytrainings>div:hover{
+    transform: scale(1.02);
+}
+
+.trainingText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 37%;
+}
+
+.iconContainer{
+  display: flex;
+  justify-content: right;
+}
+
+.close-icon {
+  color: var(--color-del);
+}
+
+.edit_icon {
+  color: var(--color-edit);
+}
+
+.close-icon,
+.edit_icon {
+  font-size: 25px;
+  padding:5px;
+  margin: 3px;
+}
+
+.close-icon:hover,
+.edit_icon:hover{
+  background-color: var(--color-iconHover);
+  border-radius: 50%;
+
+}
+
+.add_icon{
+    font-size: 30px;
+}

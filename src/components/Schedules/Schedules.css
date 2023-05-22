@@ -1,0 +1,424 @@
+.scheduleHeader{
+    text-align: center;
+    margin: 10px 0;
+}
+
+.scheduleContainer{
+    border-radius: 5px;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    margin: 0px 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: auto;
+}
+
+
+.scheduleNavbar{
+    display: flex;
+    background-color: rgb(14, 20, 30);
+    color: var(--color-body);
+    justify-content: space-between;
+    padding-right: 5px;
+}
+.SchbuttonsWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.SchbuttonsWrapper>p{
+    font-size: 20px;
+    padding: 15px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.SchbuttonsWrapper>p:hover{
+    background-color: var(--color-buttons);
+}
+
+.schsearchWrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.topicAdd{
+    font-weight: 500;
+    background-color: var(--color-buttons);
+    font-size: 18px;
+    padding: 4px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    float: right;
+}
+.topicAdd:hover{
+    background-color: var(--color-buttonsHover);
+}
+
+.schedules{
+    padding:0px 10px;
+    height: 70.8vh;
+    overflow-y: scroll;
+    background-color: var(--color-back);
+    border-right:1px solid rgba(172, 172, 172, 0.678);
+
+}
+
+.schedule{
+    background-color: var(--color-body);
+    border-radius: 5px;
+    margin: 15px 0px;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.schedule:hover{
+    transform: scale(1.01);
+}
+
+.edit_icon_wrapper{
+    display: flex;
+}
+
+.schedulesText{
+    padding:10px;
+}
+
+.schedulesText>h3{
+    font-size: 22px;
+    padding-bottom: 3px;
+}
+
+.schedulesText>p{
+    font-size: 17px;
+    font-style: italic;
+}
+
+.schedulesText>div{
+    color: var(--color-smallHead);
+    font-weight: 500;
+    padding: 2px 0px;
+}
+
+
+
+.scheduleDetails{
+    background-color: var(--color-body);
+}
+
+/* new styling for popup */
+
+.sch_popup-boxd {
+    width: inherit;
+    height: inherit;
+
+  }
+
+.sch_input_box{
+    height: 70.8vh;
+    overflow-y: scroll;
+}
+
+.sch_popupHeader>h2 {
+    position: sticky;
+    text-align: center;
+    padding: 14px 0;
+    color: var(--color-body);
+    font-weight:500;
+    background-color:rgb(19, 28, 44);
+}
+
+.sch_inputContainer{
+  width: 35vw;
+  display: block;
+  margin: 0px auto;
+
+}
+
+.sch_input-group {
+  display: grid;
+  grid-template-columns: 35% 65%;
+  margin: 25px auto;
+}
+
+.sch_input-group>label {
+  font-size: 18px;
+  padding-top: 10px;
+  font-weight: 500;
+} 
+
+.sch_input-group>input {
+  padding:5px 20px;
+  font-size: 17px;
+  border: 1px solid var(--color-inputbox);
+}
+
+
+#datePicker {
+    width:90%;
+    padding:10px 15px;
+    font-size: 17px;
+    border: 1px solid var(--color-inputbox);
+  }
+  
+
+.sch_input-group>p {
+    font-style: italic;
+  padding:0px 30px;
+  padding-top: 10px;
+  font-size: 17px;
+}
+
+.sch_input-group>textarea {
+  padding:5px 20px;
+  font-size: 17px;
+  border: 1px solid var(--color-inputbox);
+}
+
+.sch_input-group>select {
+  padding:10px 20px;
+  font-size: 17px;
+  border: 1px solid var(--color-inputbox);
+}
+
+.selectBtn{
+    border: none;
+    background-color: var(--color-buttons);
+    color: var(--color-body);
+    padding: 10px 15px;
+    border-radius: 3px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.noTrainers{
+    text-align: center;
+    font-weight: 500;
+    padding: 5px 0px;
+}
+
+.selectBtn:hover{
+    background-color: var(--color-buttonsHover);
+}
+
+.sch_buttonsContainer{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  width: inherit;
+  margin-top: 20px;
+}
+
+.sch_buttonsContainer>button{
+    background-color: var(--color-body);
+    color: var(--color-buttons);
+    border: 1px solid var(--color-buttons);
+    padding: 10px 0;
+    border-radius: 3px;
+    margin:3px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.sch_buttonsContainer>button:hover{
+  background: var(--color-buttons);
+  color: var(--color-body);
+}
+
+.sch_internWrapperDiv{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    height: fit-content;
+}
+
+.sch_ListInternWrapper{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: row;
+    padding: 0 20px;
+}
+
+.sch_ListInternWrapper>p{
+    padding: 3px 0px;
+    font-weight: 500;
+}
+
+.avlWrapper{
+    padding: 20px 0px;
+}
+
+.avlContainer>h4{
+    color: rgb(88, 88, 88);
+    font-weight: 500;
+    padding-top: 15px;
+}
+
+.avl_tile{
+    background-color: var(--color-body);
+    margin: 10px 0px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 5px;
+    cursor: pointer;
+}
+
+.avl_tile:hover{
+    transform: scale(1.01);
+}
+
+
+.avl_List{
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 10% 30% 30% 30%;
+}
+
+.avl_List>p{
+    font-weight: 400;
+    width: inherit;
+    word-break: break-all;
+    padding-top: 3px;
+}
+
+.avl_List>input[type="time"]{
+    margin:0px 3px;
+    margin-top: 4px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+
+input[type="time"]:invalid{
+    border:2px solid var(--color-del);
+}
+input[type="time"]{
+    outline: none;
+}
+.avl_List>input{
+    padding: 7px;
+}
+
+.selectedGroups{
+    font-weight: 500;
+    padding: 0px 25px;
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+.selectedGroups>span{
+    font-style: italic;
+    padding: 0px 5px;
+    color: rgb(97, 97, 97);
+}
+
+.sch_calendarAccess{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.accessBtn{
+    border: none;
+    background-color: var(--color-buttons);
+    color: var(--color-body);
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+
+/* end of popup styling */
+
+.Detail_schedulesText{
+    margin:20px;
+}
+
+.Detail_schedulesText>h3{
+    font-size: 22px;
+    padding-bottom: 3px;
+}
+
+.Detail_schedulesText>p{
+    font-size: 17px;
+    font-style: italic;
+}
+
+.Detail_schedulesText>div{
+    color: var(--color-smallHeads);
+    font-weight: 500;
+    padding: 2px 0px;
+}
+
+.meetLink{
+    color: darkblue;
+    text-decoration: underline;
+}
+
+.groupHead{
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.meetBatchContainer{
+    margin: 0px 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.meetBatchContent{
+    max-height: 25vh;
+    overflow-y: scroll;
+}
+
+.batchNavbar{
+    display: flex;
+    background-color: rgb(14, 20, 30);
+    color: var(--color-body);
+}
+
+.batchNavbar>p{
+    padding: 10px 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.batchNavbar>p:hover{
+    background-color: var(--color-buttons);
+}
+
+
+.attendanceContainer{
+    width: 60%;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    padding:5px 10px;
+}
+
+.attendanceContainer>p{
+    padding:8px 10px;
+    font-weight: 500;
+}
+
+.attendance-form{
+    margin: 10px 0px;
+}
+
+.attendance-form>div>label{
+    display: block;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.attendance-form>div>input{
+    display: block;
+    padding-top: 20px;
+    padding-left: 70px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}

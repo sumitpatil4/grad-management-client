@@ -1,0 +1,163 @@
+.navbar{
+    display: grid;
+    width: 100vw;
+    height: 10vh;
+    background-color: var(--color-navbar);
+    grid-template-columns: 20vw 80vw;
+}
+
+.website_logo_wrapper
+{
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    padding-left:5px;
+}
+
+.website_logo{
+    height: 8vh;
+    cursor: pointer;
+}
+
+.navlinksContainer
+{
+    display: flex;
+    flex-direction: row;
+    justify-content:right;
+    align-items:center;
+    height: 10vh;
+}
+
+.navlinks{
+    width:fit-content;
+    color: var(--color-body);
+    font-size: 20px;
+    padding: 0px 2vw;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    height: inherit;
+}
+
+.active
+{
+    background-color: var(--color-buttons);
+}
+
+
+.navlinks:hover{
+    background-color: var(--color-buttons);
+}
+
+
+.profile_logo
+{
+    margin-top: 0px;
+    margin: 0px 3vw;
+    /* padding: 0px 3vw; */
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.profile_logo:hover
+{
+    transform: scale(1.1);
+}
+
+
+/* css for profile component */
+
+.profile_layout{
+    position: absolute;
+    top:10.3vh;
+    right: 0px;
+    background-color: var(--color-navbar);
+    z-index: 2;
+}
+
+.profile_layout>div{
+    font-weight: bold;
+    color: var(--color-body);
+    padding: 10px 15px;
+    word-break: keep-all;
+}
+
+.profile_layout>div:hover{
+    background-color: var(--color-buttons);
+    cursor: pointer;
+}
+
+.profile_logo{
+    border-radius: 50%;
+    margin-top:5px;
+}
+
+/* notifications */
+
+.notification_icon
+{
+    padding: 0px 2vw;
+    color: var(--color-body);
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.notification_icon:hover{
+    transform: scale(1.1);
+}
+
+#notificationBadge{
+    background-color: var(--color-notificationBadge);
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+    top:0;
+    left:50%;
+}
+
+.notificationBadgeContainer{
+    position: relative;
+}
+
+/* Error Page Styling */
+
+.errorContainer{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.errorContainer>h1{
+    font-size: 130px;
+    color: rgb(46, 200, 102);
+}
+
+.errorContainer>div{
+    font-size: 33px;
+    font-weight: 200;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+.errorContainer>p{
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.returnHome{
+    color: rgb(46, 200, 102);
+    cursor: pointer;
+    border-bottom: 1px dashed rgb(46, 200, 102);
+}
+
+.returnHome:hover{
+    font-weight: 350;
+    transform: scale(1.01);
+}

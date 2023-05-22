@@ -1,0 +1,27 @@
+.newuserContainer
+{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.newuser{
+    text-align: center;
+}
+
+.newuser>p{
+    background-color: var(--color-buttons);
+    /* background-color: gray; */
+    color: var(--color-body);
+    margin: 5px auto;
+    padding: 10px 20px;
+    border-radius: 3px;
+    width: fit-content;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.newuser>p:hover{
+    background-color: var(--color-buttonsHover);
+}
