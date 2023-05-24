@@ -8,6 +8,9 @@ import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import { PuffLoader } from 'react-spinners';
 import { useNavigate } from "react-router-dom";
+import { useRef } from 'react';
+import * as XLSX from "xlsx";
+import { FiUpload } from 'react-icons/fi';
 
 const Interns = () => {
     const navigate=useNavigate();
@@ -41,8 +44,84 @@ const Interns = () => {
     const [useeffectreload3, setUseeffectreload3] = useState(false)
     const batchName = `${train.trainingName}_${train.trainingId}`;
     const [resPopUp,setResPopUp] = useState(false);
+    const [internErrPopup,setinternErrPopup] = useState(false);
     const [resMessage,setResMessage] = useState("");
     const [isLoading,setIsLoading] = useState(false);
+    const fileInput = useRef(null);
+    const [uploadPopUp,setuploadPopUp] = useState(false);
+
+    const handleFileSubmit = (e) => {
+        e.preventDefault(); // prevent default form submission behavior
+        internsExcel(fileInput.current.files[0]);
+      };
+
+      const dataValidityCheck=(dataArr)=>{
+          const regName=/^[a-zA-Z][a-zA-Z0-9]*$/;
+          const regEmail=/^\S+@\S+$/;
+          const regPhone=/^[0-9]{10}$/;
+         if(dataArr.length===0)
+            return false;
+         else {
+            let flag=true;
+            dataArr.forEach((data)=>{
+                if(Object.keys(data).length<3)
+                {
+                    flag = false;
+                }
+                else {
+                    if(!(regName.test(data.Name)
+                    && regEmail.test(data.Email)
+                    && regPhone.test(toString(data.Phone)))
+                    ){
+                        flag = false;
+                    }
+                }
+            })
+            return flag;
+        }
+      }
+
+      const internsExcel = (file) => {
+        setuploadPopUp(false);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const data = event.target.result;
+          const workbook = XLSX.read(data, { type: "binary" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const internsData = XLSX.utils.sheet_to_json(worksheet);
+          if(dataValidityCheck(internsData))
+          {
+
+            setIsLoading(true);
+            internsData.forEach((intern,index)=>{
+                axios.post(`http://localhost:8090/intern/createIntern/${userid}/${train.trainingId}`,{
+                    "internName":intern.Name,
+                    "email":intern.Email,
+                    "phoneNumber":intern.Phone
+                },{
+                    headers:{
+                    "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                }).then((res)=>{
+                    if(index===internsData.length-1)
+                    {
+                        setUseeffectreload(!useeffectreload);
+                        setIsLoading(false);
+                    }
+                }).catch((err)=>{
+                    setResMessage(err.response.data.message);
+                    setResPopUp(true);
+                    setIsLoading(false);
+                });
+            })
+
+          }
+          else{
+            setinternErrPopup(true);
+          }
+        }
+        reader.readAsBinaryString(file);
+      };
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -383,7 +462,10 @@ const Interns = () => {
                         <p><MdAddCircle title='Add Intern to Group' className='internIcons addIntern' onClick={()=>handleGroupAddInternPopup()}/></p>
                         <p><MdEdit title='Edit Group' onClick={()=>handleEditPopup(groupName)} className='internIcons edit-icon'/></p>
                         <p><MdDelete title='Delete Group' onClick={()=>setisOpenDeleteGroup(true)} className='internIcons del_icon'/></p>
-                        </>:<p><MdAddCircle title='Add Intern to Training' className='internIcons addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
+                        </>:<>
+                        <p><MdAddCircle title='Add Intern to Training' className='internIcons addIntern' onClick={()=>setisOpenDefaultAddIntern(true)}/></p>
+                        <p><FiUpload title='Upload Interns Using Excel' style={{color:"white",paddingTop:"6px",paddingLeft:"6px"}} className='uploadIcon' onClick={()=>setuploadPopUp(true)}/></p>
+                        </>
                         }
                     </div>
                     <div className='internsearchwrapper'>
@@ -506,6 +588,35 @@ const Interns = () => {
         </div>
       </div>
       </div></form>}
+
+      {uploadPopUp && <div className='popupContainer'>
+        <div className='popup-boxd'>
+            <div className='popupHeader'>
+                <h2>Upload Interns</h2>
+            </div>
+
+            <form className="attendance-form">
+                <div>
+                    <label htmlFor="attendance"> Upload Excel File</label>
+                    <input
+                    type="file"
+                    id="file"
+                    ref={fileInput}
+                    name="file"
+                    />
+                </div>        
+
+            <div className='buttonsContainer'>
+            <button type="submit" className="submit-btn" onClick={(e)=>{handleFileSubmit(e)}}>
+                Upload
+            </button>
+            <button type="reset" className="cancel-btn" onClick={() =>{setuploadPopUp(false);} }>
+                Cancel
+            </button>
+            </div>
+            </form>
+        </div>
+    </div>}
 
       {isOpenDeleteGroup && <div className='popupContainer'>
        <div className='popup-boxd'>
@@ -671,6 +782,22 @@ const Interns = () => {
                 </div>
                 <div className='buttonsContainer'>
                     <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                    Ok
+                    </button>
+                </div>
+            </div>
+            </div>}
+
+            {internErrPopup && <div className='popupContainer'>
+            <div className='popup-boxd'>
+                <div className='popupHeader'>
+                <h2>Error</h2>
+                </div>
+                <div className='msgContainer'>
+                    <p>Invalid Data in Excel file uploaded</p>
+                </div>
+                <div className='buttonsContainer'>
+                    <button type="submit" className="submit-btn" onClick={() => setinternErrPopup(false)}>
                     Ok
                     </button>
                 </div>

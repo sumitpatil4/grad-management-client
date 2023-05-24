@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { MdEdit, MdDelete, MdOutlineAddCircle, MdOutlineAddCircleOutline, MdAddCircle } from 'react-icons/md';
 import { HiDocumentReport } from 'react-icons/hi';
 import { TbReportAnalytics } from 'react-icons/tb';
+import { MdLeaderboard } from 'react-icons/md';
 import Leadercontext from '../Contextapi/Leadercontext';
 import {BsFillInfoCircleFill} from 'react-icons/bs'
 import { FaSearch } from 'react-icons/fa';
@@ -34,8 +35,11 @@ const Result = () => {
     const [isLoading,setIsLoading] = useState(false);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
-    const [attendanceReportView,setattendanceReportView] = useState(true);
+    const [overallScorePopup,setoverallScorePopup] = useState(true);
+    const [attendanceReportView,setattendanceReportView] = useState(false);
     const [reportAnalysisView,setreportAnalysisView] = useState(false);
+    const [topicPiechart,settopicPiechart] = useState([]);
+    const [overallScoresArray,setoverallScoresArray] = useState([]);
 
     useEffect(()=>{
       setIsLoading(true);
@@ -69,9 +73,70 @@ const Result = () => {
     return false;
   }
 
+  const checkIntern=(scoresArr,internId)=>{
+    const x=scoresArr.filter((scr)=>scr.internId===internId);
+    if(x.length!==0)
+      return true;
+    return false;
+  }
+
+  const overallScores=(topicList)=>{
+      setIsLoading(true);
+      let allScoresArr=[],newScoresArr=[];
+      topicList.forEach((topic,index)=>{
+
+        axios.get(`http://localhost:8090/scores/getScores/${topic.topicId}`,{
+          headers:{
+            "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
+        .then((res)=>{
+          res.data.batch.forEach((scr)=>{
+            allScoresArr.push(scr)
+          })
+          if(index===topicList.length-1){
+            setTimeout(()=>{
+              console.log(allScoresArr);
+              allScoresArr.forEach((scr)=>{
+                if(checkIntern(newScoresArr,scr.intern.internId)){
+                  newScoresArr.forEach((temp)=>{
+                    if(temp.internId===scr.intern.internId)
+                    {
+                      temp.percentage=((temp.percentage+parseInt((scr.score*100)/scr.totalScore))/2)
+                    }
+                  })
+                }
+                else{
+                  const x={
+                    internId:scr.intern.internId,
+                    internName:scr.intern.internName,
+                    batchId:scr.intern.batch.batchId,
+                    batchName:scr.intern.batch.batchName,
+                    percentage:parseInt((scr.score*100)/scr.totalScore),
+                  }
+                  newScoresArr.push(x);
+                }
+
+              })
+              console.log(newScoresArr);
+              setoverallScoresArray(newScoresArr.sort((a,b)=>b.percentage-a.percentage));
+              //completed just do html part bro
+
+            },100)
+            setIsLoading(false);
+          }
+        });
+      })
+  }
+
     const handleTraining=(e,trng)=>{
       setSearchQuery("")
+      settopicPiechart([])
+      setoverallScoresArray([])
       settrainingInstance(trng);
+      setattendanceReportView(false);
+      setoverallScorePopup(true);
+      setreportAnalysisView(false);
       settopicInstance({})
       attendanceReport.length=0;
       setattendanceReport([]);
@@ -90,8 +155,12 @@ const Result = () => {
             }
           })
           .then((meets)=>{
+            const completedtemp=res.data.topicList.filter((t) => t.completed && t.active).length;
+            console.log([completedtemp,res.data.topicList.length-completedtemp]);
+            settopicPiechart([completedtemp,res.data.topicList.length-completedtemp]);
             setcompletedList(res.data.topicList.filter((t) => t.completed && t.active));
             setreamainingList(res.data.topicList.filter((t) => !t.completed && t.active && checkMeets(meets.data.meeting,t.topicId)));
+            overallScores(res.data.topicList)
             setIsLoading(false);
           })
           
@@ -231,6 +300,7 @@ const Result = () => {
       ["Below (50%)", 0],
     ])
     setattendanceReportView(false);
+    setoverallScorePopup(false);
     setreportAnalysisView(true);
     setallScores([])
     settopicInstance(topic);
@@ -246,10 +316,17 @@ const Result = () => {
     ])
     attendanceReport.length=0;
     setreportAnalysisView(false);
+    setoverallScorePopup(false);
     setattendanceReportView(true);
     setattendanceReport([])
     settopicInstance(topic);
     calcPercentage(topic.topicId)
+  }
+
+  const handleOverallscores=()=>{
+    setreportAnalysisView(false);
+    setoverallScorePopup(true);
+    setattendanceReportView(false);
   }
 
     return (
@@ -292,12 +369,30 @@ const Result = () => {
                     <div>
                       {(completedList.length===0 && reamainingList.length===0) ? <>
                         <div>
-                          <h1 className='leaderTopics'>Topics</h1>
+                          <div className='overHeader'>
+                              <h2>Topics</h2>         
+                              <span> 
+                                <MdLeaderboard
+                                  className="overallscoreBtn"
+                                  title="Overall Training Report"
+                                  onClick={()=>{handleOverallscores()}}
+                                />
+                              </span>
+                          </div>
                           <p className='noTrainers'>-- No Topics are There In This Training --</p>
                         </div>
                       </>:
                       <>
-                      <h1 className='leaderTopics'>Topics</h1>
+                      <div className='overHeader'>
+                              <h2>Topics</h2>         
+                              <span> 
+                                <MdLeaderboard
+                                  className="overallscoreBtn"
+                                  title="Overall Training Report"
+                                  onClick={()=>{handleOverallscores()}}
+                                />
+                              </span>
+                          </div>
                       <div className='ldr_topicContainer'>
                       <h3 className='managerTopicheads'>Completed</h3>
                         { (searchQuery !== "" ? filteredList(completedList) : completedList).length===0 ? <p className='noTrainers'>-- No Topics Here --</p> :
@@ -427,6 +522,58 @@ const Result = () => {
                   </div></>}
                 </div>
               </div>}
+
+              {overallScorePopup && <div className='sch_popupHeader'>
+                  <h2>Overall Training Report</h2>
+                  <div className='barchartContainer'>
+
+                    {
+                      overallScoresArray.length===0 ? <div className='noTrainers'>-- Scores Not Yet Updated --</div>:<>
+                      <div className="availabilityContainer">
+                        <h2>Topics Progress</h2>
+                        <Chart
+                          backgroundColor={"gray"}
+                          chartType="PieChart"
+                          data={[
+                            ["Category", "Count"],
+                            ["Completed", topicPiechart[0]],
+                            ["Incompleted", topicPiechart[1]],
+                          ]}
+                          options= {{
+                            backgroundColor:"whitesmoke"}
+                          }
+                          className="pieChart"
+                        />
+                      </div>
+
+                      <div className="availabilityContainer">
+                        <h2>Overall Score Board</h2>
+                        <div className="availability">
+                        <table className="popuptable">
+                          <thead className="popuphead">
+                            <tr className="popuptr">
+                              <th className="popupth">Rank</th>
+                              <th className="popupth">Name</th>
+                              <th className="popupth">Batch</th>
+                              <th className="popupth">Percentage</th>
+                            </tr>
+                          </thead>
+                          <tbody className="popupbody">
+                            {overallScoresArray.map((scr,i) => (
+                              <tr className="popuptr" key={i}>
+                                <td className="popuptd">{i+1}</td>
+                                <td className="">{scr.internName}</td>
+                                <td className="popuptd">{scr.batchName}</td>
+                                <td className="popuptd">{scr.percentage}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                    </div>
+                  </div></>}
+                </div>
+              </div>}
+
           </div>
         </div> 
 
