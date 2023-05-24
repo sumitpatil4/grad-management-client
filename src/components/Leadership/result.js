@@ -140,6 +140,7 @@ const Result = () => {
           })
             .then((res)=>{
                 const total=res.data.interns.length;
+                console.log(res.data.interns)
                 let cnt=0,meetcheck=0;
                 res.data.interns.forEach((intern)=>{
                     intern.attendanceList.forEach((att)=>{
