@@ -10,7 +10,7 @@ const User = () => {
     const [tempdesc,setTempdesc]=useState("manager");
     const [popUp,setPopUp] = useState(false);
     const usecontext=useContext(AuthContext);
-    const {userid,username, usermail}=usecontext;
+    const {handleLogout,userid,username, usermail}=usecontext;
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
     const [isLoading,setIsLoading] = useState(false);
@@ -110,13 +110,13 @@ const User = () => {
       {resPopUp && <div className='popupContainer'>
           <div className='popup-boxd'>
             <div className='popupHeader'>
-              <h2>Opps Something went wrong!!</h2>
+              <h2>Session Expired</h2>
             </div>
               <div className='msgContainer'>
-                <p>{resMessage}</p>
+                <p>Please login again</p>
               </div>
               <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
                   Ok
                 </button>
               </div>

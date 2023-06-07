@@ -17,7 +17,7 @@ const InternsView = () => {
     const interncontext=useContext(InternContext);
     const {internSchedulesList,updateinternSchedulesList}=interncontext;
     const authContext = useContext(AuthContext);
-    const {username,usermail,userid} = authContext;
+    const {handleLogout,username,usermail,userid} = authContext;
     const [scheduleList, setscheduleList] = useState([]);
     const [past, setPast] = useState([]);
     const [present, setPresent] = useState([]);
@@ -110,6 +110,9 @@ const InternsView = () => {
     }
 
     const handleView = (e, i) => {
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = objDiv.scrollHeight;
         setViewList(e);
         handleDetsSch();
     }
@@ -158,8 +161,8 @@ const InternsView = () => {
             <PuffLoader color="#4CAF50" />
             </div>:<></>}
     <h2 className='scheduleHeader'>Your&nbsp;Schedules</h2>
-    <div className='scheduleContainer'>
-        <div className="scheduleWrapper">
+    <div id="scroll_div_container" className='scheduleContainer'>
+        <div id="scroll_div" className="scheduleWrapper">
             <div className='scheduleNavbar'>
                 <div className='SchbuttonsWrapper'>
                     <p className='headerText active' onClick={(e) => {handleClickToday(e)}}>Today</p>
@@ -173,8 +176,8 @@ const InternsView = () => {
 
 
             <div className="schsearchWrapper">               
-              <div className="buttonContainer3">
-                <div className="search-bar2">
+              <div className="int_buttonContainer3 buttonContainer3">
+                <div className="int_search-bar2 search-bar2">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -183,7 +186,7 @@ const InternsView = () => {
                   />
                 </div>
                 <div>
-                  <FaSearch className="searchIcon" />
+                  <FaSearch className="intsearchIcon searchIcon" />
                 </div>
               </div>
             </div>
@@ -294,7 +297,7 @@ const InternsView = () => {
                     </div>
 
                     <div className="sch_input-group">
-                        <label htmlFor="name">Selected Groups</label>
+                        <label htmlFor="name">Groups</label>
                         <div className='sch_internWrapperDiv'>
                             {
                                 viewList.batchList.map((e,i)=><div key={i} className='sch_ListInternWrapper'>
@@ -310,20 +313,20 @@ const InternsView = () => {
     </div>
     </div>
     {resPopUp && <div className='popupContainer'>
-            <div className='popup-boxd'>
-                <div className='popupHeader'>
-                <h2>Opps Something went wrong!!</h2>
-                </div>
-                <div className='msgContainer'>
-                    <p>{resMessage}</p>
-                </div>
-                <div className='buttonsContainer'>
-                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                    Ok
-                    </button>
-                </div>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Session Expired</h2>
             </div>
-            </div>}
+              <div className='msgContainer'>
+                <p>Please login again</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
     </>
   )
 }

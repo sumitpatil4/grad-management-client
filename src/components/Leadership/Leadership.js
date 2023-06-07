@@ -4,9 +4,12 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import "./Leadership.css"
 import { PuffLoader } from 'react-spinners';
+import AuthContext from '../Contextapi/Authcontext';
 
 const Leadership = () => {
 
+    const authcontext=useContext(AuthContext);
+    const {handleLogout}=authcontext;
     const leadercontext=useContext(Leadercontext);
     const {updatemanagerInstance}=leadercontext;
     const [usersList, setUsersList] = useState([]);
@@ -53,20 +56,20 @@ const Leadership = () => {
           </div>
         </div>
         {resPopUp && <div className='popupContainer'>
-        <div className='popup-boxd'>
+          <div className='popup-boxd'>
             <div className='popupHeader'>
-            <h2>Opps Something went wrong!!</h2>
+              <h2>Session Expired</h2>
             </div>
-            <div className='msgContainer'>
-                <p>{resMessage}</p>
-            </div>
-            <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                    Ok
+              <div className='msgContainer'>
+                <p>Please login again</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
+                  Ok
                 </button>
-            </div>
-        </div>
-    </div>}
+              </div>
+          </div>
+        </div>}
     </>
       )
 }

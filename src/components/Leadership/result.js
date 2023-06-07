@@ -83,7 +83,6 @@ const Result = () => {
     })
         .then((res)=>{
           settopicsList(res.data.topicList);
-          console.log(res.data.topicList)
           axios.get(`http://localhost:8090/meeting/getMeetings/${trng.trainingId}`,{
             headers:{
               "Authorization":`Bearer ${localStorage.getItem('accessToken')}`
@@ -223,6 +222,9 @@ const Result = () => {
   }
 
   const handleScores=(topic)=>{
+    var objDiv = document.getElementById("scroll_div");
+    var div = document.getElementById("scroll_div_container");
+    div.scrollTop = objDiv.scrollHeight;
     setdata([
       ["Category", "No Of Interns"],
       ["Above (75%)", 0],
@@ -237,6 +239,9 @@ const Result = () => {
   }
 
   const handleAttendance=(topic)=>{
+    var objDiv = document.getElementById("scroll_div");
+    var div = document.getElementById("scroll_div_container");
+    div.scrollTop = objDiv.scrollHeight;
     setdata([
       ["Category", "No Of Interns"],
       ["Above (75%)", 0],
@@ -252,54 +257,55 @@ const Result = () => {
   }
 
     return (
-        <>
-            {isLoading?<div className="loading">
-            <PuffLoader color="#4CAF50" />
-            </div>:<></>}
-            <h2 className='scheduleHeader'>Trainings Under {managerInstance.uname}</h2>
-            <div className='managerContainer'>
-              <div className='trainContainer'>
-                  <h3>Trainings</h3>
+      <>
+        {isLoading ? <div className="loading">
+          <PuffLoader color="#4CAF50" />
+        </div> : <></>}
+        <h2 className='scheduleHeader'>Trainings Under {managerInstance.uname}</h2>
+        <div id="scroll_div_container" className='leadmanagerContainer managerContainer'>
+          <div id="scroll_div" className='outerBox'>
+          <div className='trainContainer'>
+            <h3>Trainings</h3>
+            <div>
+              {trainingsList.map((trng, i) => <div className='trainingName' onClick={(e) => handleTraining(e, trng)}>{trng.trainingName}</div>)}
+            </div>
+          </div>
+          <div className="leadscheduleWrapper scheduleWrapper">
+            <div className='scheduleNavbar'>
+              <div className='SchbuttonsWrapper'>
+                <div className='headerText' >{(Object.keys(trainingInstance).length === 0) ? "TrainingName" : trainingInstance.trainingName}</div>
+              </div>
+              <div className="schsearchWrapper">
+                <div className="buttonContainer3">
+                  <div className="search-bar2">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
                   <div>
-                    {trainingsList.map((trng,i)=><div className='trainingName' onClick={(e)=>handleTraining(e,trng)}>{trng.trainingName}</div>)}
+                    <FaSearch className="lead_searchicon searchIcon" />
                   </div>
+                </div>
               </div>
-              <div className="scheduleWrapper">
-                  <div className='scheduleNavbar'>
-                      <div className='SchbuttonsWrapper'>
-                          <div className='headerText' >{(Object.keys(trainingInstance).length === 0) ? "TrainingName":trainingInstance.trainingName}</div>
-                      </div>
-                      <div className="schsearchWrapper">
-                    <div className="buttonContainer3">
-                      <div className="search-bar2">
-                        <input
-                          type="text"
-                          placeholder="Search..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <FaSearch className="searchIcon" />
-                      </div>
-                    </div>
-                  </div>
-              </div>
+            </div>
 
-              <div className='schedules'>
-                  {(Object.keys(trainingInstance).length === 0) ? <div className='noTrainers'>-- Select a Training --</div>:(
+            <div className='schedules'>
+              {(Object.keys(trainingInstance).length === 0) ? <div className='noTrainers'>-- Select a Training --</div> : (
+                <div>
+                  {(completedList.length === 0 && reamainingList.length === 0) ? <>
                     <div>
-                      {(completedList.length===0 && reamainingList.length===0) ? <>
-                        <div>
-                          <h1 className='leaderTopics'>Topics</h1>
-                          <p className='noTrainers'>-- No Topics are There In This Training --</p>
-                        </div>
-                      </>:
-                      <>
+                      <h1 className='leaderTopics'>Topics</h1>
+                      <p className='noTrainers'>-- No Topics are There In This Training --</p>
+                    </div>
+                  </> :
+                    <>
                       <h1 className='leaderTopics'>Topics</h1>
                       <div className='ldr_topicContainer'>
-                      <h3 className='managerTopicheads'>Completed</h3>
-                        { (searchQuery !== "" ? filteredList(completedList) : completedList).length===0 ? <p className='noTrainers'>-- No Topics Here --</p> :
+                        <h3 className='managerTopicheads'>Completed</h3>
+                        {(searchQuery !== "" ? filteredList(completedList) : completedList).length === 0 ? <p className='noTrainers'>-- No Topics Here --</p> :
                           (searchQuery !== "" ? filteredList(completedList) : completedList).map(
                             (t) => (
                               <div className="topicbar_ldr">
@@ -309,21 +315,21 @@ const Result = () => {
                                   <TbReportAnalytics
                                     className="report-icon"
                                     title='Score Analysis'
-                                    onClick={()=>handleScores(t)}
+                                    onClick={() => handleScores(t)}
                                   />
                                 </div>
                                 <div>
                                   <HiDocumentReport
                                     className="attd_icon"
                                     title='Attendance Report'
-                                    onClick={()=>handleAttendance(t)}
+                                    onClick={() => handleAttendance(t)}
                                   />
                                 </div>
                               </div>
                             )
                           )}
-                      <h3 className='managerTopicheads'>In Progress</h3>
-                      {  (searchQuery !== "" ? filteredList(reamainingList) : reamainingList).length===0 ? <p className='noTrainers'>-- No Topics Here --</p> :
+                        <h3 className='managerTopicheads'>In Progress</h3>
+                        {(searchQuery !== "" ? filteredList(reamainingList) : reamainingList).length === 0 ? <p className='noTrainers'>-- No Topics Here --</p> :
                           (searchQuery !== "" ? filteredList(reamainingList) : reamainingList).map(
                             (t) => (
                               <div className="topicbar_ldr">
@@ -334,74 +340,75 @@ const Result = () => {
                                   <HiDocumentReport
                                     title='Attendance Report'
                                     className="attd_icon"
-                                    onClick={()=>handleAttendance(t)}
+                                    onClick={() => handleAttendance(t)}
                                   />
                                 </div>
                               </div>
                             )
                           )}
-                          </div>
-                    
-                        </>}
-                      </div> 
-                      )}
-                    </div> 
-                </div>
-          <div className='scheduleDetails'>
-
-            {attendanceReportView && <div className='sch_popupHeader'>
-                  <h2>Attendance Report</h2>
-                  <div className='barchartContainer'>
-                    {
-                      (Object.keys(topicInstance).length !== 0) ? <div>
-                        <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
-                        <>{attendanceReport.length !==0 ?
-                          attendanceReport.map((meetReport,i)=>{
-                              if(meetReport.report){
-                                return <>
-                                  <h3 className='managerTopicheads'>{meetReport.meetDate}</h3>
-                                  <Barchart batch={meetReport.batchList}  percentage={meetReport.percentageList}/>
-                                </> 
-                              }
-                              else{
-                                return <>
-                                  <h3 className='managerTopicheads'>{meetReport.meetDate}</h3>
-                                  <div className='noTrainers'>-- Attendance report not yet uploaded --</div>
-                                </>
-                              }
-                            })
-                            : <div className='noTrainers'>-- No Meetings Scheduled Yet --</div>
-                        }</>
-                        
-                      </div>:<div className='noTrainers'>-- Select a Topic --</div>
-                    }
-                    
-                  </div>
-              </div>}
-
-              {reportAnalysisView && <div className='sch_popupHeader'>
-                  <h2>Score Analysis</h2>
-                  <div className='barchartContainer'>
-                  <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
-
-                    {
-                      allScores.length===0 ? <div className='noTrainers'>-- Score Not Yet Updated --</div>:<>
-                      <div className="availabilityContainer">
-                        <h2>Pie Chart</h2>
-                        <Chart
-                          backgroundColor={"gray"}
-                          chartType="PieChart"
-                          data={data}
-                          options= {{
-                            backgroundColor:"whitesmoke"}
-                          }
-                          className="pieChart"
-                        />
                       </div>
 
-                      <div className="availabilityContainer">
-                        <h2>Score Board</h2>
-                        <div className="availability">
+                    </>}
+                </div>
+              )}
+            </div>
+            </div>
+          </div>
+          <div className='leadscheduleDetails scheduleDetails'>
+            {attendanceReportView && <div className='sch_popupHeader'>
+              <h2>Attendance Report</h2>
+              <div className='barchartContainer'>
+                {
+                  (Object.keys(topicInstance).length !== 0) ? <div>
+                    <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
+                    <>{attendanceReport.length !== 0 ?
+                      attendanceReport.map((meetReport, i) => {
+                        if (meetReport.report) {
+                          return <>
+                            <h3 className='managerTopicheads'>{meetReport.meetDate}</h3>
+                            <Barchart batch={meetReport.batchList} percentage={meetReport.percentageList} />
+                          </>
+                        }
+                        else {
+                          return <>
+                            <h3 className='managerTopicheads'>{meetReport.meetDate}</h3>
+                            <div className='noTrainers'>-- Attendance report not yet uploaded --</div>
+                          </>
+                        }
+                      })
+                      : <div className='noTrainers'>-- No Meetings Scheduled Yet --</div>
+                    }</>
+
+                  </div> : <div className='noTrainers'>-- Select a Topic --</div>
+                }
+
+              </div>
+            </div>}
+
+            {reportAnalysisView && <div className='sch_popupHeader'>
+              <h2>Score Analysis</h2>
+              <div className='barchartContainer'>
+                <h1 className='leaderTopics'>{topicInstance.topicName}</h1>
+
+                {
+                  allScores.length === 0 ? <div className='noTrainers'>-- Score Not Yet Updated --</div> : <>
+                    <div className="availabilityContainer">
+                      <h2>Pie Chart</h2>
+                      <Chart
+                        backgroundColor={"gray"}
+                        chartType="PieChart"
+                        data={data}
+                        options={{
+                          backgroundColor: "whitesmoke"
+                        }
+                        }
+                        className="pieChart"
+                      />
+                    </div>
+
+                    <div className="availabilityContainer">
+                      <h2>Score Board</h2>
+                      <div className="availability">
                         <table className="popuptable">
                           <thead className="popuphead">
                             <tr className="popuptr">
@@ -412,9 +419,9 @@ const Result = () => {
                             </tr>
                           </thead>
                           <tbody className="popupbody">
-                            {allScores.map((scr,i) => (
+                            {allScores.map((scr, i) => (
                               <tr className="popuptr" key={i}>
-                                <td className="popuptd">{i+1}</td>
+                                <td className="popuptd">{i + 1}</td>
                                 <td className="">{scr.intern.internName}</td>
                                 <td className="popuptd">{scr.intern.batch.batchName}</td>
                                 <td className="popuptd">{scr.score}</td>
@@ -422,30 +429,30 @@ const Result = () => {
                             ))}
                           </tbody>
                         </table>
-                    </div>
-                  </div></>}
-                </div>
-              </div>}
+                      </div>
+                    </div></>}
+              </div>
+            </div>}
           </div>
-        </div> 
+        </div>
 
 
         {resPopUp && <div className='popupContainer'>
-                <div className='popup-boxd'>
-                    <div className='popupHeader'>
-                    <h2>Opps Something went wrong!!</h2>
-                    </div>
-                    <div className='msgContainer'>
-                        <p>{resMessage}</p>
-                    </div>
-                    <div className='buttonsContainer'>
-                        <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                            Ok
-                        </button>
-                    </div>
-                </div>
-            </div>}
-</>        
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Opps Something went wrong!!</h2>
+            </div>
+            <div className='msgContainer'>
+              <p>{resMessage}</p>
+            </div>
+            <div className='buttonsContainer'>
+              <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>}
+      </>        
     )
 }
 

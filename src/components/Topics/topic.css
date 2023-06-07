@@ -207,7 +207,7 @@ input[type=checkbox] {
 }
 
 
-@media all and (max-width:600px){
+@media all and (max-width:650px){
     .topicContainer
     {
         width: 95vw;
@@ -255,7 +255,7 @@ input[type=checkbox] {
         padding: 10px;
         cursor: pointer;
     }
-    .res_table{
+    .topic_res_table{
         margin-top: 30px;
     }
 
@@ -266,7 +266,7 @@ input[type=checkbox] {
     }
 }
 
-@media all and (min-width:600px) and (max-width:900px){
+@media all and (min-width:650px) and (max-width:900px){
     .topicContainer
     {
         width: 75vw;

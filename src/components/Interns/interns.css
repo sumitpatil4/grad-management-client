@@ -49,7 +49,7 @@
 }
 
 .internsTableContainer{
-    height: 60vh;
+    height: 80vh;
 }
 
 .internsGroupsContainer
@@ -165,7 +165,6 @@
     .res_table{
         display: block;
         width:100%;
-        margin: 0;
     }
     .res_table tr{
         width:100%;
@@ -223,6 +222,7 @@
     .titleContainer{
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 }
 

@@ -16,6 +16,8 @@ import { Chart } from "react-google-charts";
 
 
 const Topic = () => {
+    const authcontext=useContext(AuthContext);
+    const {handleLogout}=authcontext;
     const navigate=useNavigate();
     const managercontext=useContext(ManagerContext);
     const {train,topicsList,updateTopicsList}=managercontext;
@@ -540,7 +542,7 @@ const Topic = () => {
                       </span>
                   </div>
                   <div className="availability">
-                  <table className="popuptable res_table">
+                  <table className="popuptable topic_res_table">
                     <thead className="popuphead">
                       <tr className="popuptr">
                         <th className="popupth">Date</th>
@@ -771,20 +773,20 @@ const Topic = () => {
       </div>}
 
       {resPopUp && <div className='popupContainer'>
-            <div className='popup-boxd'>
-                <div className='popupHeader'>
-                <h2>Opps Something went wrong!!</h2>
-                </div>
-                <div className='msgContainer'>
-                    <p>{resMessage}</p>
-                </div>
-                <div className='buttonsContainer'>
-                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                    Ok
-                    </button>
-                </div>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Session Expired</h2>
             </div>
-            </div>}
+              <div className='msgContainer'>
+                <p>Please login again</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
 
 
 

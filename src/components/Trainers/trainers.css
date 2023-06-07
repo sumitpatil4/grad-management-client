@@ -207,7 +207,8 @@
 
 .res_profile {
   max-height:100vh;
-  width: 40vw;;
+  width: 40vw;
+  overflow-y: auto;
 }
 
 @media all and (max-width:500px){

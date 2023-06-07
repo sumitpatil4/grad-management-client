@@ -12,7 +12,7 @@ const Users = () => {
     const useAdmincontext=useContext(AdminContext);
     const useAuthcontext=useContext(AuthContext);
     const {userList,notificationList,updateuserList,updatenotificationList}=useAdmincontext;
-    const {updatenotificationBadge,notificationCheck,updatenotificationCheck}=useAuthcontext;
+    const {handleLogout,updatenotificationBadge,notificationCheck,updatenotificationCheck}=useAuthcontext;
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [notificationEditCheck, setNotificationEditCheck] = useState(false)
     const [useeffectreload, setUseeffectreload] = useState(false)
@@ -345,13 +345,13 @@ const Users = () => {
         {resPopUp && <div className='popupContainer'>
           <div className='popup-boxd'>
             <div className='popupHeader'>
-              <h2>Opps Something went wrong!!</h2>
+              <h2>Session Expired</h2>
             </div>
               <div className='msgContainer'>
-                <p>{resMessage}</p>
+                <p>Please login again</p>
               </div>
               <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
                   Ok
                 </button>
               </div>

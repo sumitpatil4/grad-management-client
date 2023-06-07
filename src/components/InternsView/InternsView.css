@@ -21,11 +21,32 @@
 
 .Excel-Icon{
     color: var(--color-excel);
-    margin-right: 20px;
-    margin-top: 10px;
-  }
+}
 
-  .shareIcon:hover{
+.shareIcon:hover{
     transform : scale(1.1);
-  }
+}
+
+.intsearchIcon{
+    margin-top: 4px;
+}
+
+.excel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media all and (max-width:450px){
+    .SchbuttonsWrapper>p{
+        padding-top:12px;
+    }
+    .int_search-bar2>input{
+        width:10vw;
+    }
+    .sch_input_box{
+        width: 83vw;
+        overflow-wrap: break-word;
+    }
+}
 

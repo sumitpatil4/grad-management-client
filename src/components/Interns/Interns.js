@@ -14,7 +14,7 @@ const Interns = () => {
     const managercontext=useContext(ManagerContext);
     const {train,internsList,groupsList,updateinternsList,updategroupsList}=managercontext;
     const authcontext=useContext(AuthContext);
-    const {userid}=authcontext;
+    const {handleLogout,userid}=authcontext;
     const [groupName,setGroupName]=useState("");
     const [currentGroup,setCurrentGroup]=useState([]);
     const [defaultInternList,setdefaultInternList]=useState([]);
@@ -662,20 +662,20 @@ const Interns = () => {
                 </div>
             </div></form>}
             {resPopUp && <div className='popupContainer'>
-            <div className='popup-boxd'>
-                <div className='popupHeader'>
-                <h2>Opps Something went wrong!!</h2>
-                </div>
-                <div className='msgContainer'>
-                    <p>{resMessage}</p>
-                </div>
-                <div className='buttonsContainer'>
-                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                    Ok
-                    </button>
-                </div>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Session Expired</h2>
             </div>
-            </div>}
+              <div className='msgContainer'>
+                <p>Please login again</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
 
     </>
     )

@@ -16,7 +16,7 @@ const Trainers = () => {
   const managercontext=useContext(ManagerContext);
   const {updateTrainerList,trainerList}=managercontext;
   const authcontext=useContext(AuthContext);
-  const {userid}=authcontext;
+  const {handleLogout,userid}=authcontext;
   const [searchQuery, setSearchQuery] = useState("");
   const [userList, setuserList] = useState([]);
   const [trainerTemp, settrainerTemp] = useState({});
@@ -911,16 +911,16 @@ const handleEditSubmitAvailability = () => {
         </div>
       )}
 
-      {resPopUp && <div className='popupContainer'>
+{resPopUp && <div className='popupContainer'>
           <div className='popup-boxd'>
             <div className='popupHeader'>
-              <h2>Opps Something went wrong!!</h2>
+              <h2>Session Expired</h2>
             </div>
               <div className='msgContainer'>
-                <p>{resMessage}</p>
+                <p>Please login again</p>
               </div>
               <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
                   Ok
                 </button>
               </div>

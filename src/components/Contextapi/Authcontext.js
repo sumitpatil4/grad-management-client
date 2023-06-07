@@ -49,7 +49,7 @@ export const Auth=(props)=>{
     const updatenotificationBadge=(e)=>setNotificationBadge(e);
 
     const handleLogin=()=>{
-            setIsAuthenticated(true);
+       setIsAuthenticated(true);
     }
 
     const handleLogout=()=>{

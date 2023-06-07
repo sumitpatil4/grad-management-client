@@ -19,6 +19,7 @@
 
 .scheduleNavbar{
     display: flex;
+    position: sticky;
     background-color: rgb(14, 20, 30);
     color: var(--color-body);
     justify-content: space-between;
@@ -73,7 +74,6 @@
     overflow-y: scroll;
     background-color: var(--color-back);
     border-right:1px solid rgba(172, 172, 172, 0.678);
-
 }
 
 .schedule{
@@ -125,7 +125,6 @@
 .sch_popup-boxd {
     width: inherit;
     height: inherit;
-
   }
 
 .sch_input_box{
@@ -436,15 +435,36 @@ input[type="time"]{
     margin: 0 auto;
 }
 
-@media all and (min-width:500px) and (max-width:900px){
+@media all and (max-width:600px){
+    .SchbuttonsWrapper>p{
+        font-size: 16px;
+    }
+}
+@media all and (max-width:900px){
     .scheduleContainer{
         display: flex;
         flex-direction: column;
         align-items: center;
+        transition: 1s ease;
     }
 
     .scheduleWrapper{
-        border:2px solid blue;
+        width:100%;
+    }
+    .schsearchWrapper{
+        width:38vw;
+        display: flex;
+        justify-content: space-around;
+    }
+    .search-bar2>input{
+        width:16vw;
+    }
+    .scheduleDetails{
+        width:100%;
+        min-height:80vh;
+    }
+    .sch_inputContainer{
+        width:85%;
     }
 }
 
@@ -474,5 +494,59 @@ input[type="time"]{
         color: var(--color-body);
         font-weight:500;
         background-color:rgb(19, 28, 44);
+    }
+}
+
+@media all and (max-width:550px){
+    .SchbuttonsWrapper>p{
+        font-size: 14px;
+    }
+    .schsearchWrapper{
+        width: 35vw;
+    }
+    .sch_search-bar2>input{
+        width:10vw;
+    }
+    .schtopicAdd{
+        padding: 3px 5px;
+    }
+}
+
+@media all and (max-width:450px){
+    .SchbuttonsWrapper>p{
+        padding:10px 7px; 
+        font-size: 12px;
+    }
+    .schsearchWrapper{
+        width: 35vw;
+    }
+    .sch_search-bar2>input{
+        width:8vw;
+    }
+    .schtopicAdd{
+        padding: 7px 5px;
+        font-size: 12px;
+    }
+    .scheduleDetails{
+        overflow-y: auto;
+        padding-bottom: 5px;
+    }
+    .sch_calendarAccess>p{
+        font-size: 15px;
+    }
+    .sch_buttonsContainer>button{
+        font-size: 16px;
+    }
+    .avl_List{
+        display: flex;
+        flex-direction: row;
+        font-size: 13px;
+    }
+    .schedules{
+        padding:0px 10px;
+        height: 73.8vh;
+        overflow-y: scroll;
+        background-color: var(--color-back);
+        border-right:1px solid rgba(172, 172, 172, 0.678);
     }
 }

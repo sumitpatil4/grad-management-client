@@ -16,6 +16,12 @@
     height: 100%;
   }
 
+  .outerBox{
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+  }
+
   .managerContainer{
     border-radius: 5px;
     height: 80.3vh;
@@ -25,16 +31,32 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     overflow-y: auto;
   }
+  .leadmanagerContainer{
+    display: flex;
+    flex-direction: row;
+  }
 
   .trainContainer{
+    width:30%;
     background-color: rgb(14, 20, 30);
     color: var(--color-body);
   }
 
+  .leadscheduleWrapper{
+    width:70%;
+  }
+
+  .leadscheduleDetails{
+    width:50%;
+  }
+
+  .lead_searchicon{
+    margin-top: 4px;
+  }
 
 .trainContainer>h3{
     font-size: 20px;
-    padding: 16.5px 20px;
+    padding: 15px 20px;
     font-weight: 500;
     cursor: pointer;
 }
@@ -62,7 +84,7 @@
 
 .SchbuttonsWrapper>div{
   font-size: 20px;
-  padding: 16.5px 20px;
+  padding: 15px 20px;
   font-weight: 500;
 }
 
@@ -88,7 +110,7 @@
 
 .topicbar_ldr{
     display: grid;
-    grid-template-columns: 79% 7% 7% 7%;
+    grid-template-columns: 70% 10% 10% 10%;
     width: inherit;
     box-shadow: rgba(0, 0, 0, 0.123) 0px 10px 20px;
     margin: 15px 20px;
@@ -143,4 +165,93 @@
   width: 90%;
   height: 250px;
   cursor: pointer;
+}
+
+
+@media all and (max-width:1200px){
+  .SchbuttonsWrapper>div{
+    font-size: 16px;
+    padding: 13.8px;
+  }
+
+  .trainContainer>h3{
+    font-size: 16px;
+    padding: 13.8px;
+  }
+}
+
+@media all and (max-width:1200px){
+  .SchbuttonsWrapper>div{
+    font-size: 16px;
+    padding: 13.8px;
+  }
+
+  .trainContainer>h3{
+    font-size: 16px;
+    padding: 13.8px;
+  }
+  .trainContainer>div>div {
+    font-size: 16px;
+  }
+}
+
+@media all and (max-width:900px){
+  .leadmanagerContainer{
+    display: flex;
+    flex-direction: column;
+  }
+  .outerBox{
+    width:100%;
+  }
+  .trainContainer{
+    width:20%;
+  }
+  .leadscheduleWrapper{
+    width:80%;
+  }
+  .leadscheduleDetails{
+    width:100%;
+  }
+  .trainContainer>div>div {
+    font-size: 16px;
+  }
+}
+
+@media all and (max-width:600px){
+  .leadmanagerContainer{
+    display: flex;
+    flex-direction: column;
+  }
+  .outerBox{
+    width:100%;
+  }
+  .trainContainer{
+    width:30%;
+  }
+  .leadscheduleWrapper{
+    width:80%;
+  }
+  .leadscheduleDetails{
+    width:100%;
+  }
+  .trainContainer>div>div {
+    font-size: 14px;
+    padding: 12px;
+  }
+  .topicbar_ldr{
+    display: grid;
+    grid-template-columns: 58% 14% 14% 14%;
+    width: inherit;
+    box-shadow: rgba(0, 0, 0, 0.123) 0px 10px 20px;
+    margin: 15px 20px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+
+@media all and (max-width:400px) {
+  .outerBox{
+    width:91%;
+  }
 }

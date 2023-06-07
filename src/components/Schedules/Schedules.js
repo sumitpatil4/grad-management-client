@@ -21,7 +21,7 @@ const Schedules = () => {
     const managerContext = useContext(ManagerContext);
     const authContext = useContext(AuthContext);
     const {train} = managerContext;
-    const {userid,usermail,username} = authContext;
+    const {handleLogout,userid,usermail,username} = authContext;
     const [scheduleList, setscheduleList] = useState([]);
     const [avlList, setavlList] = useState([]);
     const [instance, setInstance] = useState("");
@@ -86,6 +86,9 @@ const Schedules = () => {
       };
 
     const handleCreateSch=()=>{
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = objDiv.scrollHeight;
         setIsOpen(true);
         setselectTrainerCheck(false);
         setDescription("");
@@ -125,6 +128,9 @@ const Schedules = () => {
     }
 
     const handleCancelForAdd=()=>{
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = -1*objDiv.scrollHeight;
         const x=document.getElementById("datePicker");
         x.value="";
         x.selected="";
@@ -613,6 +619,9 @@ const Schedules = () => {
     };
 
     const handleView = (e, i) => {
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = objDiv.scrollHeight;
         setViewList(e);
         setinternInstance([]);
         handleDetsSch();
@@ -620,6 +629,9 @@ const Schedules = () => {
 
     // handle click event of the Edit button
     const handleEdit = (e,i) => {
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = objDiv.scrollHeight;
         setMeetingObj(e)
         handleEditSch();
     }
@@ -880,6 +892,9 @@ const Schedules = () => {
     }
 
     const handlePopUpOk = ()=>{
+        var objDiv = document.getElementById("scroll_div");
+        var div = document.getElementById("scroll_div_container");
+        div.scrollTop = -1*objDiv.scrollHeight;
         setPopUp(false);
         setUseEffectReload(!useEffectReload);
     }
@@ -994,8 +1009,8 @@ const Schedules = () => {
         <span><IoMdArrowRoundBack title='Go Back To Previous Page' onClick={()=>navigate(-1)} className='backButton'/></span>
         <h2>Schedules</h2>
     </div>
-    <div className='scheduleContainer'>
-        <div className="scheduleWrapper">
+    <div id="scroll_div_container" className='scheduleContainer'>
+        <div id="scroll_div" className="scheduleWrapper">
             <div className='scheduleNavbar'>
                 <div className='SchbuttonsWrapper'>
                     <p className='headerText active' onClick={(e) => {handleClickToday(e,'headerText')}}>Today</p>
@@ -1005,7 +1020,7 @@ const Schedules = () => {
 
             <div className="schsearchWrapper">
               <div className="buttonContainer3">
-                <div className="search-bar2">
+                <div className="sch_search-bar2 search-bar2">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -1019,9 +1034,9 @@ const Schedules = () => {
               </div>
               <div className='schAddBtn'>
 
-              <p className="topicAdd" title='Add New Schedule' onClick={() => {handleCreateSch();handleSetEmpty();}}>
+              <span className="schtopicAdd topicAdd" title='Add New Schedule' onClick={() => {handleCreateSch();handleSetEmpty();}}>
                     Add
-                </p>
+                </span>
               </div>
             </div>
         </div>
@@ -1484,20 +1499,20 @@ const Schedules = () => {
     </div>
 </div>}
 {resPopUp && <div className='popupContainer'>
-            <div className='popup-boxd'>
-                <div className='popupHeader'>
-                <h2>Opps Something went wrong!!</h2>
-                </div>
-                <div className='msgContainer'>
-                    <p>{resMessage}</p>
-                </div>
-                <div className='buttonsContainer'>
-                    <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
-                    Ok
-                    </button>
-                </div>
+          <div className='popup-boxd'>
+            <div className='popupHeader'>
+              <h2>Session Expired</h2>
             </div>
-            </div>}
+              <div className='msgContainer'>
+                <p>Please login again</p>
+              </div>
+              <div className='buttonsContainer'>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
+                  Ok
+                </button>
+              </div>
+          </div>
+        </div>}
 </>     
     )
 }

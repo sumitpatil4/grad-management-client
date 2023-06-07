@@ -21,7 +21,7 @@ const Mytrainings = () => {
   const managercontext=useContext(ManagerContext);
   const authcontext=useContext(AuthContext);
   const {updateTrain,updatetrainingsList,trainingsList}=managercontext;
-  const {userid}=authcontext;
+  const {handleLogout,userid}=authcontext;
   const [resPopUp,setResPopUp] = useState(false);
   const [resMessage,setResMessage] = useState("");
   const [isLoading,setIsLoading] = useState(false);
@@ -235,13 +235,13 @@ const navigate = useNavigate();
       {resPopUp && <div className='popupContainer'>
           <div className='popup-boxd'>
             <div className='popupHeader'>
-              <h2>Opps Something went wrong!!</h2>
+              <h2>Session Expired</h2>
             </div>
               <div className='msgContainer'>
-                <p>{resMessage}</p>
+                <p>Please login again</p>
               </div>
               <div className='buttonsContainer'>
-                <button type="submit" className="submit-btn" onClick={() => setResPopUp(false)}>
+                <button type="submit" className="submit-btn" onClick={() => {setResPopUp(false);handleLogout()}}>
                   Ok
                 </button>
               </div>
