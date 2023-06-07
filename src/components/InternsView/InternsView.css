@@ -18,14 +18,39 @@
     padding: 12.4px 0;
 }
 
+.internViewHeader{
+  text-align: center;
+  width: fit-content;
+  margin-left: 47%;
+  font-size: larger;
+  font-weight: bold;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  display: flex;
+}
+
+.internViewHeader>.span1{
+  z-index: 5;
+  position: fixed;
+  right: 2%;
+  padding: 0.3%;
+}
+
+.internViewHeader>.span2{
+  z-index: 5;
+  position: fixed;
+  right: 6%;
+  padding: 0.5%;
+}
 
 .Excel-Icon{
     color: var(--color-excel);
-    margin-right: 20px;
-    margin-top: 10px;
   }
 
   .shareIcon:hover{
     transform : scale(1.1);
   }
 
+  .scoreReport{
+    font-size: 25px;
+  }

@@ -724,11 +724,11 @@ const Topic = () => {
                     <div className="input-group">
                       <label htmlFor="name">Max&nbsp;Score</label>
                         <input
-                          type="text"
+                          type="number"
                           id="topic-name"
                           name="maxScore"
-                          pattern="[0-9]" 
-                          title="Please enter a number"
+                          // pattern="[0-9]" 
+                          // title="Please enter a number"
                           onChange={(e)=>setmaxScore(e.target.value)}
                           required={true}
                         />

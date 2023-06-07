@@ -4,17 +4,24 @@ const InternContext=React.createContext();
 
 export const Intern=(props)=>{
 
-  const [internSchedulesList, setinternSchedulesList] = useState([]);
-
-  const updateinternSchedulesList=(e)=> setinternSchedulesList(e);
+    const [internDetails, setInternDetails] = useState([]);
+    const [internSchedulesList, setinternSchedulesList] = useState([]);
+    const [internTopicList, setInternTopicList] = useState([]);
+    const updateInternDetails = (e) => setInternDetails(e);
+    const updateinternSchedulesList=(e)=> setinternSchedulesList(e);
+    const updateInternTopicList=(e)=> setInternTopicList(e);
 
 
 
     return (
         <InternContext.Provider        
             value={{
+                internDetails,
+                updateInternDetails,
                 internSchedulesList,
                 updateinternSchedulesList,
+                internTopicList,
+                updateInternTopicList,
             }}
         >
             {props.children}

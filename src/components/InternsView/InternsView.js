@@ -4,6 +4,7 @@ import './InternsView.css';
 import InternContext from '../Contextapi/InternContext';
 import AuthContext from '../Contextapi/Authcontext';
 import axios from 'axios';
+import { TbReportAnalytics } from 'react-icons/tb';
 import { RiFileExcel2Fill } from "react-icons/ri";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -15,7 +16,8 @@ import { Link } from 'react-router-dom';
 const InternsView = () => {
 
     const interncontext=useContext(InternContext);
-    const {internSchedulesList,updateinternSchedulesList}=interncontext;
+    const {internDetails, updateInternDetails, internSchedulesList,updateinternSchedulesList,
+        internTopicList, updateInternTopicList}=interncontext;
     const authContext = useContext(AuthContext);
     const {username,usermail,userid} = authContext;
     const [scheduleList, setscheduleList] = useState([]);
@@ -28,11 +30,16 @@ const InternsView = () => {
     const [viewList, setViewList] = useState({}); 
     const [isOpenDef, setIsOpenDef] = useState(true);
     const [isOpenDets, setIsOpenDets] = useState(false);
+    const [isOpenReport, setIsOpenReport] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [useEffectReload, setUseEffectReload] = useState(false);
+    const [useEffectReload1, setUseEffectReload1] = useState(false);
     const [resPopUp,setResPopUp] = useState(false);
     const [resMessage,setResMessage] = useState("");
     const [isLoading,setIsLoading] = useState(false);
+    const [attdReport, setAttdReport] = useState([]);
+    const [topicReport, setTopicReport] = useState([]);
+    const [topicList, setTopicList] = useState([])
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -57,10 +64,28 @@ const InternsView = () => {
 
     useEffect(() => {
         setIsLoading(true);
+
+        axios.get(`http://localhost:8090/intern/getInternById/${userid}`)
+        .then((res)=>{
+            updateInternDetails(res.data)
+            const temp = []
+            console.log(res.data.intern)
+            if (res.data.intern.attendanceList) {
+            res.data.intern.attendanceList.forEach((att)=>{
+                const tempObj = {
+                    meetDate: att.meeting.date,
+                    meetTopic: att.meeting.topic.topicName,
+                    attend: att.present
+                };
+                temp.push(tempObj);
+            });
+        }
+            setAttdReport(temp);
+        })
+
         axios.get(`http://localhost:8090/meeting/getMeetingsByIntern/${userid}`)
         .then((res)=>{
             updateinternSchedulesList(res.data.meeting);
-            
             const currDate = getCurrentDate(); //To get the Current Date
             res.data.meeting.sort((a, b) => b.date.localeCompare(a.date));
             setPresent(res.data.meeting.filter(obj => obj.date === currDate).sort((a, b) => a.date.localeCompare(b.Date)));
@@ -74,7 +99,75 @@ const InternsView = () => {
             setResPopUp(true);
             setIsLoading(false);
         });
+
+        axios.get(`http://localhost:8090/topic/getTopicsByIntern/${userid}`)
+        .then((res)=>{
+            updateInternTopicList(res.data);
+            console.log(res.data.topic)
+            const topicArr = []
+            res.data.topic.forEach((top) => {
+                if(top.completed) {
+                    topicArr.push(top);
+                }
+            })
+            
+            console.log(topicArr)
+            setTopicList(topicArr);
+            console.log(topicList)
+            setIsLoading(false);
+        }).catch((err)=>{
+            setResMessage(err.response.data.message);
+            setResPopUp(true);
+            setIsLoading(false);
+        });
     }, [useEffectReload])
+
+    useEffect(()=>{
+        if(topicReport.length>0)
+            setTopicReport(topicReport)
+    },[useEffectReload1])
+
+    const getScores = () => {
+        const scrArr = [];
+        if (topicList) {
+          topicList.forEach((topic,index) => {
+            axios.get(`http://localhost:8090/scores/getScores/${topic.topicId}`)
+              .then((res) => {
+                console.log(res.data.batch);
+                let maxScore=0;
+                let totScr=0;
+                let totCnt=0;
+                let scr=0;
+                res.data.batch.forEach((i)=> {
+                    totCnt++;
+                    totScr+=i.score;
+                    console.log(i)
+                    if(i.intern.internId == userid) {
+                        scr = i.score;
+                        maxScore = i.totalScore;
+                    }
+                })
+                // const a = totScr/totCnt;
+                // console.log(maxScore)
+                // console.log(a/maxScore)
+                const avgScr = ((totScr/totCnt)/maxScore)*100;
+                const obj= {
+                    ScoreTopic: topic.topicName,
+                    YourScore: ((scr/maxScore)*100).toFixed(2),
+                    AvgScr: avgScr.toFixed(2)
+                }
+                // console.log(obj)
+                scrArr.push(obj);
+                console.log(scrArr)
+                if(Object.keys(res).length>0 && index===topicList.length-1)
+                {
+                    setTopicReport(scrArr);
+                }
+              })
+          });
+        }
+        console.log(topicReport)
+      };
 
     const activeClass=(e)=>{
         let btns = document.getElementsByClassName("headerText");
@@ -107,6 +200,14 @@ const InternsView = () => {
     const handleDetsSch=()=>{
         setIsOpenDef(false);
         setIsOpenDets(true);
+        setIsOpenReport(false);
+    }
+
+    const handleReport=()=>{
+        setIsOpenDef(false);
+        setIsOpenDets(false);
+        setIsOpenReport(true);
+        getScores();
     }
 
     const handleView = (e, i) => {
@@ -157,7 +258,20 @@ const InternsView = () => {
   {isLoading?<div className="loading">
             <PuffLoader color="#4CAF50" />
             </div>:<></>}
-    <h2 className='scheduleHeader'>Your&nbsp;Schedules</h2>
+    {/* <div className='internViewHeader'>
+        <div className='abc'> Your&nbsp;Schedules</div>
+        
+            <RiFileExcel2Fill title="Download Excel File" className="Excel-Icon shareIcon" onClick={handleFileDownload}/>        
+    </div>  */}
+    <div className='internViewHeader'>
+        <h2> Your&nbsp;Schedules</h2>            
+        <span className='span1'> 
+            <RiFileExcel2Fill title="Download Excel File" className="Excel-Icon shareIcon" onClick={handleFileDownload}/>
+        </span>
+        <span className='span2'>
+            <TbReportAnalytics title='Scores & Attendance Report' className='scoreReport' onClick={handleReport}/>
+        </span>
+    </div>   
     <div className='scheduleContainer'>
         <div className="scheduleWrapper">
             <div className='scheduleNavbar'>
@@ -166,11 +280,6 @@ const InternsView = () => {
                     <p className='headerText' onClick={(e) => {handleClickUpcoming(e)}}>Upcoming</p>
                     <p className='headerText' onClick={(e) => {handleClickCompleted(e)}}>Completed</p>
                 </div>
-                <div className="excel">
-                <RiFileExcel2Fill title="Download Excel File" className="Excel-Icon shareIcon" onClick={handleFileDownload}/>
-
-                </div>
-
 
             <div className="schsearchWrapper">               
               <div className="buttonContainer3">
@@ -285,7 +394,7 @@ const InternsView = () => {
 
                     <div className="sch_input-group">
                         <label htmlFor="name">Meet Link</label>
-                        <p><Link className='meetLink'>{viewList.meetingLink}</Link></p>                                                              
+                        <p><Link className='meetLink' to={viewList.meetingLink}>{viewList.meetingLink}</Link></p>                                                              
                     </div>
 
                     <div className="sch_input-group">
@@ -307,6 +416,61 @@ const InternsView = () => {
             </div>
         </div>
         }
+
+        {isOpenReport && <div className='reportContainer'>
+            <div className='sch_popupHeader'>
+                <h2 id="popUp">Attendance & Scores Report</h2>
+            </div>
+            <div className="availabilityContainer">
+                <h2>Attendance Report</h2>
+                <div className="availability">
+                    <table className="popuptable">
+                        <thead className="popuphead">
+                            <tr className="popuptr">
+                                <th className="popupth">Meet Date</th>
+                                <th className="popupth">Topic</th>
+                                <th className="popupth">Attended</th>
+                            </tr>
+                        </thead>
+                        <tbody className="popupbody">
+                            {attdReport.map((isl,i) => (
+                                <tr className="popuptr" key={i}>
+                                {/* <td className="popuptd">{i+1}</td> */}
+                                <td className="">{isl.meetDate}</td>
+                                <td className="popuptd">{isl.meetTopic}</td>
+                                <td className="popuptd">{isl.attend ? "Yes" : "No"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div className="availabilityContainer">
+                <h2>Scores Report</h2>
+                <div className="availability">
+                    <table className="popuptable">
+                        <thead className="popuphead">
+                            <tr className="popuptr">
+                                <th className="popupth">Topic</th>
+                                <th className="popupth">Score(%)</th>
+                                <th className="popupth">Avg Score(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody className="popupbody">
+                            {console.log(topicReport)}
+                            {topicReport.map((scr) => (
+                                <tr className="popuptr" >
+                                {/* <td className="popuptd">{i+1}</td> */}
+                                <td className="popuptd">{scr.ScoreTopic}</td>
+                                <td className="popuptd">{scr.YourScore}</td>
+                                <td className="popuptd">{scr.AvgScr}</td>
+                                </tr>
+                            ))}                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>}
     </div>
     </div>
     {resPopUp && <div className='popupContainer'>
